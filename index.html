@@ -1148,6 +1148,8 @@ function nameIndex(){
   if(NAMEIDX) return NAMEIDX;
   NAMEIDX = {};
   Object.keys(C).forEach(tag => [tag, C[tag].n[0], C[tag].n[1]].forEach(n => { [norm(n), norm2(n)].forEach(k => { if(k && !NAMEIDX[k]) NAMEIDX[k] = tag; }); }));
+  // cards with two names ("Harem / Farm", "Settlers / Bustling Village"): each name on its own also counts
+  Object.keys(C).forEach(tag => [C[tag].n[0], C[tag].n[1]].forEach(n => { if(!n.includes('/')) return; n.split('/').map(x=>x.trim()).forEach(part => { [norm(part), norm2(part)].forEach(k => { if(k && !NAMEIDX[k]) NAMEIDX[k] = tag; }); }); }));
   Object.entries(VIRT).forEach(([pile, names]) => names.forEach(n => { NAMEIDX[norm(n)] = pile + '#' + n; }));
   Object.entries(VMETA).forEach(([id, m]) => m.n.forEach(n => { NAMEIDX[norm(n)] = id; NAMEIDX[norm2(n)] = id; }));
   return NAMEIDX;

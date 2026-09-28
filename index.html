@@ -149,6 +149,8 @@ h2.sec small{font:600 .9rem "Alegreya Sans",sans-serif;color:var(--muted)}
 .roundrow .em{width:40px;height:40px}
 .roundrow .spacer{flex:1}
 .roundrow{row-gap:10px}
+.sec .em{width:30px;height:30px;flex:none}
+.modeplaque{font:700 1rem Grenze,serif;color:#F6D98E;background:#A8322D;padding:4px 12px;border-radius:4px;box-shadow:0 0 0 2px #D6A032,0 3px 5px rgba(0,0,0,.3);transform:rotate(-2deg)}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media(min-width:640px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:900px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
@@ -176,6 +178,10 @@ h2.sec small{font:600 .9rem "Alegreya Sans",sans-serif;color:var(--muted)}
 .lockbtn svg{width:17px;height:17px}
 .lockbtn[aria-pressed="true"]{background:var(--rose);color:#fff}
 .tw .tile .marks{right:46px}
+.pickt .tile{transition:transform .12s, box-shadow .12s}
+.pickt.picked .tile{box-shadow:0 0 0 3px var(--leaf),var(--shadow);transform:translateY(-2px)}
+.pcheck{position:absolute;left:-6px;top:-6px;z-index:3;width:26px;height:26px;border-radius:50%;background:var(--leaf);color:#fff;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 2px var(--surface)}
+.infobtn{position:absolute;top:6px;right:6px;z-index:2;width:30px;height:30px;border-radius:50%;border:0;font:800 1rem Grenze,serif;color:#2B1E14;background:repeating-linear-gradient(100deg,rgba(90,55,20,.1) 0 2px,transparent 2px 6px),linear-gradient(#E6BD86,#BE8A55);box-shadow:0 2px 3px rgba(0,0,0,.4)}
 .tw.locked .tile{box-shadow:0 0 0 3px var(--rose),var(--shadow)}
 .tile .art.ph .band{height:100%}
 .ownGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:14px 10px;margin:18px 0}
@@ -197,6 +203,16 @@ h2.sec small{font:600 .9rem "Alegreya Sans",sans-serif;color:var(--muted)}
 .tile.land .art{height:92px}
 .tile.land .art img{object-position:50% 50%}
 .sheetphoto{display:block;max-width:100%;max-height:52vh;margin:0 auto 12px;border-radius:12px;box-shadow:var(--shadow)}
+.pgal{text-align:center;margin-bottom:10px}
+.pimg{border:0;padding:0;background:none;display:block;margin:0 auto;cursor:pointer}
+.pimg .sheetphoto{margin-bottom:8px}
+.nophoto{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:min(62vw,240px);aspect-ratio:5/7.6;border-radius:12px;border:2px dashed var(--line);color:var(--muted);margin:0 auto 8px}
+.nophoto .cam{width:34px;height:34px}
+.pdots{display:flex;justify-content:center;gap:6px;margin:2px 0 6px}
+.pdots span{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.pdots span.on{background:var(--rose)}
+.pcap{font:700 1.05rem Grenze,serif}.pcap small{display:block;font:600 .8rem "Alegreya Sans",sans-serif;color:var(--muted)}
+.memtxt{margin:8px auto 4px;padding:8px 12px;background:var(--sunk);border-radius:8px;text-align:left;font-size:.95rem}
 label.btn{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
 label.btn input{display:none}
 .capcard{text-align:center}
@@ -259,6 +275,8 @@ label.btn input{display:none}
 .can .cb svg{position:absolute;left:50%;top:50%;width:84%;height:auto;transform:translate(-50%,-50%)}
 .boxgrid.cans .bx.chosen{box-shadow:none;transform:translateY(-8px) scale(1.1);filter:drop-shadow(0 0 8px rgba(242,182,50,.95)) drop-shadow(0 0 3px #F2B632)}
 .boxgrid.cans .bx.lit{transform:translateY(-4px) rotate(-8deg) scale(1.08)}
+.boxgrid.cans.manual .bx{cursor:pointer}
+.boxgrid.cans.manual .bx:not(.chosen){opacity:.7}
 .boxgrid.cans.done .bx:not(.chosen){opacity:.35;transform:rotate(12deg) translateY(4px)}
 .stall .roof,.booth .roof{position:absolute;left:-6px;right:-6px;top:0;height:40px;z-index:3;
   background:linear-gradient(rgba(0,0,0,.12),transparent 40%,rgba(0,0,0,.2)),repeating-linear-gradient(90deg,#A8322D 0 30px,#F1E6C8 30px 60px);
@@ -398,6 +416,11 @@ nav.tabs button[aria-current="page"]{color:var(--royal)}
 .row .lbl{flex:1;min-width:0;font-weight:600}
 .row .lbl small{display:block;color:var(--muted);font-size:.84rem;font-weight:400}
 .row .em{width:36px;height:36px;flex:none}
+.modegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:12px}
+.modecard{border:0;text-align:left;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:2px;color:#2B1E14;
+  background:repeating-linear-gradient(100deg,rgba(90,55,20,.10) 0 2px,transparent 2px 6px),linear-gradient(#EFD3A6,#CFA06A);box-shadow:0 2px 3px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.45)}
+.modecard b{font:700 1.08rem Grenze,serif}.modecard small{font-size:.8rem;line-height:1.25;opacity:.85}
+.modecard[aria-pressed="true"]{color:#fff;background:repeating-linear-gradient(100deg,rgba(0,0,0,.1) 0 2px,transparent 2px 6px),linear-gradient(#B8423A,#8E2723);box-shadow:0 0 0 2px #D6A032,0 3px 5px rgba(0,0,0,.4)}
 .edseg button{padding:5px 9px;font-size:.8rem}
 @media(max-width:420px){.edseg button{padding:5px 6px;font-size:.74rem}}
 .toggle{appearance:none;-webkit-appearance:none;width:58px;height:30px;border-radius:7px;position:relative;cursor:pointer;flex:none;margin:0;background:repeating-linear-gradient(100deg,rgba(0,0,0,.14) 0 2px,transparent 2px 6px),linear-gradient(#4E3321,#6B4630);box-shadow:inset 0 2px 5px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.25);transition:background .2s}
@@ -593,6 +616,17 @@ const S = {
  startShel:["Each player starts with 7 Copper and the 3 Shelters.","Jeder startet mit 7 Kupfer und den 3 Unterschlüpfen."],
  volume:["Volume","Lautstärke"], on:["On","An"], off:["Off","Aus"],
  edBoth:["Both","Beide"], wheelSign:["Wheel of Fortune","Glücksrad"], canSign:["Box Toss","Boxenwerfen"],
+ themeTitle:["Themed round","Themenrunde"], themeHint:["If the drawn boxes have too few matching cards, the rest is filled with other cards.","Haben die gezogenen Boxen zu wenige passende Karten, wird der Rest mit anderen Karten aufgefüllt."],
+ themeFew:["matching cards in these boxes, filled up with others.","passende Karten in diesen Boxen, Rest aufgefüllt."], themeAll:["All cards","Alle Karten"],
+ manual:["Choose myself","Selbst wählen"], stManual:["Manual","Selbst"],
+ q2m:["Which boxes do you want?","Welche Boxen wollt ihr?"], q2ml:["Tap every box you want to play with.","Tippe alle Boxen an, mit denen ihr spielen wollt."],
+ pickCards:["Choose cards","Karten wählen"], randomCards:["Random cards","Karten zufällig"],
+ q3m:["Choose your kingdom","Stellt euer Königreich zusammen"], q3ml:["kingdom cards chosen","Königreichkarten gewählt"],
+ fillRest:["Fill the rest","Rest zufällig"], doneN:["Done","Fertig"], max10:["That's 10 already – remove one first.","Schon 10 gewählt – erst eine abwählen."],
+ pickBoxFirst:["Pick at least one box.","Wähle mindestens eine Box."], landsOpt:["Landscapes (optional)","Querformat-Karten (optional)"],
+ photoFor:["Photo of","Foto von"], tapToFlip:["Tap the picture to flip through the pile","Aufs Bild tippen, um durch den Stapel zu blättern"],
+ selectAll:["Select all","Alle auswählen"], selectNone:["None","Keine"], allPromos:["All promo cards","Alle Promokarten"],
+ modeTitle:["Game mode","Spielmodus"], modeNow:["Mode","Modus"],
  sharedKingdom:["Shared kingdom","Geteiltes Königreich"],
 };
 const NOTES = {
@@ -621,7 +655,7 @@ const esc = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'
 const DEF = {
   lang:'de', theme:'auto', sound:true, music:false, vol:.65, view:'table', fast:false, setupDone:false,
   owned:{dominion:{e2:true}}, promos:{},
-  s:{players:3,req:{},min:1,max:3,perBox:true,landMax:2,landDeck:true,colony:'rule',shelters:'rule',noAttacks:false,reactPair:false,noRepeat:true,sort:'cost'},
+  s:{players:3,req:{},theme:[],mode:'normal',min:1,max:3,perBox:true,landMax:2,landDeck:true,colony:'rule',shelters:'rule',noAttacks:false,reactPair:false,noRepeat:true,sort:'cost'},
   blocked:[], seen:[], history:[], favorites:[], current:null,
   flow:{stage:'wheel', n:null, boxes:null}
 };
@@ -633,6 +667,7 @@ function load(){
   if(existed && ST.setupDone===false && localStorage.getItem('kr-setup-seen')===null && Object.keys(ST.owned).length>1) ST.setupDone = true;
   ST.s = Object.assign(clone(DEF.s), ST.s||{});
   if(!ST.s.req) ST.s.req = {};
+  if(!ST.s.theme) ST.s.theme = [];
   if(!ST.flow || !ST.flow.stage) ST.flow = clone(DEF.flow);
   lang = ST.lang;
 }
@@ -723,11 +758,41 @@ function drawSet(P, boxes, keep){
   return chosen;
 }
 // keep = cards the players locked; everything else is drawn fresh
-function dealCards(boxes, keep){
+const MODES = {
+  normal:   {n:['Normal','Normal'], d:['Everything goes.','Alles ist erlaubt.']},
+  attack:   {n:['Battlefield','Schlachtfeld'], d:['Only Attack cards.','Nur Angriffskarten.'], theme:['Attack']},
+  victory:  {n:['Point hunt','Punktejagd'], d:['Only Victory (green) cards.','Nur Punktekarten (die grünen).'], theme:['Victory']},
+  treasure: {n:['Money rain','Geldregen'], d:['Only Treasure cards.','Nur Geldkarten.'], theme:['Treasure']},
+  night:    {n:['Night market','Nachtmarkt'], d:['Only Night and Duration cards.','Nur Nacht- und Dauerkarten.'], theme:['Night','Duration']},
+  reaction: {n:['Shield wall','Schildwall'], d:['Only Reactions and Attacks.','Nur Reaktionen und Angriffe.'], theme:['Reaction','Attack']},
+  landscape:{n:['Landscape fair','Landschaftsfest'], d:['Always 4 landscape cards (Events, Projects, …).','Immer 4 Querformat-Karten (Ereignisse, Projekte, …).'], landMax:4, landDeck:false},
+  cheap:    {n:['Penny market','Pfennigmarkt'], d:['Only cards costing up to 4.','Nur Karten bis 4 Geld.'], costMax:4},
+  luxury:   {n:["King's court",'Königshof'], d:['Only cards costing 5 or more.','Nur Karten ab 5 Geld.'], costMin:5},
+  peace:    {n:['Peace market','Friedensmarkt'], d:['No Attacks at all.','Gar keine Angriffe.'], noAttacks:true},
+  chaos:    {n:["Jester's chaos",'Gauklerchaos'], d:['A random mode every round.','Jede Runde ein zufälliger Modus.']},
+  custom:   {n:['My own types','Eigene Typen'], d:['Pick the card types yourself.','Kartentypen selbst auswählen.']},
+};
+function modeFor(id){
+  if(id === 'chaos'){ const pool = Object.keys(MODES).filter(x => !['normal','chaos','custom'].includes(x)); id = pool[rnd(pool.length)]; }
+  const m = MODES[id] || MODES.normal;
+  return { id, theme: id==='custom' ? (ST.s.theme||[]) : (m.theme||[]), costMin:m.costMin, costMax:m.costMax, landMax:m.landMax, landDeck:m.landDeck, noAttacks:m.noAttacks };
+}
+const effCost = x => coin(x) + (C[x].dc||0);
+function dealCards(boxes, keep, opts){
+  opts = opts || {};
   keep = keep || {s:[], land:[]};
   const P = poolFor(boxes);
-  const keepS = keep.s.filter(x => C[x]), keepL = keep.land.filter(x => C[x]);
+  let keepS = keep.s.filter(x => C[x]), keepL = keep.land.filter(x => C[x]);
   if(new Set([...P.K, ...keepS]).size < 10){ toast(t('notEnough')); return false; }
+  // game mode: only cards that fit; top up with others if there are too few
+  let themeNote = '';
+  const M = modeFor(ST.s.mode || 'normal'), theme = M.theme;
+  if(M.noAttacks) P.K = P.K.filter(x => !has(x,'Attack'));
+  if(theme.length || M.costMin || M.costMax){
+    const T = P.K.filter(x => (!theme.length || theme.some(ty => has(x, ty))) && (!M.costMin || effCost(x) >= M.costMin) && (M.costMax===undefined || effCost(x) <= M.costMax));
+    if(T.length >= 10) P.K = T;
+    else { keepS = [...new Set([...keepS, ...T])].slice(0,10); themeNote = `${T.length} ${t('themeFew')}`; }
+  }
   let best = null, bestBad = null;
   for(let a = 0; a < 400; a++){
     const sel = drawSet(P, boxes, keepS);
@@ -736,22 +801,24 @@ function dealCards(boxes, keep){
     if(!bad.length) break;
   }
   let nL = 0;
-  if(ST.s.landMax>0 && P.L.length){
-    if(ST.s.landDeck){
+  const LM = M.landMax ?? ST.s.landMax, LD = M.landDeck ?? ST.s.landDeck;
+  if(!opts.exactLand && LM>0 && P.L.length){
+    if(LD){
       const deck = shuffle([...Array(P.K.length).fill(0), ...Array(P.L.length).fill(1)]);
       let k=0; for(const d of deck){ if(d) nL++; else if(++k===10) break; }
-      nL = Math.min(nL, ST.s.landMax);
-    } else nL = Math.min(ST.s.landMax, P.L.length);
+      nL = Math.min(nL, LM);
+    } else nL = Math.min(LM, P.L.length);
   }
   nL = Math.max(nL, keepL.length);
   const land = [...keepL, ...preferUnseen(P.L.filter(x => !keepL.includes(x))).slice(0, nL - keepL.length)];
-  const k = { v:2, b:boxes, s:best, land, ts:Date.now(), locked:[...keepS, ...keepL] };
+  const k = { v:2, b:boxes, s:best, land, ts:Date.now(), locked: opts.manual ? [] : [...keep.s.filter(x=>C[x]), ...keepL], mode: M.id!=='normal' ? M.id : undefined };
   resolve(k, P, true);
   markSeen([...k.s, ...k.land], P.K);
   ST.current = k;
   ST.history.unshift({ id:'h'+Date.now(), k:clone(k) });
   ST.history = ST.history.slice(0,60);
   if(bestBad.length) toast(t('rulesUnmet') + ' ' + bestBad.map(x=>t('r_'+x)).join(', '));
+  else if(themeNote) toast(themeNote);
   return true;
 }
 const supply = k => [...k.s, k.bane, k.army].filter(Boolean);
@@ -836,6 +903,58 @@ function toggleBlock(tag){
 
 /* ---------- sound ---------- */
 let AC;
+let WOODNOISE = null;
+function woodClick(on){
+  if(!ST.sound) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)(); AC.resume && AC.resume();
+    const t0 = AC.currentTime, j = 1 + (Math.random()-.5)*.12;
+    if(!WOODNOISE){ const b = AC.createBuffer(1, AC.sampleRate*.08, AC.sampleRate), d = b.getChannelData(0); for(let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 3); WOODNOISE = b; }
+    // the knock: short noise through a woody band-pass …
+    const n = AC.createBufferSource(), bp = AC.createBiquadFilter(), ng = AC.createGain();
+    n.buffer = WOODNOISE; bp.type = 'bandpass'; bp.frequency.value = (on ? 1500 : 1100) * j; bp.Q.value = 4;
+    ng.gain.setValueAtTime(.55, t0); ng.gain.exponentialRampToValueAtTime(.001, t0 + .07);
+    n.connect(bp).connect(ng).connect(AC.destination); n.start(t0); n.stop(t0 + .08);
+    // … plus the hollow body resonance of the wood
+    const o = AC.createOscillator(), og = AC.createGain(), lp = AC.createBiquadFilter();
+    o.type = 'triangle'; o.frequency.setValueAtTime((on ? 520 : 400) * j, t0); o.frequency.exponentialRampToValueAtTime((on ? 360 : 280) * j, t0 + .06);
+    lp.type = 'lowpass'; lp.frequency.value = 1400;
+    og.gain.setValueAtTime(.22, t0); og.gain.exponentialRampToValueAtTime(.001, t0 + .09);
+    o.connect(lp).connect(og).connect(AC.destination); o.start(t0); o.stop(t0 + .1);
+  }catch(e){}
+}
+function uiSound(kind){
+  if(!ST.sound) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)(); AC.resume && AC.resume();
+    const t0 = AC.currentTime;
+    if(kind === 'card'){ // paper flick
+      const n = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain();
+      if(!WOODNOISE){ woodClick(true); return; }
+      n.buffer = WOODNOISE; n.playbackRate.value = .55; f.type = 'highpass'; f.frequency.setValueAtTime(3800, t0); f.frequency.exponentialRampToValueAtTime(900, t0 + .12);
+      g.gain.setValueAtTime(.35, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + .14);
+      n.connect(f).connect(g).connect(AC.destination); n.start(t0); n.stop(t0 + .15); return;
+    }
+    if(kind === 'tin'){ // tin can clink
+      [2150, 3420, 5100].forEach((fr, i) => { const o = AC.createOscillator(), g = AC.createGain(); o.frequency.value = fr * (1 + (Math.random()-.5)*.03);
+        g.gain.setValueAtTime(.09 / (i+1), t0); g.gain.exponentialRampToValueAtTime(.0005, t0 + .35 - i*.08); o.connect(g).connect(AC.destination); o.start(t0); o.stop(t0 + .4); });
+      return;
+    }
+    // soft felt tap for tents, tabs and plain buttons
+    const o = AC.createOscillator(), g = AC.createGain(), f = AC.createBiquadFilter();
+    o.type = 'sine'; o.frequency.setValueAtTime(260, t0); o.frequency.exponentialRampToValueAtTime(140, t0 + .09);
+    f.type = 'lowpass'; f.frequency.value = 900; g.gain.setValueAtTime(.3, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + .12);
+    o.connect(f).connect(g).connect(AC.destination); o.start(t0); o.stop(t0 + .13);
+  }catch(e){}
+}
+document.addEventListener('click', e => {
+  if(!e.target.closest) return;
+  const w = e.target.closest('.toggle,.seg button,.chip,.stepper button,.ownBtn,.plock,.lockbtn,.infobtn');
+  if(w){ woodClick(w.matches('.toggle') ? w.checked : w.getAttribute('aria-pressed') !== 'true'); return; }
+  if(e.target.closest('.bx.can')){ if(ST.flow.manual) uiSound('tin'); return; }
+  if(e.target.closest('.tile,.pile,.pimg,.pickrow')){ uiSound('card'); return; }
+  if(e.target.closest('nav.tabs button,.btn,.step,.musicbtn,.saveditem button')) uiSound('tap');
+}, true);
 function beep(freq=1400, dur=.03, vol=.08, type='square'){
   if(!ST.sound) return;
   try{
@@ -961,7 +1080,7 @@ function tileHTML(tag, marks=[], opts={}){
   const c = C[tag]; if(!c) return '';
   const land = (c.k!=='K' && c.k!=='X') || opts.land;
   const btn = `<button class="tile${land?' land':''}${ST.blocked.includes(tag)?' blocked':''}" data-card="${esc(tag)}" ${opts.delay!=null?`style="animation-delay:${opts.delay}ms"`:''}>
-    ${PH.urls[tag]?`<span class="art"><img src="${PH.urls[tag]}" alt="" loading="lazy"></span>${bandHTML(tag)}`:opts.art?`<span class="art ph">${bandHTML(tag)}</span>`:bandHTML(tag)}<span class="cost">${costHTML(tag)}</span>
+    ${photoFor(tag)?`<span class="art"><img src="${photoFor(tag)}" alt="" loading="lazy"></span>${bandHTML(tag)}`:opts.art?`<span class="art ph">${bandHTML(tag)}</span>`:bandHTML(tag)}<span class="cost">${costHTML(tag)}</span>
     ${marks.length?`<span class="marks">${marks.map(m=>`<span class="mark">${esc(m)}</span>`).join('')}</span>`:''}
     <span class="body"><span class="name">${esc(nm(tag))}</span>
     <span class="foot"><span class="meta">${esc(c.t.map(typeName).join(' – '))}</span>${emblem(CARDBOX[tag])}</span></span>
@@ -983,7 +1102,7 @@ async function photoInit(){
     PH.db = await new Promise((res, rej) => { const r = indexedDB.open('kr-photos', 1); r.onupgradeneeded = () => r.result.createObjectStore('p'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
     await new Promise((res, rej) => {
       const tx = PH.db.transaction('p','readonly'); const cur = tx.objectStore('p').openCursor();
-      cur.onsuccess = () => { const c = cur.result; if(!c) return; if(C[c.key]) PH.urls[c.key] = URL.createObjectURL(c.value); c.continue(); };
+      cur.onsuccess = () => { const c = cur.result; if(!c) return; if(C[c.key] || String(c.key).includes('#')) PH.urls[c.key] = URL.createObjectURL(c.value); c.continue(); };
       tx.oncomplete = res; tx.onerror = () => rej(tx.error);
     });
     PH.ok = true;
@@ -1016,6 +1135,7 @@ function nameIndex(){
   if(NAMEIDX) return NAMEIDX;
   NAMEIDX = {};
   Object.keys(C).forEach(tag => [tag, C[tag].n[0], C[tag].n[1]].forEach(n => { [norm(n), norm2(n)].forEach(k => { if(k && !NAMEIDX[k]) NAMEIDX[k] = tag; }); }));
+  Object.entries(VIRT).forEach(([pile, names]) => names.forEach(n => { NAMEIDX[norm(n)] = pile + '#' + n; }));
   return NAMEIDX;
 }
 function matchFile(name){
@@ -1053,10 +1173,23 @@ async function exportPhotos(){
     tx.oncomplete = res; tx.onerror = () => rej(tx.error);
   });
   const blob = await zip.generate({type:'blob'});
-  if(dl){ try{ await dl.save({filename:'dominion-kartenfotos.zip', data:blob}); }catch(e){} return; }
+  if(dl){ try{ await dl.save({filename:'carnivinion-kartenfotos.zip', data:blob}); }catch(e){} return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'carnivinion-kartenfotos.zip';
   document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
+const VIRT = {
+  Knights:['Dame Anna','Dame Josephine','Dame Molly','Dame Natalie','Dame Sylvia','Sir Bailey','Sir Destry','Sir Martin','Sir Michael','Sir Vander'],
+  Castles:['Humble Castle','Crumbling Castle','Small Castle','Haunted Castle','Opulent Castle','Sprawling Castle','Grand Castle',"King's Castle"],
+};
+function pileMembers(tag){
+  if(VIRT[tag]) return VIRT[tag].map(n => tag + '#' + n);
+  const c = C[tag]; if(!c || c.g !== tag || !GROUPS[tag]) return [];
+  return GROUPS[tag].filter(m => m !== tag && C[m]).sort((a,b) => costKey(a) - costKey(b));
+}
+const itemName = id => id.includes('#') ? id.split('#')[1] : nm(id);
+function photoFor(tag){ if(PH.urls[tag]) return PH.urls[tag]; for(const m of pileMembers(tag)) if(PH.urls[m]) return PH.urls[m]; return null; }
+function photoItems(tag){ const m = pileMembers(tag); return m.length ? (PH.urls[tag] ? [tag, ...m] : m) : [tag]; }
+const expandPhoto = tags => [...new Set(tags.flatMap(x => { const m = pileMembers(x); return m.length ? m : [x]; }))];
 const photoCount = tags => tags.filter(x => PH.urls[x]).length;
 const photoable = tag => C[tag] && C[tag].k !== 'X' || (C[tag] && C[tag].k==='X');
 
@@ -1070,17 +1203,17 @@ function startCapture(tags){
 }
 function captureSheet(){
   if(!CAP || CAP.i >= CAP.q.length){ CAP = null; closeSheet(); render(); return; }
-  const tag = CAP.q[CAP.i], c = C[tag];
+  const id = CAP.q[CAP.i], base = id.includes('#') ? id.split('#')[0] : id, tag = C[id] ? id : base, c = C[tag];
   openSheet(`${bandHTML(tag)}<div class="inner capcard">
     <div class="progress"><span style="width:${Math.round(CAP.i/CAP.total*100)}%"></span></div>
     <div class="hint" style="margin:0">${CAP.i+1} / ${CAP.total}</div>
-    <h3>${esc(nm(tag))}</h3>
-    <div class="sub" style="justify-content:center">${costHTML(tag)} <span>${esc(c.t.map(typeName).join(' – '))}</span> ${emblem(CARDBOX[tag],'')}</div>
+    <h3>${esc(itemName(id))}</h3>
+    <div class="sub" style="justify-content:center">${costHTML(tag)} <span>${esc(c.t.map(typeName).join(' – '))}</span> ${emblem(CARDBOX[tag]||CARDBOX[base],'')}</div>
     <div class="txt">${fmt(c.d[L()])}</div>
     <p class="hint">${t('capHint')}</p>
     <div class="sheetactions">
-      <label class="btn primary">${CAMSVG}${t('addPhoto')}<input type="file" accept="image/*" capture="environment" data-photofor="${esc(tag)}" data-cap="1"></label>
-      <label class="btn small">${t('fromGallery')}<input type="file" accept="image/*" data-photofor="${esc(tag)}" data-cap="1"></label>
+      <label class="btn primary">${CAMSVG}${t('addPhoto')}<input type="file" accept="image/*" capture="environment" data-photofor="${esc(id)}" data-cap="1"></label>
+      <label class="btn small">${t('fromGallery')}<input type="file" accept="image/*" data-photofor="${esc(id)}" data-cap="1"></label>
     </div>
     <div class="sheetactions"><button class="btn small" data-act="capskip">${t('skip')}</button><button class="btn small" data-act="capdone">${t('done')}</button></div>
   </div>`);
@@ -1095,7 +1228,7 @@ function photoBar(tags){
 let CAPSET = [];
 function camBtn(tags){
   if(!PH.ok) return '';
-  const tt = tags.filter(x => C[x] && C[x].k !== 'X'); CAPSET = tt;
+  const tt = expandPhoto(tags.filter(x => C[x] && C[x].k !== 'X')); CAPSET = tt;
   const n = photoCount(tt);
   return `<button class="btn small" data-act="capture" title="${t('capture')}" aria-label="${t('capture')}: ${n} / ${tt.length} ${t('withPhoto')}" style="display:inline-flex;align-items:center;gap:5px">${CAMSVG}${n}/${tt.length}</button>`;
 }
@@ -1121,13 +1254,39 @@ function renderSteps(){
   const el = document.getElementById('steps');
   if(TAB!=='kingdom' || !ST.setupDone){ el.innerHTML=''; el.style.display='none'; return; }
   el.style.display='';
-  const st = ST.flow.stage, order = ['wheel','boxes','kingdom'], cur = order.indexOf(st);
-  const reach = [true, ST.flow.n!=null, !!ST.current && ST.flow.boxes!=null];
+  const man = !!ST.flow.manual, st = ST.flow.stage === 'pick' ? 'kingdom' : ST.flow.stage, order = ['wheel','boxes', man ? 'pick' : 'kingdom'], cur = ['wheel','boxes','kingdom'].indexOf(st);
+  const reach = [true, man || ST.flow.n!=null, man ? !!(ST.flow.boxes||[]).length : (!!ST.current && ST.flow.boxes!=null)];
   el.innerHTML = [['st1'],['st2'],['st3']].map(([k],i)=>{
     const cls = i===cur ? 'cur' : (i<cur ? 'done' : '');
-    const label = i===0 && ST.flow.n!=null && i!==cur ? `${ST.flow.n} ${ST.flow.n===1?t('oneBox'):t('nBoxes')}` : t(k);
+    const label = i===0 && man ? t('stManual') : i===0 && ST.flow.n!=null && i!==cur ? `${ST.flow.n} ${ST.flow.n===1?t('oneBox'):t('nBoxes')}` : t(k);
     return `<button class="step ${cls}" data-goto="${order[i]}" ${(!reach[i]||busy)?'disabled':''}><span class="num">${i<cur?'✓':i+1}</span><span class="l">${label}</span></button>`;
   }).join('');
+}
+/* --- manual stage: pick the cards yourself --- */
+let PICKQ = '';
+function renderPick(){
+  const v = document.getElementById('view'), f = ST.flow, boxes = f.boxes || [];
+  const pk = f.picks = f.picks || {s:[], land:[]};
+  const P = poolFor(boxes);
+  const byBox = boxes.map(id => [id, P.K.filter(x => boxTags(id).includes(x)).sort((a,b)=>costKey(a)-costKey(b)||nm(a).localeCompare(nm(b),lang))]);
+  const q = PICKQ.trim().toLowerCase(), match = x => !q || C[x].n[0].toLowerCase().includes(q) || C[x].n[1].toLowerCase().includes(q);
+  const tileP = (x, land) => { const on = (land?pk.land:pk.s).includes(x);
+    return `<div class="tw pickt${on?' picked':''}">${tileHTML(x,[],{land}).replace('data-card=', land?'data-pickl=':'data-picks=')}<button class="infobtn" data-card="${esc(x)}" aria-label="Info">i</button>${on?'<span class="pcheck">✓</span>':''}</div>`; };
+  let h = `<h2 class="big">${t('q3m')}</h2><p class="lead">${pk.s.length} / 10 ${t('q3ml')}</p>
+    <div class="round" style="justify-content:center;margin:8px 0">${pk.s.map(x=>`<button class="chip on" data-picks="${esc(x)}">${esc(nm(x))} ✕</button>`).join('')}</div>
+    <input class="search" type="search" id="picksearch2" placeholder="${t('searchCards')}" value="${esc(PICKQ)}" style="margin-top:6px">`;
+  byBox.forEach(([id, cards]) => { const cs = cards.filter(match); if(!cs.length) return;
+    h += `<h2 class="sec">${emblem(id)} ${esc(boxName(id))} <small>${cs.length}</small></h2><div class="grid">${cs.map(x=>tileP(x,false)).join('')}</div>`; });
+  const lands = P.L.filter(match).sort((a,b)=>nm(a).localeCompare(nm(b),lang));
+  if(lands.length) h += `<h2 class="sec">${t('landsOpt')} <small>${pk.land.length}</small></h2><div class="grid wide">${lands.map(x=>tileP(x,true)).join('')}</div>`;
+  v.innerHTML = h;
+  const sI = document.getElementById('picksearch2');
+  sI.addEventListener('input', e => { PICKQ = e.target.value; const pos = e.target.selectionStart; renderPick(); const n = document.getElementById('picksearch2'); n.focus(); n.setSelectionRange(pos,pos); });
+}
+function finishManual(fill){
+  const f = ST.flow, pk = f.picks || {s:[], land:[]};
+  if(!fill && pk.s.length < 10) return;
+  if(dealCards(f.boxes, {s:pk.s, land:pk.land}, {manual:true, exactLand:true})){ ST.flow.stage = 'kingdom'; save(); goStage('kingdom', true); fanfare(); }
 }
 function sortTags(arr){
   const s = ST.s.sort;
@@ -1261,11 +1420,11 @@ function pyramids(ids){
 function renderBoxes(){
   const v = document.getElementById('view');
   const owned = ownedBoxes(); const n = Math.min(ST.flow.n||1, owned.length);
-  const chosen = ST.flow.boxes || [];
-  v.innerHTML = `<h2 class="big">${t('q2')}</h2><p class="lead">${n} ${t('q2l')}</p>
+  const chosen = ST.flow.boxes || [], man = !!ST.flow.manual;
+  v.innerHTML = `<h2 class="big">${man?t('q2m'):t('q2')}</h2><p class="lead">${man?t('q2ml'):`${n} ${t('q2l')}`}</p>
     <div class="picked" id="picked">${chosen.map(id=>`<span class="pickedbox">${emblem(id,'')}${esc(boxName(id))}</span>`).join('')}</div>
     <div class="booth wide"><span class="pflag l"></span><span class="pflag r"></span><div class="roof"></div><div class="valance"></div><span class="pole l"></span><span class="pole r"></span>
-    <div class="boothin"><div class="boxgrid cans ${chosen.length&&!busy?'done':''}" id="boxgrid">${pyramids(owned).map(p=>`<div class="pyr">${p.map(tier=>`<div class="tier">${tier.map(id=>`<button class="bx can ${chosen.includes(id)?'chosen':''}" data-bx="${id}" tabindex="-1" aria-label="${esc(boxName(id))}"><span class="cb">${emblem(id,'')}</span></button>`).join('')}</div>`).join('')}<div class="shelf"></div></div>`).join('')}</div></div>
+    <div class="boothin"><div class="boxgrid cans ${chosen.length&&!busy&&!man?'done':''} ${man?'manual':''}" id="boxgrid">${pyramids(owned).map(p=>`<div class="pyr">${p.map(tier=>`<div class="tier">${tier.map(id=>`<button class="bx can ${chosen.includes(id)?'chosen':''}" data-bx="${id}" ${man?`aria-pressed="${chosen.includes(id)}"`:'tabindex="-1"'} aria-label="${esc(boxName(id))}"><span class="cb">${emblem(id,'')}</span></button>`).join('')}</div>`).join('')}<div class="shelf"></div></div>`).join('')}</div></div>
     <div class="counter"><span>${t('canSign')}</span></div></div>`;
 }
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
@@ -1368,7 +1527,7 @@ function pileHTML(o){
   cols = [...new Set(cols)].slice(0,3);
   const band = cols.map(x=>`<span style="background:var(--t-${x})"></span>`).join('');
   const name = c ? nm(o.tag) : o.name;
-  const photo = o.tag && PH.urls[o.tag];
+  const photo = o.tag && photoFor(o.tag);
   const single = !o.count || o.count <= 1;
   const btn = `<button class="pile${single?' single':''}${o.wide?' wide':''}" ${o.tag?`data-card="${esc(o.tag)}"`:''} style="--rot:${hashRot(o.tag||o.name)}deg${o.delay!=null?`;animation-delay:${o.delay}ms`:''}" aria-label="${esc(name)}${o.count?`, ${o.count}`:''}">
     <span class="pcard"><span class="pname"><span class="pbg">${band}</span><b>${esc(name)}</b></span>
@@ -1447,9 +1606,9 @@ function renderKingdom(anim){
   const lands = [...k.land, k.ally, k.proph].filter(Boolean);
   const aside = [[k.ferry,'ferry'],[k.mouse,'mouse'],[k.river,'river']].filter(x=>x[0]);
   const locked = k.locked || [];
-  const artK = sup.some(x=>PH.urls[x]), artL = lands.some(x=>PH.urls[x]);
+  const artK = sup.some(x=>photoFor(x)), artL = lands.some(x=>photoFor(x));
   const lockable = x => k.s.includes(x) || k.land.includes(x);
-  let h = `<div class="roundrow">${(k.b||[]).map(id=>emblem(id)).join('')}<span class="spacer"></span>
+  let h = `<div class="roundrow">${(k.b||[]).map(id=>emblem(id)).join('')}${k.mode&&MODES[k.mode]?`<span class="modeplaque">${esc(MODES[k.mode].n[L()])}</span>`:''}<span class="spacer"></span>
     <span class="seg viewseg"><button data-view="table" aria-pressed="${ST.view!=='list'}">${t('vTable')}</button><button data-view="list" aria-pressed="${ST.view==='list'}">${t('vList')}</button></span>
     ${camBtn([...supply(k), ...k.land, k.ally, k.proph, k.ferry, k.mouse, k.river, ...(k.boons||[])].filter(Boolean))}
     <button class="btn small" data-act="recards">${locked.length?t('rerollRest'):t('reshuffleCards')}</button></div>`;
@@ -1516,7 +1675,7 @@ function renderSettings(){
   const tog = (key, on, label, hint='', attr='data-set') => `<label class="row"><span class="lbl">${label}${hint?`<small>${hint}</small>`:''}</span><input type="checkbox" class="toggle" ${attr}="${key}" ${on?'checked':''}></label>`;
   const step = (key, val, label) => `<div class="row"><span class="lbl">${label}</span><span class="stepper"><button data-step="${key}" data-d="-1" aria-label="−">−</button><output>${val}</output><button data-step="${key}" data-d="1" aria-label="+">+</button></span></div>`;
   const segRow = (key, val, opts, label) => `<div class="row"><span class="lbl">${label}</span><span class="seg">${opts.map(([o,l])=>`<button data-seg="${key}" data-v="${o}" aria-pressed="${val===o}">${l}</button>`).join('')}</span></div>`;
-  let h = `<h2 class="sec">${t('collection')}</h2><div class="panel">`;
+  let h = `<h2 class="sec">${t('collection')}</h2><div class="panel"><div class="row"><span class="lbl">${t('collection')}</span><button class="chip" data-selall="1">${t('selectAll')}</button><button class="chip" data-selall="0">${t('selectNone')}</button></div>`;
   BOXES.filter(b=>b.id!=='promo').forEach(b => {
     const eds = Object.keys(b.e); const o = ST.owned[b.id]||{}; const on = !!(o.e1||o.e2);
     const cur = o.e1 && o.e2 ? 'b' : o.e1 ? '1' : '2';
@@ -1525,9 +1684,18 @@ function renderSettings(){
     }<input type="checkbox" class="toggle" data-ownt="${b.id}" ${on?'checked':''} aria-label="${esc(b.n[L()])}"></div>`;
   });
   h += `</div><p class="hint">${t('collectionHint')}</p>`;
-  h += `<h2 class="sec">${t('promoCards')}</h2><div class="panel">${BOX.promo.e['1'].filter(x=>C[x].k==='K'||C[x].k==='L').sort((a,b)=>nm(a).localeCompare(nm(b),lang)).map(x=>
+  { const promoList = BOX.promo.e['1'].filter(x=>C[x].k==='K'||C[x].k==='L'); const allOn = promoList.every(x=>ST.promos[x]);
+    h += `<h2 class="sec">${t('promoCards')}</h2><div class="panel"><label class="row">${emblem('promo')}<span class="lbl"><b>${t('allPromos')}</b></span><input type="checkbox" class="toggle" data-allpromo="1" ${allOn?'checked':''}></label>`; }
+  h += `${BOX.promo.e['1'].filter(x=>C[x].k==='K'||C[x].k==='L').sort((a,b)=>nm(a).localeCompare(nm(b),lang)).map(x=>
     `<label class="row">${emblem('promo')}<span class="lbl">${esc(nm(x))}</span><input type="checkbox" class="toggle" data-promo="${esc(x)}" ${ST.promos[x]?'checked':''}></label>`).join('')}</div>`;
   h += `<h2 class="sec">${t('wheelS')}</h2><div class="panel">${step('min', s.min, t('minBoxes'))}${step('max', s.max, t('maxBoxes'))}${tog('perBox', s.perBox, t('perBox'))}${tog('sound', ST.sound, t('sound'), '', 'data-root')}<label class="row"><span class="lbl">${t('music')}<small>${t('musicHint')}</small></span><input type="checkbox" class="toggle" data-music="1" ${ST.music?'checked':''}></label><label class="row"><span class="lbl">${t('volume')}</span><input type="range" min="0" max="100" value="${Math.round(ST.vol*100)}" data-vol="1" style="flex:1;max-width:220px;accent-color:var(--rose)"></label>${tog('fast', ST.fast, t('fast'), t('fastHint'), 'data-root')}${step('players', s.players, t('players'))}</div>`;
+  const THEMES = ['Attack','Victory','Treasure','Reaction','Duration','Night','Reserve','Command','Fate','Doom','Liaison','Omen','Traveller','Looter'];
+  const ownK = [...new Set(ownedBoxes().flatMap(boxTags))].filter(isK);
+  const th = s.theme || [], md = s.mode || 'normal';
+  h += `<h2 class="sec">${t('modeTitle')}</h2><div class="panel"><div class="modegrid">${Object.entries(MODES).map(([id,m])=>`<button class="modecard" data-mode="${id}" aria-pressed="${md===id}"><b>${esc(m.n[L()])}</b><small>${esc(m.d[L()])}</small></button>`).join('')}</div>
+    ${md==='custom'?`<div class="row" style="flex-wrap:wrap;gap:8px;border-top:1px dashed var(--line)">
+      ${THEMES.map(ty=>{ const n = ownK.filter(x=>has(x,ty)).length; return n ? `<button class="chip ${th.includes(ty)?'on':''}" data-theme="${ty}" aria-pressed="${th.includes(ty)}">${esc(typeName(ty))} <small style="opacity:.7">${n}</small></button>` : ''; }).join('')}
+    </div>`:''}</div><p class="hint">${t('themeHint')}</p>`;
   h += `<h2 class="sec">${t('reqTitle')}</h2><div class="panel">${['buy','village','trash','draw','spread'].map(r=>tog(r, !!s.req[r], t('r_'+r), t('r_'+r+'H'), 'data-req')).join('')}</div><p class="hint">${t('reqHint')}</p>`;
   h += `<h2 class="sec">${t('landTitle')}</h2><div class="panel">${step('landMax', s.landMax, t('landMax'))}${tog('landDeck', s.landDeck, t('landMode'), t('landModeHint'))}</div>`;
   h += `<h2 class="sec">${t('rules')}</h2><div class="panel">
@@ -1558,12 +1726,16 @@ function renderActionbarInner(){
   const st = ST.flow.stage;
   if(!ST.setupDone){ a.innerHTML = `<button class="btn primary" data-act="setupDone" ${ownedBoxes().length?'':'disabled'}>${t('letsGo')}</button>`; return; }
   if(!ownedBoxes().length){ a.innerHTML=''; return; }
+  if(st==='pick'){ const n = (ST.flow.picks||{s:[]}).s.length;
+    a.innerHTML = `<button class="btn" data-act="fillRest">${t('fillRest')}</button><button class="btn primary" data-act="finishPick" ${n<10?'disabled':''}>${t('doneN')} ${n}/10</button>`; return; }
+  if(st==='boxes' && ST.flow.manual){ const n = (ST.flow.boxes||[]).length;
+    a.innerHTML = `<button class="btn" data-act="manRandom" ${n?'':'disabled'}>${t('randomCards')}</button><button class="btn primary" data-act="toPick" ${n?'':'disabled'}>${t('pickCards')}</button>`; return; }
   if(st==='wheel') a.innerHTML = wheelResult!=null && !busy
-      ? `<button class="btn" data-act="spin">${t('spinAgain')}</button><button class="btn primary" data-act="toBoxes">${t('toBoxes')}</button>`
-      : busy ? `<button class="btn primary" data-act="skip">${t('skipAnim')}</button>` : `<button class="btn primary" data-act="spin">${t('spin')}</button>`;
+      ? `<button class="btn" data-act="manual">${t('manual')}</button><button class="btn" data-act="spin">${t('spinAgain')}</button><button class="btn primary" data-act="toBoxes">${t('toBoxes')}</button>`
+      : busy ? `<button class="btn primary" data-act="skip">${t('skipAnim')}</button>` : `<button class="btn" data-act="manual">${t('manual')}</button><button class="btn primary" data-act="spin">${t('spin')}</button>`;
   else if(st==='boxes') a.innerHTML = ST.flow.boxes && !busy
       ? `<button class="btn" data-act="drawBoxes">${t('drawAgain')}</button><button class="btn primary" data-act="toCards">${t('toCards')}</button>`
-      : busy ? `<button class="btn primary" data-act="skip">${t('skipAnim')}</button>` : `<button class="btn primary" data-act="drawBoxes">${t('draw')}</button>`;
+      : busy ? `<button class="btn primary" data-act="skip">${t('skipAnim')}</button>` : `<button class="btn" data-act="manual">${t('manual')}</button><button class="btn primary" data-act="drawBoxes">${t('draw')}</button>`;
   else a.innerHTML = `<button class="btn" data-act="fav">${t('favorite')}</button><button class="btn primary" data-act="newRound">${t('newRound')}</button><button class="btn" data-act="share">${t('share')}</button>`;
 }
 function tentify(){ document.querySelectorAll('.actionbar .btn.primary').forEach(b => { if(!b.querySelector('.pennant')) b.insertAdjacentHTML('afterbegin','<i class="pennant" aria-hidden="true"></i>'); }); }
@@ -1573,12 +1745,12 @@ function render(anim){
   document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===lang));
   const mb = document.getElementById('musicbtn'); mb.setAttribute('aria-pressed', !!ST.music); mb.setAttribute('aria-label', t('music')); mb.title = t('music');
   if(ST.theme==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', ST.theme);
-  if(TAB==='kingdom' && ST.setupDone && ST.flow.stage==='wheel' && !busy && ownedBoxes().length){
+  if(TAB==='kingdom' && ST.setupDone && ST.flow.stage==='wheel' && !ST.flow.manual && !busy && ownedBoxes().length){
     const vals = wheelRange(); if(vals.length===1){ wheelResult = vals[0]; ST.flow = {stage:'boxes', n:vals[0], boxes:ST.flow.n===vals[0]?ST.flow.boxes:null}; }
   }
   renderTabs(); renderSteps(); renderActionbar();
   if(TAB==='kingdom' && !ST.setupDone) return renderSetup();
-  if(TAB==='kingdom') ({wheel:renderWheel, boxes:renderBoxes, kingdom:renderKingdom})[ST.flow.stage](anim);
+  if(TAB==='kingdom') ({wheel:renderWheel, boxes:renderBoxes, pick:renderPick, kingdom:renderKingdom})[ST.flow.stage](anim);
   else ({cards:renderCards, saved:renderSaved, settings:renderSettings})[TAB]();
 }
 
@@ -1586,18 +1758,27 @@ function render(anim){
 function openSheet(html){ const sh = document.getElementById('sheet'); sh.innerHTML = html; sh.scrollTop = 0;
   document.getElementById('scrim').classList.add('open'); requestAnimationFrame(()=>sh.classList.add('open')); }
 function closeSheet(){ document.getElementById('sheet').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); }
-function cardSheet(tag){
+let SHEET = {tag:null, i:0};
+function cardSheet(tag, idx){
   const c = C[tag], k = ST.current;
+  const items = photoItems(tag), multi = items.length > 1, i = ((idx||0) % items.length + items.length) % items.length, cur = items[i];
+  SHEET = {tag, i};
+  const curPhoto = PH.urls[cur];
   const inKingdom = TAB==='kingdom' && ST.flow.stage==='kingdom' && k && slotOf(k, tag);
   const g = c.g && GROUPS[c.g] ? GROUPS[c.g].filter(m=>m!==tag && C[m]) : [];
   const wiki = 'https://wiki.dominionstrategy.com/index.php/' + encodeURIComponent(c.n[0].replace(/ /g,'_'));
   const blocked = ST.blocked.includes(tag);
-  const photo = PH.urls[tag];
+  const forName = multi ? ` – ${esc(itemName(cur))}` : '';
   const photoBtns = PH.ok ? `<div class="sheetactions">
-      <label class="btn small">${CAMSVG}${photo?t('replacePhoto'):t('addPhoto')}<input type="file" accept="image/*" capture="environment" data-photofor="${esc(tag)}"></label>
-      <label class="btn small">${t('fromGallery')}<input type="file" accept="image/*" data-photofor="${esc(tag)}"></label>
-      ${photo?`<button class="btn small danger" data-delphoto="${esc(tag)}">${t('removePhoto')}</button>`:''}</div>` : '';
-  openSheet(`${bandHTML(tag)}<div class="inner">${photo?`<img class="sheetphoto" src="${photo}" alt="${esc(nm(tag))}">`:''}<h3>${esc(nm(tag))}</h3>
+      <label class="btn small">${CAMSVG}${curPhoto?t('replacePhoto'):t('addPhoto')}${forName}<input type="file" accept="image/*" capture="environment" data-photofor="${esc(cur)}"></label>
+      <label class="btn small">${t('fromGallery')}<input type="file" accept="image/*" data-photofor="${esc(cur)}"></label>
+      ${curPhoto?`<button class="btn small danger" data-delphoto="${esc(cur)}">${t('removePhoto')}</button>`:''}</div>` : '';
+  const gallery = (multi || curPhoto) ? `<div class="pgal">
+      <button class="pimg" ${multi?`data-cycle="${esc(tag)}" data-i="${i+1}" aria-label="${t('tapToFlip')}"`:'tabindex="-1"'}>${curPhoto?`<img class="sheetphoto" src="${curPhoto}" alt="${esc(itemName(cur))}">`:`<span class="nophoto">${CAMSVG}<b>${esc(itemName(cur))}</b></span>`}</button>
+      ${multi?`<div class="pdots">${items.map((_,j)=>`<span class="${j===i?'on':''}"></span>`).join('')}</div><div class="pcap">${esc(itemName(cur))} <small>${i+1} / ${items.length} · ${t('tapToFlip')}</small></div>
+      ${C[cur] && cur!==tag ? `<div class="txt memtxt">${fmt(C[cur].d[L()])}</div>` : ''}`:''}
+    </div>` : '';
+  openSheet(`${bandHTML(tag)}<div class="inner">${gallery}<h3>${esc(nm(tag))}</h3>
     <div class="sub">${costHTML(tag)} <span>${esc(c.t.map(typeName).join(' – '))}</span> ${CARDBOX[tag]?`${emblem(CARDBOX[tag],'')} <span>${esc(boxName(CARDBOX[tag]))}</span>`:''} <span>(${esc(c.n[lang==='de'?0:1])})</span></div>
     <div class="txt">${fmt(c.d[L()])}</div>
     ${c.x[L()]?`<details class="extra"><summary>${t('details')}</summary><div class="txt">${fmt(c.x[L()])}</div></details>`:''}
@@ -1651,7 +1832,11 @@ document.addEventListener('click', e => {
   const d = el.dataset;
   if(d.lang){ lang = ST.lang = d.lang; save(); render(); return; }
   if(d.tab){ if(busy) return; TAB = d.tab; closeSheet(); render(); window.scrollTo(0,0); return; }
-  if(d.goto){ if(busy) return; if(d.goto==='wheel') wheelResult = ST.flow.n; goStage(d.goto); return; }
+  if(d.goto){ if(busy) return; if(d.goto==='wheel'){ wheelResult = ST.flow.manual ? null : ST.flow.n; ST.flow.manual = false; } if(d.goto==='pick' && ST.current && ST.flow.manual && ST.flow.stage==='kingdom'){ goStage('kingdom'); return; } goStage(d.goto); return; }
+  if(d.bx && ST.flow.manual && ST.flow.stage==='boxes'){ const b = ST.flow.boxes = ST.flow.boxes||[]; const i = b.indexOf(d.bx); if(i>=0) b.splice(i,1); else b.push(d.bx); save(); renderBoxes(); renderActionbar(); renderSteps(); return; }
+  if(d.picks){ const pk = ST.flow.picks; const i = pk.s.indexOf(d.picks); if(i>=0) pk.s.splice(i,1); else { if(pk.s.length>=10){ toast(t('max10')); return; } pk.s.push(d.picks); } save(); renderPick(); renderActionbar(); return; }
+  if(d.pickl){ const pk = ST.flow.picks; const i = pk.land.indexOf(d.pickl); if(i>=0) pk.land.splice(i,1); else pk.land.push(d.pickl); save(); renderPick(); return; }
+  if(d.cycle){ cardSheet(d.cycle, +d.i); return; }
   if(d.card){ cardSheet(d.card); return; }
   if(d.replace){ replaceCard(d.replace); return; }
   if(d.replacewith){ pickerSheet(d.replacewith); return; }
@@ -1668,13 +1853,19 @@ document.addEventListener('click', e => {
   if(d.seg){ if(d.seg==='theme') ST.theme=d.v; else ST.s[d.seg]=d.v; save(); render(); return; }
   if(busy && e.target.closest('#wheelwrap,#boxgrid')){ SKIP = true; return; }
   if(d.edsel){ const v = d.v; ST.owned[d.edsel] = {e1: v!=='2', e2: v!=='1'}; save(); if(TAB==='settings') renderSettings(); else render(); return; }
+  if(d.theme!==undefined && el.classList.contains('chip')){
+    const th = ST.s.theme = ST.s.theme || [];
+    { const i = th.indexOf(d.theme); if(i>=0) th.splice(i,1); else th.push(d.theme); }
+    save(); renderSettings(); return; }
+  if(d.mode){ ST.s.mode = d.mode; save(); renderSettings(); return; }
+  if(d.selall!==undefined){ if(d.selall==='1') BOXES.forEach(b => { if(b.id!=='promo') ST.owned[b.id] = Object.fromEntries(Object.keys(b.e).map(e=>['e'+e,true])); }); else BOXES.forEach(b => { if(b.id!=='promo') ST.owned[b.id] = {}; }); save(); renderSettings(); return; }
   if(d.view){ ST.view = d.view; save(); renderKingdom(); return; }
   if(d.ownq){ const b = BOX[d.ownq], o = ST.owned[d.ownq] = ST.owned[d.ownq]||{};
     if(Object.values(o).some(Boolean)) ST.owned[d.ownq] = {}; else o['e'+Object.keys(b.e).slice(-1)[0]] = true;
     save(); render(); return; }
   if(d.lock){ const k = ST.current; k.locked = k.locked||[]; const i = k.locked.indexOf(d.lock); if(i>=0) k.locked.splice(i,1); else k.locked.push(d.lock);
     if(ST.history[0] && ST.history[0].k.ts===k.ts) ST.history[0].k = clone(k); save(); renderKingdom(); return; }
-  if(d.delphoto){ photoDel(d.delphoto).then(()=>{ cardSheet(d.delphoto); render(); }); return; }
+  if(d.delphoto){ photoDel(d.delphoto).then(()=>{ cardSheet(SHEET.tag || d.delphoto, SHEET.i); render(); }); return; }
   switch(d.act){
     case 'capture': startCapture(CAPSET); break;
     case 'capskip': CAP.i++; captureSheet(); break;
@@ -1683,6 +1874,13 @@ document.addEventListener('click', e => {
     case 'delall': if(!delArmed){ delArmed = true; renderSettings(); setTimeout(()=>{ delArmed=false; if(TAB==='settings') renderSettings(); }, 4000); }
       else { delArmed = false; Object.keys(PH.urls).reduce((p,tg)=>p.then(()=>photoDel(tg)), Promise.resolve()).then(()=>renderSettings()); } break;
     case 'skip': SKIP = true; break;
+    case 'manual': ST.flow = {stage:'boxes', manual:true, n:null, boxes:[], picks:{s:[], land:[]}}; PICKQ=''; goStage('boxes'); break;
+    case 'toPick': if(!(ST.flow.boxes||[]).length){ toast(t('pickBoxFirst')); break; } ST.flow.picks = ST.flow.picks || {s:[],land:[]};
+      { const P = poolFor(ST.flow.boxes); ST.flow.picks.s = ST.flow.picks.s.filter(x=>P.K.includes(x)); ST.flow.picks.land = ST.flow.picks.land.filter(x=>P.L.includes(x)); }
+      goStage('pick'); break;
+    case 'manRandom': if(dealCards(ST.flow.boxes)){ goStage('kingdom', true); fanfare(); } break;
+    case 'fillRest': finishManual(true); break;
+    case 'finishPick': finishManual(false); break;
     case 'music': if(!ST.music) setMusic(true); musicPop(!POPOPEN); break;
     case 'musicon': setMusic(true); break;
     case 'musicoff': setMusic(false); break;
@@ -1713,13 +1911,14 @@ document.addEventListener('change', e => {
   if(d.ownt){ const b = BOX[d.ownt]; ST.owned[d.ownt] = e.target.checked ? {['e'+Object.keys(b.e).slice(-1)[0]]: true} : {}; save(); renderSettings(); }
   if(d.music){ setMusic(e.target.checked); }
   if(d.own){ const o = ST.owned[d.own] = ST.owned[d.own]||{}; o['e'+d.ed] = e.target.checked; save(); }
-  if(d.promo){ ST.promos[d.promo] = e.target.checked; save(); }
+  if(d.promo){ ST.promos[d.promo] = e.target.checked; save(); renderSettings(); }
+  if(d.allpromo){ BOX.promo.e['1'].forEach(x => ST.promos[x] = e.target.checked); save(); renderSettings(); }
   if(d.photofor && e.target.files && e.target.files[0]){
     const tag = d.photofor, f = e.target.files[0], cap = !!d.cap;
     toast(t('working'));
     shrink(f).then(b => photoPut(tag, b)).then(() => {
       toast(t('photoSaved'));
-      if(cap && CAP){ CAP.i++; captureSheet(); } else { cardSheet(tag); }
+      if(cap && CAP){ CAP.i++; captureSheet(); } else { cardSheet(SHEET.tag || tag, SHEET.i); }
       render();
     }).catch(() => toast(t('noPhotoStore')));
   }

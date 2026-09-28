@@ -1123,14 +1123,20 @@ const CAMSVG = '<svg class="cam" viewBox="0 0 24 24" fill="none" stroke="current
 function idb(mode, fn){
   return new Promise((res, rej) => { const tx = PH.db.transaction('p', mode); const st = tx.objectStore('p'); const r = fn(st); tx.oncomplete = () => res(r && r.result); tx.onerror = () => rej(tx.error); });
 }
+const FIXKEYS = [];
 async function photoInit(){
   try{
     PH.db = await new Promise((res, rej) => { const r = indexedDB.open('kr-photos', 1); r.onupgradeneeded = () => r.result.createObjectStore('p'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
     await new Promise((res, rej) => {
       const tx = PH.db.transaction('p','readonly'); const cur = tx.objectStore('p').openCursor();
-      cur.onsuccess = () => { const c = cur.result; if(!c) return; if(C[c.key] || String(c.key).includes('#')) PH.urls[c.key] = URL.createObjectURL(c.value); c.continue(); };
+      cur.onsuccess = () => { const c = cur.result; if(!c) return; const k = String(c.key);
+        if(k.includes('#') && k !== k.trim()) FIXKEYS.push([c.key, k.trim(), c.value]);
+        else if(C[c.key] || k.includes('#')) PH.urls[c.key] = URL.createObjectURL(c.value);
+        c.continue(); };
       tx.oncomplete = res; tx.onerror = () => rej(tx.error);
     });
+    // older versions stored some sub-card photos under names with a trailing space – move them
+    for(const [oldK, newK, blob] of FIXKEYS){ try{ await idb('readwrite', st => st.put(blob, newK)); await idb('readwrite', st => st.delete(oldK)); PH.urls[newK] = URL.createObjectURL(blob); }catch(e){} }
     PH.ok = true;
   }catch(e){ PH.ok = false; }
   render();
@@ -1243,13 +1249,13 @@ const VIRT = {
 // Sub-cards named with <u>Name</u>: text in the pile's description (both languages, same order)
 const VMETA = {};
 (function(){
-  const parts = s => [...(s||'').matchAll(/<u>(.*?)<\/u>:?\s*([\s\S]*?)(?=<left><u>|<u>|$)/g)].map(m => [m[1], m[2].replace(/<\/?left>/g,'').trim()]);
+  const parts = s => [...(s||'').matchAll(/<u>(.*?)<\/u>:?\s*([\s\S]*?)(?=<left><u>|<u>|$)/g)].map(m => [m[1].trim(), m[2].replace(/<\/?left>/g,'').replace(/\s*\d+\s*Coins?\s*$/,'').trim()]);
   Object.keys(C).forEach(tag => {
     if(!['Ruins','Loot','Envious / Deluded','Miserable / Twice Miserable','Knights'].includes(tag)) return;
     const en = parts(C[tag].d[0]), de = parts(C[tag].d[1]);
     if(en.length < 2) return;
     VIRT[tag] = en.map(x => x[0]);
-    en.forEach(([n, txt], i) => { VMETA[tag + '#' + n] = { n:[n, (de.length===en.length ? de[i][0] : n)], d: tag==='Knights' ? ['',''] : [txt, de.length===en.length ? de[i][1] : txt] }; });
+    en.forEach(([n, txt], i) => { VMETA[tag + '#' + n] = { n:[n, (de.length===en.length ? de[i][0] : n)], d:[txt, de.length===en.length ? de[i][1] : txt] }; });
   });
   // the Boons and Hexes decks as piles you can photograph card by card
   const deck = (id, ty, en, de) => { const m = Object.keys(C).filter(x => C[x].t.includes(ty) && C[x].k !== 'L'); if(!m.length) return;
@@ -1297,7 +1303,7 @@ function captureSheet(){
 }
 function photoBar(tags){
   if(!PH.ok) return '';
-  const tt = tags.filter(x => C[x] && (C[x].k==='K' || C[x].k==='L' || C[x].k==='A' || C[x].k==='P'));
+  const tt = expandPhoto(tags.filter(x => C[x] && (C[x].k==='K' || C[x].k==='L' || C[x].k==='A' || C[x].k==='P')));
   const n = photoCount(tt), miss = tt.length - n;
   CAPSET = tt;
   return `<div class="photobar">${CAMSVG}<span>${n} / ${tt.length} ${t('withPhoto')}</span><span class="spacer"></span>${miss?`<button class="btn small" data-act="capture">${t('capture')} (${miss})</button>`:''}</div>`;

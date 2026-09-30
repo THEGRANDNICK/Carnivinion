@@ -174,6 +174,9 @@ textarea.nameinput{resize:vertical;font:inherit}
 a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .badlist{max-height:40vh;overflow:auto;background:var(--sunk);border-radius:8px;padding:8px 8px 8px 28px;font-size:.9rem}
 .embtn{border:0;padding:0;background:none;border-radius:50%;display:grid}
+.modechiprow{text-align:center;margin:4px 0 2px}
+.modechip{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;padding:6px 14px;border-radius:6px;color:#F6D98E;background:#A8322D;box-shadow:0 0 0 2px #D6A032,0 3px 6px rgba(0,0,0,.3);transform:rotate(-1.5deg)}
+.modechip small{font:700 .75rem "Alegreya Sans",sans-serif;opacity:.85}.modechip b{font:700 1.15rem Grenze,serif;color:#fff}.modechip span{font-size:.8rem}
 .modeplaque{border:0;cursor:pointer;font:700 1rem Grenze,serif;color:#F6D98E;background:#A8322D;padding:4px 12px;border-radius:4px;box-shadow:0 0 0 2px #D6A032,0 3px 5px rgba(0,0,0,.3);transform:rotate(-2deg)}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media(min-width:640px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -704,6 +707,7 @@ const S = {
  scanNoCam:["The camera isn't available here. Use a photo of the QR code instead, or scan it with your phone's camera app.","Die Kamera ist hier nicht verfügbar. Nimm stattdessen ein Foto vom QR-Code oder scanne ihn mit der Kamera-App deines Handys."],
  scanned:["Kingdom loaded","Königreich geladen"], scanFail:["That's not a Carnivinion code.","Das ist kein Carnivinion-Code."], shareLink:["Share link","Link teilen"], copyLink:["Copy link","Link kopieren"],
  shareQR:["Let your friends scan this code – they get exactly the same kingdom.","Lass deine Freunde diesen Code scannen – sie bekommen genau dasselbe Königreich."], customNotShared:["Your own cards aren't in the code.","Eigene Karten sind nicht im Code enthalten."],
+ modeNowL:["Game mode","Spielmodus"], modePickHint:["Pick the mode for the next rounds. More options in Settings.","Wähle den Modus für die nächsten Runden. Mehr Optionen in den Einstellungen."],
  sharedKingdom:["Shared kingdom","Geteiltes Königreich"],
 };
 const NOTES = {
@@ -716,7 +720,7 @@ const NOTES = {
  debt:["Debt tokens.","Schuldenmarker."], vp:["Victory point tokens.","Siegpunktmarker."],
  tavern:["Tavern mats.","Wirtshaustableaus."], exile:["Exile mats.","Exil-Tableaus."], favors:["Favor tokens.","Gefallen-Marker."],
  sun:["Sun tokens on the Prophecy.","Sonnenmarker auf die Prophezeiung."], trade:["Trade Route mat and tokens.","Handelsstraßen-Tableau und -Marker."],
- native:["Native Village mats.","Eingeborenendorf-Tableaus."], pirateship:["Pirate Ship mats and coin tokens.","Piratenschiff-Tableaus und Geldmarker."], island:["Island mats.","Insel-Tableaus."],
+ native:["Native Village mats.","Eingeborenendorf-Tableaus."], pirateship:["Pirate Ship mats and coin tokens.","Piratenschiff-Tableaus und Geldmarker."], projects:["Wooden cubes to mark bought Projects.","Holzwürfel, um gekaufte Projekte zu markieren."], island:["Island mats.","Insel-Tableaus."],
  adv:["Adventures player tokens.","Abenteuer-Spielermarker."], heirloom:["Each Heirloom replaces one Copper in starting decks.","Jedes Erbstück ersetzt ein Kupfer im Startdeck."],
  blackmarket:["Build the Black Market deck from unused kingdom cards.","Schwarzmarkt-Stapel aus unbenutzten Königreichkarten bilden."],
 };
@@ -795,7 +799,7 @@ BOXES.forEach(b => Object.values(b.e).forEach(arr => arr.forEach(tg => { if(!CAR
 const MATS = {villagers:['Villagers','Dorfbewohner','tok','renaissance'], coffers:['Coffers','Taler','tok','renaissance'], debt:['Debt tokens','Schuldenmarker','tok','empires'], vp:['Victory tokens','Siegpunktmarker','tok','prosperity'],
   tavern:['Tavern mat','Wirtshaus-Tableau','mat','adventures'], exile:['Exile mat','Exil-Tableau','mat','menagerie'], favors:['Favor tokens','Gefallen-Marker','tok','allies'], sun:['Sun tokens','Sonnenmarker','tok','risingSun'],
   trade:['Trade Route mat','Handelsstraße','mat','prosperity'], native:['Native Village mat','Eingeborenendorf-Tableau','mat','seaside'], island:['Island mat','Insel-Tableau','mat','seaside'],
-  adv:['Adventures tokens','Abenteuer-Marker','tok','adventures'], pirateship:['Pirate Ship mat','Piratenschiff-Tableau','mat','seaside'], blackmarket:['Black Market deck','Schwarzmarkt-Stapel','deck','promo']};
+  adv:['Adventures tokens','Abenteuer-Marker','tok','adventures'], pirateship:['Pirate Ship mat','Piratenschiff-Tableau','mat','seaside'], projects:['Project cubes','Projekt-Würfel','tok','renaissance'], blackmarket:['Black Market deck','Schwarzmarkt-Stapel','deck','promo']};
 Object.entries(MATS).forEach(([key,[en,de,kind,box]]) => { const tag = '@mat:'+key; C[tag] = {n:[en,de], d:[NOTES[key][0], NOTES[key][1]], x:['',''], t:[kind==='mat'?'Mat':kind==='tok'?'Token':'Deck'], k:'X'}; CARDBOX[tag] = box; });
 
 /* ---------- random ---------- */
@@ -1098,7 +1102,7 @@ document.addEventListener('click', e => {
   if(w){ woodClick(w.matches('.toggle') ? w.checked : w.getAttribute('aria-pressed') !== 'true'); return; }
   if(e.target.closest('.bx.can')){ if(ST.flow.manual) uiSound('tin'); return; }
   if(e.target.closest('.tile,.pile,.pimg,.pickrow')){ uiSound('card'); return; }
-  if(e.target.closest('.modecard,.emchip,.embtn,.snav')){ woodClick(true); return; }
+  if(e.target.closest('.modecard,.emchip,.embtn,.snav,.modechip')){ woodClick(true); return; }
   if(e.target.closest('button,label.btn')) uiSound('tap');
 }, true);
 function beep(freq=1400, dur=.03, vol=.08, type='square'){
@@ -1318,7 +1322,7 @@ function progress(done, total, label){
 const EXP_ALIAS = { base_game:['dominion'], base:['dominion'], base_set:['dominion'], dominion:['dominion'], intrigue:['intrigue'], seaside:['seaside'], alchemy:['alchemy'],
   prosperity:['prosperity'], cornucopia:['cornucopia'], hinterlands:['hinterlands'], dark_ages:['darkAges'], guilds:['guilds'], cornucopia_and_guilds:['cornucopia','guilds'],
   adventures:['adventures'], empires:['empires'], nocturne:['nocturne'], renaissance:['renaissance'], menagerie:['menagerie'], allies:['allies'], plunder:['plunder'],
-  rising_sun:['risingSun'], promo:['promo'], promos:['promo'], promo_cards:['promo'] };
+  rising_sun:['risingSun'], promo:['promo'], promos:['promo'], promo_cards:['promo'], base_cards:['basecards'], basic_cards:['basecards'] };
 // "seaside_2nd_edition_update_pack" → {boxes:['seaside'], ed:'u'}; unsuffixed means the original edition
 function parseExp(id){
   id = id.toLowerCase().replace(/&/g,'and').replace(/[\s-]+/g,'_');
@@ -1337,7 +1341,8 @@ function assetFor(kind, id){ for(const ed of prefEds(id)){ const u = PH.urls[`${
 // setup_<component>: tolerant matching, the bundle spells the tavern mat "tavermat"
 const SETUP_ALIAS = { tavermat:['tavern'], tavernmat:['tavern'], nativevillagemat:['native'], islandmat:['island'], pirateshipmat:['pirateship'], traderoutemat:['trade'],
   coffersmat:['coffers'], villagersmat:['villagers'], coffersvillagersmat:['coffers','villagers'], exilemat:['exile'], favorsmat:['favors'], favortokens:['favors'], favorstokens:['favors'],
-  trashmat:['trash'], debttokens:['debt'], suntokens:['sun'], journeytoken:['adv'], banemarker:['bane'], vptokens:['vp'], victorytokens:['vp'], blackmarketdeck:['blackmarket'] };
+  trashmat:['trash'], debttokens:['debt'], suntokens:['sun'], journeytoken:['adv'], banemarker:['bane'], vptokens:['vp'], victorytokens:['vp'], blackmarketdeck:['blackmarket'],
+  actiontoken:['adv'], buytoken:['adv'], cardtoken:['adv'], cointoken:['adv','coffers','pirateship','trade'], cointokens:['adv','coffers','pirateship','trade'], woodencubes:['projects'], cubes:['projects'] };
 function setupTargets(id){
   id = id.toLowerCase().replace(/[^a-z0-9]/g,'');
   if(SETUP_ALIAS[id]) return SETUP_ALIAS[id];
@@ -1348,7 +1353,7 @@ function setupTargets(id){
   for(const [re, tg] of k) if(re.test(id) && !out.includes(tg)) out.push(tg);
   return out.length ? out : null;
 }
-function setupPhoto(matKey){ for(const k of Object.keys(PH.urls)) if(k.startsWith('setup:')){ const tg = setupTargets(k.slice(6)); if(tg && tg.includes(matKey)) return PH.urls[k]; } return null; }
+function setupPhoto(matKey){ let best = null, bl = 99; for(const k of Object.keys(PH.urls)) if(k.startsWith('setup:')){ const tg = setupTargets(k.slice(6)); if(tg && tg.includes(matKey) && tg.length < bl){ best = PH.urls[k]; bl = tg.length; } } return best; }
 // English-first card lookup for the bundle ("Sauna-Avanto.jpg", "King's Court.jpg", "Dame Anna.jpg")
 let ENIDX = null;
 function enIndex(){
@@ -1665,6 +1670,15 @@ function wheelSVG(){
     <g id="wheelrot" style="transform:rotate(${wheelRot}deg)">${g}<circle r="${R}" fill="none" stroke="#D6A032" stroke-width="4"/></g>
   </svg>`;
 }
+function modeChip(){ const m = MODES[ST.s.mode||'normal'] || MODES.normal;
+  return `<div class="modechiprow"><button class="modechip" data-act="modepick" aria-haspopup="dialog"><small>${t('modeNowL')}</small><b>${esc(m.n[L()])}</b><span aria-hidden="true">▾</span></button></div>`; }
+function modeGrid(){ const md = ST.s.mode || 'normal'; return `<div class="modegrid">${Object.entries(MODES).map(([id,m])=>`<button class="modecard" data-mode="${id}" aria-pressed="${md===id}"><b>${esc(m.n[L()])}</b><small>${esc(m.d[L()])}</small></button>`).join('')}</div>`; }
+function typeChips(){ const THEMES = ['Attack','Victory','Treasure','Reaction','Duration','Night','Reserve','Command','Fate','Doom','Liaison','Omen','Traveller','Looter'];
+  const ownK = [...new Set(ownedBoxes().flatMap(boxTags))].filter(isK), th = ST.s.theme || [];
+  return `<div class="round" style="padding:0 12px 12px;gap:8px">${THEMES.map(ty=>{ const n = ownK.filter(x=>has(x,ty)).length; return n ? `<button class="chip ${th.includes(ty)?'on':''}" data-theme="${ty}" aria-pressed="${th.includes(ty)}">${esc(typeName(ty))} <small style="opacity:.7">${n}</small></button>` : ''; }).join('')}</div>`; }
+let MODESHEET = false;
+function modeSheet(){ MODESHEET = true;
+  openSheet(`<div class="inner"><h3>${t('modeTitle')}</h3><p class="hint" style="margin-top:0">${t('modePickHint')}</p>${modeGrid()}${(ST.s.mode||'normal')==='custom' ? typeChips() : ''}</div>`); }
 function renderWheel(){
   const v = document.getElementById('view');
   if(!ownedBoxes().length){
@@ -1672,7 +1686,7 @@ function renderWheel(){
     return;
   }
   const r = wheelResult;
-  v.innerHTML = `<h2 class="big">${t('q1')}</h2><p class="lead">${t('q1l')}</p>
+  v.innerHTML = `<h2 class="big">${t('q1')}</h2><p class="lead">${t('q1l')}</p>${modeChip()}
     <div class="resultrow"><span class="result" id="wheelres" aria-live="polite">${r!=null?`${r} ${r===1?t('oneBox'):t('nBoxes')}`:''}</span></div>
     <div class="booth"><span class="pflag l"></span><span class="pflag r"></span><div class="roof"></div><div class="valance"></div><span class="pole l"></span><span class="pole r"></span>
     <div class="boothin"><div class="wheelwrap" id="wheelwrap">
@@ -1747,7 +1761,7 @@ function renderBoxes(){
   const v = document.getElementById('view');
   const owned = ownedBoxes(); const n = Math.min(ST.flow.n||1, owned.length);
   const chosen = ST.flow.boxes || [], man = !!ST.flow.manual;
-  v.innerHTML = `<h2 class="big">${man?t('q2m'):t('q2')}</h2><p class="lead">${man?t('q2ml'):`${n} ${t('q2l')}`}</p>
+  v.innerHTML = `<h2 class="big">${man?t('q2m'):t('q2')}</h2><p class="lead">${man?t('q2ml'):`${n} ${t('q2l')}`}</p>${busy ? '' : modeChip()}
     <div class="picked" id="picked">${chosen.map(id=>`<span class="pickedbox">${emblem(id,'')}${esc(boxName(id))}</span>`).join('')}</div>
     <div class="booth wide"><span class="pflag l"></span><span class="pflag r"></span><div class="roof"></div><div class="valance"></div><span class="pole l"></span><span class="pole r"></span>
     <div class="boothin"><div class="boxgrid cans ${chosen.length&&!busy&&!man?'done':''} ${man?'manual':''}" id="boxgrid">${pyramids(owned).map(p=>`<div class="pyr">${p.map(tier=>`<div class="tier">${tier.map(id=>`<button class="bx can ${chosen.includes(id)?'chosen':''}" data-bx="${id}" ${man?`aria-pressed="${chosen.includes(id)}"`:'tabindex="-1"'} aria-label="${esc(boxName(id))}"><span class="cb">${emblem(id,'')}</span></button>`).join('')}</div>`).join('')}<div class="shelf"></div></div>`).join('')}</div></div>
@@ -1831,6 +1845,7 @@ function setupNotes(k){
   if(/Native Village mat/.test(text)) NT('native');
   if(/Island mat/.test(text)) NT('island');
   if(/Pirate Ship mat/.test(text)) NT('pirateship');
+  if(all.some(x=>has(x,'Project'))) NT('projects');
   if(/(\+1 (Card|Action|Buy|Coin) token|-1 (Card|Coin) token|-2 Cost token|Trashing token|Journey token|Estate token)/i.test(text)) NT('adv');
   if(sup.includes('Black Market')) NT('blackmarket');
   return notes;
@@ -1865,7 +1880,7 @@ function pileHTML(o){
       <span class="part">${photo?`<img src="${photo}" alt="" loading="lazy">`:`${band}${o.tag&&CARDBOX[o.tag]?emblem(CARDBOX[o.tag]):(o.tag?baseSym(o.tag):'')}`}</span>
       <span class="ptype">${esc(types.map(typeName).join(' – '))}</span>
       ${c?`<span class="pcost">${costHTML(o.tag)}</span>`:''}</span>
-    ${photo && o.tag && CARDBOX[o.tag] ? `<span class="pem">${emblem(CARDBOX[o.tag],'')}</span>` : ''}
+    ${photo && o.tag && CARDBOX[o.tag] ? `<span class="pem">${emblem(CARDBOX[o.tag],'')}</span>` : photo && o.tag && BASESYM[o.tag] && assetFor('icon','basecards') ? `<span class="pem"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18.5" fill="#FBF6E9" stroke="#D6A032" stroke-width="2"/><image href="${assetFor('icon','basecards')}" x="7" y="7" width="26" height="26" preserveAspectRatio="xMidYMid meet"/></svg></span>` : ''}
     ${(o.marks||[]).map(m=>`<span class="pmark">${esc(m)}</span>`).join('')}
     ${o.count>1?`<span class="pcount">${o.count}</span>`:''}
   </button>`;
@@ -2043,7 +2058,7 @@ function renderSettings(){
   const THEMES = ['Attack','Victory','Treasure','Reaction','Duration','Night','Reserve','Command','Fate','Doom','Liaison','Omen','Traveller','Looter'];
   const ownK = [...new Set(ownedBoxes().flatMap(boxTags))].filter(isK);
   const th = s.theme || [], md = s.mode || 'normal';
-  h += `<h2 class="sec">${t('modeTitle')}</h2><div class="panel"><div class="modegrid">${Object.entries(MODES).map(([id,m])=>`<button class="modecard" data-mode="${id}" aria-pressed="${md===id}"><b>${esc(m.n[L()])}</b><small>${esc(m.d[L()])}</small></button>`).join('')}</div>
+  h += `<h2 class="sec">${t('modeTitle')}</h2><div class="panel">${modeGrid()}
     ${md==='custom'?`<div class="row" style="flex-wrap:wrap;gap:8px;border-top:1px dashed var(--line)">
       ${THEMES.map(ty=>{ const n = ownK.filter(x=>has(x,ty)).length; return n ? `<button class="chip ${th.includes(ty)?'on':''}" data-theme="${ty}" aria-pressed="${th.includes(ty)}">${esc(typeName(ty))} <small style="opacity:.7">${n}</small></button>` : ''; }).join('')}
     </div>`:''}</div><p class="hint">${t('themeHint')}</p>`;
@@ -2110,7 +2125,7 @@ function render(anim){
 /* ---------- sheet ---------- */
 function openSheet(html){ const sh = document.getElementById('sheet'); sh.innerHTML = html; sh.scrollTop = 0;
   document.getElementById('scrim').classList.add('open'); requestAnimationFrame(()=>sh.classList.add('open')); }
-function closeSheet(){ stopScan(); document.getElementById('sheet').classList.remove('tall'); document.getElementById('sheet').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); }
+function closeSheet(){ stopScan(); if(MODESHEET){ MODESHEET = false; if(TAB==='kingdom') render(); } document.getElementById('sheet').classList.remove('tall'); document.getElementById('sheet').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); }
 let SHEET = {tag:null, i:0}, SHEETLIST = null;
 function navSheet(dir){ if(!SHEETLIST || !SHEETLIST.includes(SHEET.tag)) return; const n = SHEETLIST.length, i = SHEETLIST.indexOf(SHEET.tag); uiSound('card'); cardSheet(SHEETLIST[(i + dir + n) % n]); }
 function cardSheet(tag, idx){
@@ -2331,8 +2346,10 @@ document.addEventListener('click', e => {
   if(d.theme!==undefined && el.classList.contains('chip')){
     const th = ST.s.theme = ST.s.theme || [];
     { const i = th.indexOf(d.theme); if(i>=0) th.splice(i,1); else th.push(d.theme); }
-    save(); renderSettings(); return; }
-  if(d.mode){ ST.s.mode = d.mode; save(); renderSettings(); return; }
+    save(); if(MODESHEET) modeSheet(); else renderSettings(); return; }
+  if(d.mode){ ST.s.mode = d.mode; save();
+    if(MODESHEET){ if(d.mode === 'custom') modeSheet(); else { closeSheet(); render(); toast(`${t('modeNowL')}: ${MODES[d.mode].n[L()]}`); } }
+    else renderSettings(); return; }
   if(d.selall!==undefined){ if(d.selall==='1') BOXES.forEach(b => { if(b.id!=='promo') ST.owned[b.id] = Object.fromEntries(Object.keys(b.e).map(e=>['e'+e,true])); }); else BOXES.forEach(b => { if(b.id!=='promo') ST.owned[b.id] = {}; }); save(); renderSettings(); return; }
   if(d.boxinfo){ boxSheet(d.boxinfo); return; }
   if(d.rule){ openRule(d.rule); return; }
@@ -2373,6 +2390,7 @@ document.addEventListener('click', e => {
     case 'fillRest': finishManual(true); break;
     case 'finishPick': finishManual(false); break;
     case 'rules': rulesSheet(); break;
+    case 'modepick': modeSheet(); break;
     case 'music': if(!ST.music) setMusic(true); musicPop(!POPOPEN); break;
     case 'musicon': setMusic(true); break;
     case 'musicoff': setMusic(false); break;

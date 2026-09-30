@@ -15,3 +15,6 @@ Einfach `index.html` öffnen – oder als GitHub Pages veröffentlichen (Setting
 ## Hinweis
 Inoffizielles, nicht-kommerzielles Fanprojekt. Nicht verbunden mit Rio Grande Games oder ASS Altenburger.
 „Dominion“ ist eine Marke der jeweiligen Rechteinhaber.
+
+## Copyright
+© 2026 Nicolas Vogt. Alle Rechte an Code, Gestaltung, Grafiken und Musik vorbehalten – siehe `LICENSE.md`.

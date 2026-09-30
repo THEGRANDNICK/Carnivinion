@@ -192,7 +192,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .tile .body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:2px;flex:1}
 .tile .name{font:700 1.15rem/1.1 Grenze,Georgia,serif;color:var(--ink);overflow-wrap:anywhere;hyphens:auto}
 .tile .foot{display:flex;align-items:flex-end;gap:6px;margin-top:auto}
-.tile .meta{font-size:.8rem;color:var(--muted);line-height:1.2;flex:1;font-weight:600}
+.tile .meta{font-size:.9rem;color:var(--ink);line-height:1.2;flex:1;font-weight:700}
 .tile .em{width:28px;height:28px;flex:none}
 .tile .cost{position:absolute;top:8px;left:9px;display:flex;gap:3px;z-index:1}
 .tile .marks{position:absolute;top:9px;right:9px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:68%;z-index:1}
@@ -254,7 +254,7 @@ label.btn input{display:none}
 .cam{width:18px;height:18px;flex:none}
 .tile.land .band{height:28px}
 .tile.land{min-height:92px}
-.coin,.debt,.pot{display:inline-grid;place-items:center;min-width:28px;height:28px;border-radius:50%;font:800 .95rem/1 "Alegreya Sans",sans-serif;padding:0 4px}
+.coin,.debt,.pot{display:inline-grid;place-items:center;min-width:30px;height:30px;border-radius:50%;font:800 .95rem/1 "Alegreya Sans",sans-serif;padding:0 4px}
 .coin{background:radial-gradient(circle at 35% 30%,#FFE28A,var(--gold) 60%,#C98E12);color:var(--gold-ink);box-shadow:0 0 0 2px #C98E12 inset,0 2px 3px rgba(0,0,0,.25)}
 .debt{background:var(--debt);color:#fff;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
 .pot{background:var(--potion);color:#fff;min-width:20px;border-radius:40% 40% 50% 50%}
@@ -370,7 +370,7 @@ label.btn input{display:none}
 .tbl h4 .stepper button{background:rgba(255,243,223,.9);color:#3A2606}
 .tbl{--g:14px;--kc:2;--sc:4}
 @media(min-width:560px){.tbl{--kc:4;--sc:7}}
-@media(max-width:559px){.pname{font-size:.95rem}.ptype{font-size:.72rem}.pcost .coin,.pcost .debt,.pcost .pot{min-width:24px;height:24px;font-size:.8rem}.pmark{font-size:.72rem}}
+@media(max-width:559px){.pmark{font-size:.72rem}}
 @media(min-width:720px){.tbl{--kc:5;--sc:9}}
 @media(min-width:1100px){.tbl{--sc:10}}
 .tsec+.tsec{margin-top:30px}
@@ -388,18 +388,32 @@ label.btn input{display:none}
 .pile.wide{--cw:150px}
 .pile.wide .pcard{aspect-ratio:7.6/5}
 @media(min-width:900px){.pile.wide{--cw:170px}}
-.pname{position:relative;display:flex;min-height:18%;align-items:center;justify-content:center;padding:2px 3px;font:700 clamp(.62rem,2.6vw,.84rem)/1.05 Grenze,Georgia,serif;overflow-wrap:anywhere;hyphens:auto}
+.pname{position:relative;display:flex;min-height:18%;align-items:center;justify-content:center;padding:2px 3px;font:700 clamp(.62rem,12.5cqi,1.05rem)/1.05 Grenze,Georgia,serif;overflow-wrap:anywhere;hyphens:auto}
 .pname .pbg{position:absolute;inset:0;display:flex}.pname .pbg span{flex:1}
 .pname b{position:relative;font-weight:700}
 .part{position:relative;flex:1;min-height:0;display:flex;background:#E9DFC6;overflow:hidden;border-top:1px solid rgba(43,30,20,.35);border-bottom:1px solid rgba(43,30,20,.35)}
 .part>span{flex:1;opacity:.55}
 .part img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 .part .em{position:absolute;left:50%;top:50%;width:44%;height:auto;aspect-ratio:1;transform:translate(-50%,-50%);opacity:.9}
-.ptype{font:700 clamp(.5rem,1.9vw,.64rem)/1.1 "Alegreya Sans",sans-serif;padding:3px 2px 4px 18px;color:#4E3321;min-height:14%}
+.ptype{font:800 clamp(.6rem,11.5cqi,.95rem)/1.1 "Alegreya Sans",sans-serif;padding:4px 3px 5px calc(clamp(20px,24cqi,32px) + 2px);color:#2B1E14;min-height:15%;display:flex;align-items:center;justify-content:center}
 .pcost{position:absolute;left:2px;bottom:2px;display:flex;gap:1px;z-index:1}
-.pcost .coin,.pcost .debt,.pcost .pot{min-width:19px;height:19px;font-size:.66rem;padding:0 2px}
+.pile{container-type:inline-size}
+.pcost .coin,.pcost .debt,.pcost .pot{min-width:clamp(20px,24cqi,32px);height:clamp(20px,24cqi,32px);font-size:clamp(.66rem,12.5cqi,1.05rem);padding:0 2px}
 .pem{position:absolute;right:4px;top:21%;z-index:2;width:clamp(20px,22%,28px);aspect-ratio:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
 .pem svg{width:100%;height:100%;display:block}
+.matpiece{position:relative;border:0;padding:0;background:none;display:flex;flex-direction:column;align-items:center;gap:6px;transform:rotate(var(--rot,0deg))}
+.frow>.matpiece{width:min(300px,calc((100% - (var(--kc) - 1) * var(--g)) / var(--kc) * 1.8))!important}
+.matboard{display:grid;place-items:center;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 40%,#5E7D48,#3F5A30 70%,#2E4424);box-shadow:inset 0 0 0 4px #7A5236,inset 0 0 0 6px #D6A032,inset 0 0 22px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.4)}
+.matboard img{width:100%;height:100%;object-fit:cover}
+.matlabel{font:700 clamp(.95rem,3.4vw,1.3rem)/1.1 "Grenze Gotisch",serif;color:#F6D98E;text-shadow:0 2px 2px rgba(0,0,0,.5);padding:0 14px;text-align:center}
+.matname{font:700 .85rem/1.1 Grenze,serif;color:#FFF1D6;text-shadow:0 1px 2px rgba(0,0,0,.7);text-align:center}
+.matpiece .pcount{right:-6px;bottom:18px}
+.tokpiece{border:0;padding:0;background:none;display:flex;flex-direction:column;align-items:center;gap:6px}
+.frow>.tokpiece{width:min(110px,calc((100% - (var(--sc) - 1) * var(--g)) / var(--sc)))!important}
+.tokstack{display:grid;place-items:center;width:78%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 35% 30%,#FFE28A,#E2B63C 55%,#A8791A);
+  box-shadow:0 3px 0 #8A6420,0 6px 0 #6E4F18,0 10px 12px rgba(0,0,0,.45),inset 0 0 0 3px rgba(120,80,10,.5)}
+.tokstack img{width:100%;height:100%;object-fit:cover}.tokstack svg{width:80%;height:80%}
 .pcount{position:absolute;right:-10px;bottom:-12px;z-index:2;min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:800 .8rem/1 "Alegreya Sans",sans-serif;color:#FFF3DF;
   background:radial-gradient(circle at 35% 30%,#8A5E3C,#5A3B27);box-shadow:0 0 0 2px #D6A032,0 3px 5px rgba(0,0,0,.4)}
 .pmark{position:absolute;left:-4px;top:22%;z-index:2;background:#A8322D;color:#fff;font:800 .62rem/1.5 "Alegreya Sans",sans-serif;padding:0 6px;border-radius:2px;box-shadow:0 2px 3px rgba(0,0,0,.35);max-width:110%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -708,6 +722,9 @@ const S = {
  scanned:["Kingdom loaded","Königreich geladen"], scanFail:["That's not a Carnivinion code.","Das ist kein Carnivinion-Code."], shareLink:["Share link","Link teilen"], copyLink:["Copy link","Link kopieren"],
  shareQR:["Let your friends scan this code – they get exactly the same kingdom.","Lass deine Freunde diesen Code scannen – sie bekommen genau dasselbe Königreich."], customNotShared:["Your own cards aren't in the code.","Eigene Karten sind nicht im Code enthalten."],
  modeNowL:["Game mode","Spielmodus"], modePickHint:["Pick the mode for the next rounds. More options in Settings.","Wähle den Modus für die nächsten Runden. Mehr Optionen in den Einstellungen."],
+ startDeckT:["Starting deck – each player","Startdeck – je Spieler"], perPlayer:["each","je"],
+ scanTake:["Take a photo of the code","Code fotografieren"], scanGallery:["From gallery","Aus Galerie"],
+ scanDenied:["Camera access was blocked. On iPhone: Settings → Safari → Camera → Allow, then reload. Or simply take a photo of the code below.","Kamerazugriff wurde blockiert. Auf dem iPhone: Einstellungen → Safari → Kamera → Erlauben, dann neu laden. Oder fotografiere den Code einfach unten."],
  sharedKingdom:["Shared kingdom","Geteiltes Königreich"],
 };
 const NOTES = {
@@ -1865,6 +1882,14 @@ function baseSym(tag){
   if(kind==='pot') return `<svg class="sym" viewBox="0 0 40 40"><path d="M16 5h8v9l9 16a4 4 0 0 1-3.5 6h-19A4 4 0 0 1 7 30l9-16z" fill="${col}" stroke="#2B1E14" stroke-width="1.5"/><path d="M11 25h18" stroke="#fff" stroke-opacity=".6" stroke-width="2"/></svg>`;
   return `<svg class="sym" viewBox="0 0 40 40"><path d="M9 12h22l-2 24H11z" fill="${col}" stroke="#2B1E14" stroke-width="1.5"/><path d="M7 12h26M16 12V7h8v5M16 17v14M24 17v14" stroke="#EDE2C6" stroke-width="1.6" fill="none"/></svg>`;
 }
+function matHTML(o, kind, photo){
+  const name = nm(o.tag);
+  if(kind === 'mat') return `<button class="matpiece" data-card="${esc(o.tag)}" style="--rot:${hashRot(o.tag)}deg" aria-label="${esc(name)}${o.count?`, ${o.count}`:''}">
+      <span class="matboard">${photo ? `<img src="${photo}" alt="" loading="lazy">` : `<span class="matlabel">${esc(name)}</span>`}</span>
+      <span class="matname">${esc(name)}</span>${o.count>1?`<span class="pcount">${o.count}</span>`:''}</button>`;
+  return `<button class="tokpiece" data-card="${esc(o.tag)}" aria-label="${esc(name)}">
+      <span class="tokstack">${photo ? `<img src="${photo}" alt="" loading="lazy">` : baseSym(o.tag)}</span><span class="matname">${esc(name)}</span></button>`;
+}
 function pileHTML(o){
   // o: {tag?, name?, types?, count?, marks?, lock?, wide?, deck?}
   const c = o.tag ? C[o.tag] : null;
@@ -1875,6 +1900,8 @@ function pileHTML(o){
   const name = c ? nm(o.tag) : o.name;
   const photo = o.tag && photoFor(o.tag);
   const single = !o.count || o.count <= 1;
+  const isMat = o.tag && o.tag.startsWith('@mat:') ? MATS[o.tag.slice(5)][2] : null;
+  if(isMat === 'mat' || isMat === 'tok') return matHTML(o, isMat, photo);
   const btn = `<button class="pile${single?' single':''}${o.wide?' wide':''}" ${o.tag?`data-card="${esc(o.tag)}"`:''} style="--rot:${hashRot(o.tag||o.name)}deg${o.delay!=null?`;animation-delay:${o.delay}ms`:''}" aria-label="${esc(name)}${o.count?`, ${o.count}`:''}">
     <span class="pcard"><span class="pname"><span class="pbg">${band}</span><b>${esc(name)}</b></span>
       <span class="part">${photo?`<img src="${photo}" alt="" loading="lazy">`:`${band}${o.tag&&CARDBOX[o.tag]?emblem(CARDBOX[o.tag]):(o.tag?baseSym(o.tag):'')}`}</span>
@@ -1910,7 +1937,7 @@ function tableHTML(k, anim, marks, locked){
   [[k.ferry,'ferry',10],[k.mouse,'mouse',1],[k.river,'river',1]].forEach(([x,key,n])=>{ if(x) aside.push({tag:x, count:n, marks:[t(key)]}); });
   (k.boons||[]).forEach(x=>aside.push({tag:x, wide:true, marks:[t('druid')]}));
   if(k.shel) ['Necropolis','Hovel','Overgrown Estate'].forEach(x=>aside.push({tag:x, count:N}));
-  S0.extras.forEach(x => aside.push({tag:x, count: has(x,'Heirloom') ? N : (XC[x] || 1)}));
+  S0.extras.filter(x => !has(x,'Heirloom')).forEach(x => aside.push({tag:x, count: XC[x] || 1}));
   if('ruins' in F) aside.push({tag:'Ruins', count:10*(N-1)});
   if('spoils' in F) aside.push({tag:'Spoils', count:15});
   if('horse' in F) aside.push({tag:'Horse', count:30});
@@ -1922,8 +1949,15 @@ function tableHTML(k, anim, marks, locked){
   if('hexes' in F) aside.push({tag:'@Hexes', count:12});
   const slipKeys = ['heirloom','villagers','coffers','debt','vp','tavern','exile','favors','sun','trade','native','island','adv','blackmarket'];
   const mats = Object.keys(MATS).filter(x => x in F).map(x => ({tag:'@mat:'+x, count: MATS[x][2]==='mat' ? N : 0}));
-  const startTxt = k.start==='curse' ? t('startCurse') : k.start==='silver' ? (k.shel ? t('startSilverShel') : t('startSilver')) : (k.shel ? t('startShel') : t('startDeck'));
-  const slip = [startTxt, ...slipKeys.filter(x=>x in F && !MATS[x]).map(x=>notes[F[x]])];
+  // what each player starts with – Heirlooms replace Coppers, modes swap Estates
+  const heirs = S0.extras.filter(x => has(x,'Heirloom'));
+  const start = [{tag:'Copper', count: 7 - heirs.length}];
+  heirs.forEach(x => start.push({tag:x, count:1}));
+  if(k.start==='silver') start.push({tag:'Silver', count:1});
+  if(k.start==='curse') start.push({tag:'Curse', count:3});
+  else if(k.shel) ['Necropolis','Hovel','Overgrown Estate'].forEach(x => start.push({tag:x, count:1}));
+  else start.push({tag:'Estate', count:3});
+  const slip = slipKeys.filter(x => x in F && !MATS[x] && x !== 'heirloom').map(x => notes[F[x]]);
   return `<div class="stall"><span class="pflag l"></span><span class="pflag r"></span><div class="roof"></div><div class="valance"></div><span class="pole l"></span><span class="pole r"></span><div class="tbl">
     <div class="wear" aria-hidden="true">
       <i class="scratch" style="left:12%;top:18%;width:140px;transform:rotate(-8deg)"></i>
@@ -1938,7 +1972,8 @@ function tableHTML(k, anim, marks, locked){
     <div class="tsec"><h4>${t('supplyT')}<span class="stepper"><button data-step="players" data-d="-1" aria-label="−">−</button><output style="color:#FFF1D6">${N}</output><button data-step="players" data-d="1" aria-label="+">+</button> ${t('players')}</span></h4><div class="frow">${supplyP.map(pileHTML).join('')}</div></div>
     ${mats.length?`<div class="tsec"><h4>${t('matsT')}</h4><div class="frow">${mats.map(pileHTML).join('')}</div></div>`:''}
     ${aside.length?`<div class="tsec"><h4>${t('asideT')}</h4><div class="frow">${aside.map(pileHTML).join('')}</div></div>`:''}
-    <div class="tsec"><h4>${t('alsoT')}</h4><div class="slip"><ul>${slip.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>
+    <div class="tsec"><h4>${t('startDeckT')} <small>(×${N})</small></h4><div class="frow">${start.map(pileHTML).join('')}</div></div>
+    ${slip.length ? `<div class="tsec"><h4>${t('alsoT')}</h4><div class="slip"><ul>${slip.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>` : ''}
     <div class="props" aria-hidden="true">
       <div class="puddle"></div><div class="mug"><div class="body"></div><div class="handle"></div><div class="foam"></div></div>
       <span class="stream" style="left:150px"></span><span class="drip" style="left:148px"></span><span class="drip" style="left:196px;animation-delay:-1.1s"></span>
@@ -2275,25 +2310,29 @@ function handleScanned(text){
 }
 async function openScanner(){
   openSheet(`<div class="inner" style="text-align:center"><h3>${t('scanTitle')}</h3>
-    <div class="scanbox"><video id="scanvid" playsinline muted></video><span class="scanframe"></span></div>
+    <div class="scanbox"><video id="scanvid" playsinline webkit-playsinline muted autoplay></video><span class="scanframe"></span></div>
     <p class="hint" id="scanmsg">${t('scanHint')}</p>
-    <div class="sheetactions" style="justify-content:center"><label class="btn small">${CAMSVG}${t('scanPhoto')}<input type="file" accept="image/*" data-qrfile="1"></label></div></div>`);
+    <div class="sheetactions" style="justify-content:center"><label class="btn small">${CAMSVG}${t('scanTake')}<input type="file" accept="image/*" capture="environment" data-qrfile="1"></label><label class="btn small">${t('scanGallery')}<input type="file" accept="image/*" data-qrfile="1"></label></div></div>`);
   try{
-    const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}, audio:false});
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nomedia');
+    let stream;
+    try{ stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}}, audio:false}); }
+    catch(e1){ if(e1 && e1.name === 'NotAllowedError') throw e1; stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false}); }
     const video = document.getElementById('scanvid'); if(!video){ stream.getTracks().forEach(tr=>tr.stop()); return; }
-    SCAN = {stream, stop:false}; video.srcObject = stream; await video.play();
+    video.muted = true; video.playsInline = true; video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
+    SCAN = {stream, stop:false}; video.srcObject = stream; try{ await video.play(); }catch(e){}
     const det = ('BarcodeDetector' in window) ? new BarcodeDetector({formats:['qr_code']}) : null;
     const cv = document.createElement('canvas'), cx = cv.getContext('2d', {willReadFrequently:true});
     const tick = async () => {
       if(!SCAN || SCAN.stop) return;
       try{
         if(det){ const r = await det.detect(video); if(r[0] && handleScanned(r[0].rawValue)) return; }
-        else if(window.jsQR && video.videoWidth){ cv.width = video.videoWidth; cv.height = video.videoHeight; cx.drawImage(video, 0, 0); const img = cx.getImageData(0, 0, cv.width, cv.height); const r = jsQR(img.data, img.width, img.height); if(r && handleScanned(r.data)) return; }
+        else if(window.jsQR && video.videoWidth){ const k = Math.min(1, 720 / Math.max(video.videoWidth, video.videoHeight)); cv.width = Math.round(video.videoWidth*k); cv.height = Math.round(video.videoHeight*k); cx.drawImage(video, 0, 0, cv.width, cv.height); const img = cx.getImageData(0, 0, cv.width, cv.height); const r = jsQR(img.data, img.width, img.height, {inversionAttempts:'dontInvert'}); if(r && handleScanned(r.data)) return; }
       }catch(e){}
       setTimeout(tick, 220);
     };
     tick();
-  }catch(e){ const m = document.getElementById('scanmsg'); if(m) m.textContent = t('scanNoCam'); const b = document.querySelector('.scanbox'); if(b) b.style.display = 'none'; }
+  }catch(e){ const m = document.getElementById('scanmsg'); if(m) m.textContent = e && e.name === 'NotAllowedError' ? t('scanDenied') : t('scanNoCam'); const b = document.querySelector('.scanbox'); if(b) b.style.display = 'none'; }
 }
 async function scanFile(f){
   try{

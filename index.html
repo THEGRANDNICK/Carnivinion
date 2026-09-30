@@ -390,12 +390,12 @@ label.btn input{display:none}
 @media(min-width:900px){.pile.wide{--cw:170px}}
 .pname{position:relative;display:flex;min-height:18%;align-items:center;justify-content:center;padding:2px 3px;font:700 clamp(.62rem,12.5cqi,1.05rem)/1.05 Grenze,Georgia,serif;overflow-wrap:anywhere;hyphens:auto}
 .pname .pbg{position:absolute;inset:0;display:flex}.pname .pbg span{flex:1}
-.pname b{position:relative;font-weight:700}
+.pname b{position:relative;font-weight:700;text-align:center;width:100%}
 .part{position:relative;flex:1;min-height:0;display:flex;background:#E9DFC6;overflow:hidden;border-top:1px solid rgba(43,30,20,.35);border-bottom:1px solid rgba(43,30,20,.35)}
 .part>span{flex:1;opacity:.55}
 .part img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 .part .em{position:absolute;left:50%;top:50%;width:44%;height:auto;aspect-ratio:1;transform:translate(-50%,-50%);opacity:.9}
-.ptype{font:800 clamp(.6rem,11.5cqi,.95rem)/1.1 "Alegreya Sans",sans-serif;padding:4px 3px 5px calc(clamp(20px,24cqi,32px) + 2px);color:#2B1E14;min-height:15%;display:flex;align-items:center;justify-content:center}
+.ptype{font:800 clamp(.6rem,11.5cqi,.95rem)/1.1 "Alegreya Sans",sans-serif;padding:4px calc(clamp(20px,24cqi,32px) + 3px) 5px;text-align:center;color:#2B1E14;min-height:15%;display:flex;align-items:center;justify-content:center}
 .pcost{position:absolute;left:2px;bottom:2px;display:flex;gap:1px;z-index:1}
 .pile{container-type:inline-size}
 .pcost .coin,.pcost .debt,.pcost .pot{min-width:clamp(20px,24cqi,32px);height:clamp(20px,24cqi,32px);font-size:clamp(.66rem,12.5cqi,1.05rem);padding:0 2px}
@@ -413,6 +413,7 @@ label.btn input{display:none}
 .frow>.tokpiece{width:min(110px,calc((100% - (var(--sc) - 1) * var(--g)) / var(--sc)))!important}
 .tokstack{display:grid;place-items:center;width:78%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 35% 30%,#FFE28A,#E2B63C 55%,#A8791A);
   box-shadow:0 3px 0 #8A6420,0 6px 0 #6E4F18,0 10px 12px rgba(0,0,0,.45),inset 0 0 0 3px rgba(120,80,10,.5)}
+.toklabel{font:800 clamp(.72rem,3vw,1rem)/1.05 Grenze,serif;color:#3A2606;text-align:center;padding:0 8px;text-shadow:0 1px 0 rgba(255,240,190,.6)}
 .tokstack img{width:100%;height:100%;object-fit:cover}.tokstack svg{width:80%;height:80%}
 .pcount{position:absolute;right:-10px;bottom:-12px;z-index:2;min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:800 .8rem/1 "Alegreya Sans",sans-serif;color:#FFF3DF;
   background:radial-gradient(circle at 35% 30%,#8A5E3C,#5A3B27);box-shadow:0 0 0 2px #D6A032,0 3px 5px rgba(0,0,0,.4)}
@@ -738,7 +739,12 @@ const NOTES = {
  tavern:["Tavern mats.","Wirtshaustableaus."], exile:["Exile mats.","Exil-Tableaus."], favors:["Favor tokens.","Gefallen-Marker."],
  sun:["Sun tokens on the Prophecy.","Sonnenmarker auf die Prophezeiung."], trade:["Trade Route mat and tokens.","Handelsstraßen-Tableau und -Marker."],
  native:["Native Village mats.","Eingeborenendorf-Tableaus."], pirateship:["Pirate Ship mats and coin tokens.","Piratenschiff-Tableaus und Geldmarker."], projects:["Wooden cubes to mark bought Projects.","Holzwürfel, um gekaufte Projekte zu markieren."], island:["Island mats.","Insel-Tableaus."],
- adv:["Adventures player tokens.","Abenteuer-Spielermarker."], heirloom:["Each Heirloom replaces one Copper in starting decks.","Jedes Erbstück ersetzt ein Kupfer im Startdeck."],
+ adv:["Adventures player tokens.","Abenteuer-Spielermarker."],
+ advcard:["Each player takes their +1 Card token.","Jeder Spieler nimmt seinen Marker +1 Karte."], advaction:["Each player takes their +1 Action token.","Jeder Spieler nimmt seinen Marker +1 Aktion."],
+ advbuy:["Each player takes their +1 Buy token.","Jeder Spieler nimmt seinen Marker +1 Kauf."], advcoin:["Each player takes their +1 Coin token.","Jeder Spieler nimmt seinen Marker +1 Geld."],
+ advminuscard:["Each player takes their −1 Card token.","Jeder Spieler nimmt seinen Marker −1 Karte."], advminuscoin:["Each player takes their −1 Coin token.","Jeder Spieler nimmt seinen Marker −1 Geld."],
+ advminuscost:["Each player takes their −2 Cost token.","Jeder Spieler nimmt seinen Marker −2 Kosten."], advtrashing:["Each player takes their Trashing token.","Jeder Spieler nimmt seinen Entsorgungsmarker."],
+ advestate:["Each player takes their Estate token.","Jeder Spieler nimmt seinen Anwesen-Marker."], advjourney:["Each player takes their Journey token (face up).","Jeder Spieler nimmt seinen Reisemarker (offen)."], heirloom:["Each Heirloom replaces one Copper in starting decks.","Jedes Erbstück ersetzt ein Kupfer im Startdeck."],
  blackmarket:["Build the Black Market deck from unused kingdom cards.","Schwarzmarkt-Stapel aus unbenutzten Königreichkarten bilden."],
 };
 let lang = 'de';
@@ -816,7 +822,11 @@ BOXES.forEach(b => Object.values(b.e).forEach(arr => arr.forEach(tg => { if(!CAR
 const MATS = {villagers:['Villagers','Dorfbewohner','tok','renaissance'], coffers:['Coffers','Taler','tok','renaissance'], debt:['Debt tokens','Schuldenmarker','tok','empires'], vp:['Victory tokens','Siegpunktmarker','tok','prosperity'],
   tavern:['Tavern mat','Wirtshaus-Tableau','mat','adventures'], exile:['Exile mat','Exil-Tableau','mat','menagerie'], favors:['Favor tokens','Gefallen-Marker','tok','allies'], sun:['Sun tokens','Sonnenmarker','tok','risingSun'],
   trade:['Trade Route mat','Handelsstraße','mat','prosperity'], native:['Native Village mat','Eingeborenendorf-Tableau','mat','seaside'], island:['Island mat','Insel-Tableau','mat','seaside'],
-  adv:['Adventures tokens','Abenteuer-Marker','tok','adventures'], pirateship:['Pirate Ship mat','Piratenschiff-Tableau','mat','seaside'], projects:['Project cubes','Projekt-Würfel','tok','renaissance'], blackmarket:['Black Market deck','Schwarzmarkt-Stapel','deck','promo']};
+  adv:['Adventures tokens','Abenteuer-Marker','tok','adventures'],
+  advcard:['+1 Card token','Marker +1 Karte','tok','adventures'], advaction:['+1 Action token','Marker +1 Aktion','tok','adventures'], advbuy:['+1 Buy token','Marker +1 Kauf','tok','adventures'],
+  advcoin:['+1 Coin token','Marker +1 Geld','tok','adventures'], advminuscard:['−1 Card token','Marker −1 Karte','tok','adventures'], advminuscoin:['−1 Coin token','Marker −1 Geld','tok','adventures'],
+  advminuscost:['−2 Cost token','Marker −2 Kosten','tok','adventures'], advtrashing:['Trashing token','Entsorgungsmarker','tok','adventures'], advestate:['Estate token','Anwesen-Marker','tok','adventures'],
+  advjourney:['Journey token','Reisemarker','tok','adventures'], pirateship:['Pirate Ship mat','Piratenschiff-Tableau','mat','seaside'], projects:['Project cubes','Projekt-Würfel','tok','renaissance'], blackmarket:['Black Market deck','Schwarzmarkt-Stapel','deck','promo']};
 Object.entries(MATS).forEach(([key,[en,de,kind,box]]) => { const tag = '@mat:'+key; C[tag] = {n:[en,de], d:[NOTES[key][0], NOTES[key][1]], x:['',''], t:[kind==='mat'?'Mat':kind==='tok'?'Token':'Deck'], k:'X'}; CARDBOX[tag] = box; });
 
 /* ---------- random ---------- */
@@ -1358,13 +1368,15 @@ function assetFor(kind, id){ for(const ed of prefEds(id)){ const u = PH.urls[`${
 // setup_<component>: tolerant matching, the bundle spells the tavern mat "tavermat"
 const SETUP_ALIAS = { tavermat:['tavern'], tavernmat:['tavern'], nativevillagemat:['native'], islandmat:['island'], pirateshipmat:['pirateship'], traderoutemat:['trade'],
   coffersmat:['coffers'], villagersmat:['villagers'], coffersvillagersmat:['coffers','villagers'], exilemat:['exile'], favorsmat:['favors'], favortokens:['favors'], favorstokens:['favors'],
-  trashmat:['trash'], debttokens:['debt'], suntokens:['sun'], journeytoken:['adv'], banemarker:['bane'], vptokens:['vp'], victorytokens:['vp'], blackmarketdeck:['blackmarket'],
-  actiontoken:['adv'], buytoken:['adv'], cardtoken:['adv'], cointoken:['adv','coffers','pirateship','trade'], cointokens:['adv','coffers','pirateship','trade'], woodencubes:['projects'], cubes:['projects'] };
+  trashmat:['trash'], debttokens:['debt'], suntokens:['sun'], journeytoken:['advjourney'], banemarker:['bane'], vptokens:['vp'], victorytokens:['vp'], blackmarketdeck:['blackmarket'],
+  actiontoken:['advaction'], buytoken:['advbuy'], cardtoken:['advcard'], cointoken:['advcoin','coffers','pirateship','trade'], cointokens:['advcoin','coffers','pirateship','trade'],
+  plusactiontoken:['advaction'], plusbuytoken:['advbuy'], pluscardtoken:['advcard'], pluscointoken:['advcoin'], minuscardtoken:['advminuscard'], minuscointoken:['advminuscoin'], minuscosttoken:['advminuscost'], trashingtoken:['advtrashing'], estatetoken:['advestate'], woodencubes:['projects'], cubes:['projects'] };
 function setupTargets(id){
   id = id.toLowerCase().replace(/[^a-z0-9]/g,'');
   if(SETUP_ALIAS[id]) return SETUP_ALIAS[id];
   const k = [[/taver/,'tavern'],[/nativevillage/,'native'],[/island/,'island'],[/pirate/,'pirateship'],[/traderoute/,'trade'],[/exile/,'exile'],[/favor/,'favors'],[/debt/,'debt'],
-    [/sun/,'sun'],[/journey|pluscard|plusaction|plusbuy|pluscoin|minuscard|minuscoin|minuscost|estatetoken|trashingtoken|adventure/,'adv'],[/vp|victory|pointtoken/,'vp'],
+    [/sun/,'sun'],[/journey/,'advjourney'],[/minuscard/,'advminuscard'],[/minuscoin/,'advminuscoin'],[/minuscost|twocost/,'advminuscost'],[/trashing/,'advtrashing'],[/estatetoken/,'advestate'],
+    [/pluscard|cardtoken/,'advcard'],[/plusaction|actiontoken/,'advaction'],[/plusbuy|buytoken/,'advbuy'],[/pluscoin/,'advcoin'],[/adventure/,'adv'],[/vp|victory|pointtoken/,'vp'],
     [/bane/,'bane'],[/blackmarket/,'blackmarket'],[/trash/,'trash'],[/embargo/,'embargo'],[/obelisk/,'obelisk']];
   const out = []; if(/coffer/.test(id)) out.push('coffers'); if(/villager/.test(id)) out.push('villagers');
   for(const [re, tg] of k) if(re.test(id) && !out.includes(tg)) out.push(tg);
@@ -1863,7 +1875,11 @@ function setupNotes(k){
   if(/Island mat/.test(text)) NT('island');
   if(/Pirate Ship mat/.test(text)) NT('pirateship');
   if(all.some(x=>has(x,'Project'))) NT('projects');
-  if(/(\+1 (Card|Action|Buy|Coin) token|-1 (Card|Coin) token|-2 Cost token|Trashing token|Journey token|Estate token)/i.test(text)) NT('adv');
+  const ADVT = {'Bridge Troll':['advminuscoin'], 'Ball':['advminuscoin'], 'Ranger':['advjourney'], 'Giant':['advjourney'], 'Pilgrimage':['advjourney'],
+    'Borrow':['advminuscard'], 'Raid':['advminuscard'], 'Relic':['advminuscard'], 'Ferry':['advminuscost'], 'Plan':['advtrashing'], 'Inheritance':['advestate'],
+    'Lost Arts':['advaction'], 'Seaway':['advbuy'], 'Pathfinding':['advcard'], 'Training':['advcoin'], 'Teacher':['advcard','advaction','advbuy','advcoin']};
+  const advNeed = []; [...all, ...extras].forEach(x => (ADVT[x]||[]).forEach(tk => { if(!advNeed.includes(tk)) advNeed.push(tk); }));
+  advNeed.forEach(tk => NT(tk));
   if(sup.includes('Black Market')) NT('blackmarket');
   return notes;
 }
@@ -1888,7 +1904,7 @@ function matHTML(o, kind, photo){
       <span class="matboard">${photo ? `<img src="${photo}" alt="" loading="lazy">` : `<span class="matlabel">${esc(name)}</span>`}</span>
       <span class="matname">${esc(name)}</span>${o.count>1?`<span class="pcount">${o.count}</span>`:''}</button>`;
   return `<button class="tokpiece" data-card="${esc(o.tag)}" aria-label="${esc(name)}">
-      <span class="tokstack">${photo ? `<img src="${photo}" alt="" loading="lazy">` : baseSym(o.tag)}</span><span class="matname">${esc(name)}</span></button>`;
+      <span class="tokstack">${photo ? `<img src="${photo}" alt="" loading="lazy">` : o.tag.startsWith('@mat:adv') && o.tag !== '@mat:adv' ? `<span class="toklabel">${esc(({advtrashing:['Trash','Entsorgen'],advjourney:['Journey','Reise'],advestate:['Estate','Anwesen']}[o.tag.slice(5)]||[])[L()] || name.replace(/^Marker\s*/,'').replace(/\s*token$/,''))}</span>` : baseSym(o.tag)}</span><span class="matname">${esc(name)}</span></button>`;
 }
 function pileHTML(o){
   // o: {tag?, name?, types?, count?, marks?, lock?, wide?, deck?}

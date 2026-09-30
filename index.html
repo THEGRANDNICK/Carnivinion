@@ -172,6 +172,25 @@ textarea.nameinput{resize:vertical;font:inherit}
 .pdfframe{width:100%;height:70vh;border:0;border-radius:8px;background:#fff;box-shadow:0 0 0 2px var(--line)}
 .linkbtn{border:0;background:none;padding:0;color:var(--royal);font-weight:700;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
 a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.crown{width:18px;height:18px;flex:none}
+.addrow{display:flex;gap:8px;align-items:center}.addrow .nameinput{margin:0;flex:1}
+.row.resrow{flex-wrap:nowrap}.row.resrow .lbl{flex:1 1 0;min-width:0;font-size:1.05rem}
+.crownbtn{border:0;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#BBA98E;background:var(--sunk);box-shadow:inset 0 2px 3px rgba(0,0,0,.2)}
+.crownbtn .crown{width:24px;height:24px}
+.crownbtn[aria-pressed="true"]{color:#F6D98E;background:#A8322D;box-shadow:0 0 0 2px #D6A032,0 3px 6px rgba(0,0,0,.3)}
+.ptsin{width:92px!important;margin:0!important;text-align:center}
+.resline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:.92rem}.resline .crown{color:#D6A032}.resline span{color:var(--muted)}
+.modechip .crown{width:20px;height:20px;color:#F6D98E}
+.podium{position:relative;display:grid;grid-template-columns:repeat(3,1fr);align-items:end;gap:6px;max-width:420px;margin:18px auto 0;min-height:230px}
+.pstand{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pname2{display:flex;flex-direction:column;align-items:center;font:700 1.1rem Grenze,serif;line-height:1.1}.pname2 small{font:700 .8rem "Alegreya Sans",sans-serif;color:var(--muted)}
+.pname2 .crown{width:34px;height:34px;color:#D6A032;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+.pblock{width:100%;display:grid;place-items:center;border-radius:6px 6px 0 0;font:800 2rem Grenze,serif;color:#F6D98E;text-shadow:0 2px 2px rgba(0,0,0,.4);
+  background:repeating-linear-gradient(180deg,transparent 0 22px,rgba(40,22,8,.35) 22px 23.5px),linear-gradient(#9A6B45,#6B4630);box-shadow:inset 0 3px 0 rgba(255,230,190,.25),0 6px 10px rgba(0,0,0,.3)}
+.p1 .pblock{height:120px;background:repeating-linear-gradient(180deg,transparent 0 22px,rgba(40,22,8,.3) 22px 23.5px),linear-gradient(#C9463E,#8E2723)}
+.p2 .pblock{height:84px}.p3 .pblock{height:60px}
+.row.statrow{min-height:44px;gap:4px;flex-wrap:nowrap;font-size:.92rem;padding:8px 10px}.row.statrow>span{min-width:42px;text-align:center}.statrow>span:first-child{min-width:22px}.row.statrow .lbl{flex:1 1 0;min-width:0;text-align:left;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row.statrow.head{font-size:.75rem;color:var(--muted);font-weight:800;min-height:34px}
 .badlist{max-height:40vh;overflow:auto;background:var(--sunk);border-radius:8px;padding:8px 8px 8px 28px;font-size:.9rem}
 .embtn{border:0;padding:0;background:none;border-radius:50%;display:grid}
 .modechiprow{text-align:center;margin:4px 0 2px}
@@ -726,6 +745,12 @@ const S = {
  startDeckT:["Starting deck – each player","Startdeck – je Spieler"], perPlayer:["each","je"],
  scanTake:["Take a photo of the code","Code fotografieren"], scanGallery:["From gallery","Aus Galerie"],
  scanDenied:["Camera access was blocked. On iPhone: Settings → Safari → Camera → Allow, then reload. Or simply take a photo of the code below.","Kamerazugriff wurde blockiert. Auf dem iPhone: Einstellungen → Safari → Kamera → Erlauben, dann neu laden. Oder fotografiere den Code einfach unten."],
+ result:["Result","Ergebnis"], resultT:["Who played – who won?","Wer hat gespielt – wer hat gewonnen?"], addPlayer:["Add name","Name hinzufügen"], newName:["Name","Name"],
+ resHint:["Tap names to mark who played, then tap the crown of the winner (several for a tie). Points are optional.","Tippe die Namen an, die mitgespielt haben, dann die Krone beim Gewinner (bei Gleichstand mehrere). Punkte sind optional."],
+ saveResult:["Save result","Ergebnis speichern"], delResult:["Remove result","Ergebnis entfernen"], points:["Points","Punkte"], won:["won","gewinnt"], wonTie:["tie","Gleichstand"],
+ podium:["Podium","Podium"], podiumEmpty:["No results yet. Open a game and tap “Result”.","Noch keine Ergebnisse. Öffne ein Spiel und tippe auf „Ergebnis“."],
+ wins:["wins","Siege"], win1:["win","Sieg"], ptsShort:["pts","Pkt."], games:["games","Spiele"], rate:["win rate","Siegquote"], best:["best score","Bestwert"], needWinner:["Mark at least one winner.","Markiere mindestens einen Gewinner."],
+ needPlayers:["Pick at least two players.","Wähle mindestens zwei Spieler."], resSaved:["Result saved","Ergebnis gespeichert"], with:["with","mit"],
  sharedKingdom:["Shared kingdom","Geteiltes Königreich"],
 };
 const NOTES = {
@@ -758,7 +783,7 @@ const esc = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'
 
 /* ---------- state ---------- */
 const DEF = {
-  lang:'de', theme:'auto', sound:true, music:false, vol:.65, custom:[], view:'table', fast:false, setupDone:false,
+  lang:'de', theme:'auto', sound:true, music:false, vol:.65, custom:[], people:[], lastPlayers:[], view:'table', fast:false, setupDone:false,
   owned:{dominion:{e2:true}}, promos:{},
   s:{players:3,req:{},theme:[],mode:'normal',min:1,max:3,perBox:true,landMax:2,landDeck:true,colony:'rule',shelters:'rule',noAttacks:false,reactPair:false,noRepeat:true,sort:'cost'},
   blocked:[], seen:[], history:[], favorites:[], current:null,
@@ -797,6 +822,7 @@ function load(){
   if(!ST.s.theme) ST.s.theme = [];
   if(!ST.flow || !ST.flow.stage) ST.flow = clone(DEF.flow);
   if(!ST.custom) ST.custom = [];
+  if(!ST.people) ST.people = []; if(!ST.lastPlayers) ST.lastPlayers = [];
   lang = ST.lang;
   registerCustom();
 }
@@ -937,7 +963,7 @@ function kingdomFromOfficial(o, boxes){
 }
 function playKingdom(k){
   markSeen([...k.s, ...k.land]);
-  ST.current = k; ST.history.unshift({ id:'h'+Date.now(), k:clone(k) }); ST.history = ST.history.slice(0,60);
+  ST.current = k; ST.history.unshift({ id:'h'+Date.now(), k:clone(k) }); trimHistory();
   ST.flow = {stage:'kingdom', n:k.b.length, boxes:k.b}; save();
 }
 function dealOfficial(boxes){
@@ -952,6 +978,7 @@ function dealOfficial(boxes){
   if(note) toast(note);
   return true;
 }
+function trimHistory(){ let n = 0; ST.history = ST.history.filter(e => e.res || ++n <= 60); }
 function dealCards(boxes, keep, opts){
   opts = opts || {};
   keep = keep || {s:[], land:[]};
@@ -992,7 +1019,7 @@ function dealCards(boxes, keep, opts){
   markSeen([...k.s, ...k.land], P.K);
   ST.current = k;
   ST.history.unshift({ id:'h'+Date.now(), k:clone(k) });
-  ST.history = ST.history.slice(0,60);
+  trimHistory();
   if(bestBad.length) toast(t('rulesUnmet') + ' ' + bestBad.map(x=>t('r_'+x)).join(', '));
   else if(themeNote) toast(themeNote);
   return true;
@@ -1274,6 +1301,7 @@ const PH = { db:null, urls:{}, ok:false };
 const LOCKSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor" fill-opacity=".15"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></svg>';
 const UNLOCKSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.8"/></svg>';
 const BOOKSVG = '<svg class="cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5.5C6.5 4 9.5 4 12 5.5v14C9.5 18 6.5 18 4 19.5z"/><path d="M20 5.5C17.5 4 14.5 4 12 5.5v14c2.5-1.5 5.5-1.5 8 0z"/></svg>';
+const CROWNSVG = '<svg class="crown" viewBox="0 0 24 24"><path d="M3 18l1.6-10 4.7 4.6L12 5l2.7 7.6L19.4 8 21 18z" fill="currentColor"/><rect x="3" y="19" width="18" height="2.4" rx="1" fill="currentColor"/></svg>';
 const CAMSVG = '<svg class="cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></svg>';
 function idb(mode, fn){
   return new Promise((res, rej) => { const tx = PH.db.transaction('p', mode); const st = tx.objectStore('p'); const r = fn(st); tx.oncomplete = () => res(r && r.result); tx.onerror = () => rej(tx.error); });
@@ -1422,12 +1450,16 @@ async function importFiles(files){
       let zip; try{ zip = await JSZip.loadAsync(f); }catch(e){ rep.fail.push([f.name, t('rCorrupt')]); continue; }
       const cj = Object.values(zip.files).find(e => e.name.endsWith('carnivinion-custom.json'));
       if(cj){ try{ const arr = JSON.parse(await cj.async('string')); arr.forEach(cc => { const i = (ST.custom||[]).findIndex(x=>x.id===cc.id); if(i>=0) ST.custom[i]=cc; else (ST.custom = ST.custom||[]).push(cc); }); if(arr.length){ ST.owned.custom = ST.owned.custom || {e1:true}; registerCustom(); save(); } }catch(e){} }
+      const gj = Object.values(zip.files).find(e => e.name.endsWith('carnivinion-games.json'));
+      if(gj){ try{ const g = JSON.parse(await gj.async('string')); (g.people||[]).forEach(n => { if(!ST.people.includes(n)) ST.people.push(n); });
+        (g.games||[]).forEach(ge => { const i = ST.history.findIndex(x => x.id === ge.id); if(i>=0) ST.history[i] = ge; else ST.history.push(ge); });
+        ST.history.sort((a,b) => (b.k.ts||0) - (a.k.ts||0)); save(); }catch(e){} }
       Object.values(zip.files).forEach(e => {
         if(e.dir) return;
         const raw = e.unsafeOriginalName || e.name;
         if(unsafePath(raw)){ rep.fail.push([raw, t('rUnsafe')]); return; }
         const base = e.name.split('/').pop();
-        if(e.name.includes('__MACOSX') || base.startsWith('.') || /^(thumbs\.db|desktop\.ini)$/i.test(base) || base === 'carnivinion-custom.json'){ if(base !== 'carnivinion-custom.json') rep.skip.push([e.name, t('rSystem')]); return; }
+        if(e.name.includes('__MACOSX') || base.startsWith('.') || /^(thumbs\.db|desktop\.ini)$/i.test(base) || base === 'carnivinion-custom.json' || base === 'carnivinion-games.json'){ if(!/^carnivinion-(custom|games)\.json$/.test(base)) rep.skip.push([e.name, t('rSystem')]); return; }
         jobs.push({name:e.name, get:() => e.async('blob')});
       });
     } else jobs.push({name:f.name, get:async () => f});
@@ -1510,6 +1542,7 @@ async function exportPhotos(){
     tx.oncomplete = res; tx.onerror = () => rej(tx.error);
   });
   zip.file('carnivinion-custom.json', JSON.stringify(ST.custom || []));
+  zip.file('carnivinion-games.json', JSON.stringify({people:ST.people, games:ST.history.filter(e=>e.res)}));
   const blob = await zip.generate({type:'blob'});
   if(dl){ try{ await dl.save({filename:'carnivinion-kartenfotos.zip', data:blob}); }catch(e){} return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'carnivinion-kartenfotos.zip';
@@ -2015,6 +2048,7 @@ function renderKingdom(anim){
   let h = `<div class="roundrow">${(k.b||[]).map(id=>`<button class="embtn" data-boxinfo="${id}" aria-label="${esc(boxName(id))}">${emblem(id)}</button>`).join('')}${k.mode&&MODES[k.mode]?`<button class="modeplaque" data-modeinfo="${k.mode}">${esc(k.rec || MODES[k.mode].n[L()])}</button>`:''}<span class="spacer"></span>
     <span class="seg viewseg" aria-label="${t('sortShort')}">${[['cost',t('sCost')],['name',t('sName')],['set',t('sSet')]].map(([o,l])=>`<button data-seg="sort" data-v="${o}" aria-pressed="${ST.s.sort===o}">${l}</button>`).join('')}</span>
     ${camBtn([...supply(k), ...k.land, k.ally, k.proph, k.ferry, k.mouse, k.river, ...(k.boons||[]), ...asideTags(k)].filter(Boolean))}
+    <button class="btn small" data-act="result" style="display:inline-flex;align-items:center;gap:5px">${CROWNSVG}${t('result')}</button>
     <button class="btn small" data-act="recards">${locked.length?t('rerollRest'):t('reshuffleCards')}</button></div>`;
   if(k.shared) h += `<p class="hint">${t('sharedKingdom')}</p>`;
   if(ST.view!=='list'){ h += tableHTML(k, anim, marks, locked); h += `<p class="hint" style="margin-top:40px">${t('credit')}</p>`; v.innerHTML = h; sizeProps(); return; }
@@ -2074,12 +2108,14 @@ function renderSaved(){
         <div class="sheetactions" style="margin-top:10px"><button class="btn small" data-playoff="${i}">${t('playThis')}</button></div></div>`; }).join('')}</div>` : `<p class="empty">${t('noOfficial')}</p>`;
     v.innerHTML = h; return;
   }
+  if(SAVEDTAB==='history') h += `<div style="text-align:center;margin:-4px 0 14px"><button class="modechip" data-act="podium">${CROWNSVG}<b>${t('podium')}</b></button></div>`;
   if(!list.length) h += `<p class="empty">${SAVEDTAB==='history'?t('noHistory'):t('noFav')}</p>`;
   else h += `<div class="saved">${list.map(e=>`<div class="saveditem">
       <div class="t">${(e.k.b||[]).map(id=>emblem(id,'')).join('')} ${e.name?esc(e.name):''}</div>
       <div class="m">${fmtDate(e.k.ts||0)}</div>
       <div class="c">${esc(kingdomSummary(e.k))}</div>
-      <div class="sheetactions" style="margin-top:10px"><button class="btn small" data-open="${e.id}">${t('open')}</button><button class="btn small danger" data-del="${e.id}">${t('del')}</button></div>
+      ${e.res ? `<div class="resline">${CROWNSVG}<b>${esc(e.res.w.join(' & '))}</b> <span>${t('with')} ${esc(e.res.p.filter(n=>!e.res.w.includes(n)).map(n => n + (e.res.pts&&e.res.pts[n]!=null?` (${e.res.pts[n]})`:'')).join(', '))}</span></div>` : ''}
+      <div class="sheetactions" style="margin-top:10px"><button class="btn small" data-open="${e.id}">${t('open')}</button>${SAVEDTAB==='history'?`<button class="btn small" data-result="${e.id}">${CROWNSVG}${t('result')}</button>`:''}<button class="btn small danger" data-del="${e.id}">${t('del')}</button></div>
     </div>`).join('')}</div>`;
   if(SAVEDTAB==='history' && list.length) h += `<p style="margin-top:18px"><button class="btn small danger" data-act="clearhist">${t('clearHistory')}</button></p>`;
   v.innerHTML = h;
@@ -2262,6 +2298,43 @@ function embSheetOld(id){
       <label class="btn small">${CAMSVG}${t('emblemPick')}<input type="file" accept="image/*" data-photofor="box:${id}"></label>
       ${has?`<button class="btn small danger" data-delphoto="box:${id}">${t('emblemReset')}</button>`:''}</div></div>`);
 }
+let RES = null;
+function historyFor(k){
+  let e = ST.history.find(x => x.k.ts === k.ts);
+  if(!e){ e = {id:'h'+Date.now(), k:clone(k)}; ST.history.unshift(e); save(); }
+  return e;
+}
+function readPts(){ document.querySelectorAll('[data-pts]').forEach(inp => { const v = inp.value.trim(); if(v === '') delete RES.pts[inp.dataset.pts]; else RES.pts[inp.dataset.pts] = +v; }); }
+function resultSheet(id){
+  const e = ST.history.find(x => x.id === id); if(!e) return;
+  if(!RES || RES.id !== id){ const r = e.res || {p:[...ST.lastPlayers], w:[], pts:{}}; RES = {id, p:[...r.p], w:[...r.w], pts:{...(r.pts||{})}}; }
+  const names = [...new Set([...ST.people, ...RES.p])];
+  openSheet(`<div class="inner"><h3>${t('resultT')}</h3><p class="hint" style="margin-top:0">${t('resHint')}</p>
+    <div class="round" style="margin:8px 0">${names.map(n => `<button class="chip ${RES.p.includes(n)?'on':''}" data-rp="${esc(n)}" aria-pressed="${RES.p.includes(n)}">${esc(n)}</button>`).join('')}</div>
+    <div class="addrow"><input class="nameinput" id="newname" placeholder="${t('newName')}" maxlength="24"><button class="btn small" data-act="addperson">＋ ${t('addPlayer')}</button></div>
+    ${RES.p.length ? `<div class="panel" style="margin-top:14px">${RES.p.map(n => `<div class="row resrow">
+      <button class="crownbtn" data-rw="${esc(n)}" aria-pressed="${RES.w.includes(n)}" aria-label="${esc(n)} ${t('won')}">${CROWNSVG}</button>
+      <span class="lbl">${esc(n)}</span>
+      <input class="nameinput ptsin" type="number" inputmode="numeric" data-pts="${esc(n)}" value="${RES.pts[n] ?? ''}" placeholder="${t('ptsShort')}"></div>`).join('')}</div>` : ''}
+    <div class="sheetactions"><button class="btn small" data-act="saveresult">${t('saveResult')}</button>${e.res ? `<button class="btn small danger" data-act="delresult">${t('delResult')}</button>` : ''}</div></div>`);
+}
+function podiumStats(){
+  const st = {};
+  ST.history.filter(e => e.res).forEach(e => {
+    e.res.p.forEach(n => { const x = st[n] = st[n] || {n, g:0, w:0, best:null}; x.g++; if(e.res.w.includes(n)) x.w++; const pt = (e.res.pts||{})[n]; if(pt != null && (x.best == null || pt > x.best)) x.best = pt; });
+  });
+  return Object.values(st).sort((a,b) => b.w - a.w || (b.w/b.g) - (a.w/a.g) || b.g - a.g || a.n.localeCompare(b.n));
+}
+function podiumSheet(){
+  const s2 = podiumStats();
+  if(!s2.length){ openSheet(`<div class="inner" style="text-align:center"><h3>${t('podium')}</h3><p>${t('podiumEmpty')}</p></div>`); return; }
+  const top = [s2[1], s2[0], s2[2]];
+  openSheet(`<div class="inner" style="text-align:center"><h3>${t('podium')}</h3>
+    <div class="podium" id="podium">${top.map((x,i) => x ? `<div class="pstand p${[2,1,3][i]}"><div class="pname2">${[2,1,3][i]===1?CROWNSVG:''}<b>${esc(x.n)}</b><small>${x.w} ${x.w===1?t('win1'):t('wins')}</small></div><div class="pblock"><span>${[2,1,3][i]}</span></div></div>` : '<div class="pstand empty"></div>').join('')}</div>
+    <div class="panel" style="margin-top:16px;text-align:left"><div class="row statrow head"><span>#</span><span class="lbl"></span><span>${t('wins')}</span><span>${t('games')}</span><span>${t('rate')}</span><span>${t('best')}</span></div>
+      ${s2.map((x,i) => `<div class="row statrow"><span>${i+1}</span><span class="lbl">${esc(x.n)}</span><span><b>${x.w}</b></span><span>${x.g}</span><span>${Math.round(x.w/x.g*100)}%</span><span>${x.best ?? '–'}</span></div>`).join('')}</div></div>`);
+  confetti(document.getElementById('podium')); fanfare();
+}
 function favSheet(){
   const k = ST.current;
   openSheet(`<div class="inner"><h3>${t('saveFav')}</h3><div class="sub">${(k.b||[]).map(id=>emblem(id,'')).join('')}</div><p class="hint">${esc(kingdomSummary(k))}</p>
@@ -2391,6 +2464,7 @@ document.addEventListener('click', e => {
   if(d.filter){ CARDFILTER = d.filter; renderCards(); return; }
   if(d.saved){ SAVEDTAB = d.saved; renderSaved(); return; }
   if(d.open){ const e2 = [...ST.history, ...ST.favorites].find(x=>x.id===d.open); if(e2){ ST.current = clone(e2.k); ST.flow = {stage:'kingdom', n:(e2.k.b||[]).length, boxes:e2.k.b}; TAB='kingdom'; goStage('kingdom', true);} return; }
+  if(d.del && el.dataset.armed !== '1'){ el.dataset.armed = '1'; const old = el.textContent; el.textContent = lang==='de' ? 'Sicher?' : 'Sure?'; setTimeout(() => { el.dataset.armed = ''; el.textContent = old; }, 3000); return; }
   if(d.del){ ST.history = ST.history.filter(x=>x.id!==d.del); ST.favorites = ST.favorites.filter(x=>x.id!==d.del); save(); renderSaved(); return; }
   if(d.own && el.classList.contains('chip')){ const o = ST.owned[d.own] = ST.owned[d.own]||{}; o['e'+d.ed] = !o['e'+d.ed]; save(); if(TAB==='settings') renderSettings(); else render(); return; }
   if(d.step){ const s=ST.s; const lim={min:[1,18],max:[1,18],landMax:[0,4],players:[2,6]}[d.step]; s[d.step]=Math.max(lim[0],Math.min(lim[1], s[d.step]+Number(d.d)));
@@ -2418,6 +2492,9 @@ document.addEventListener('click', e => {
     if(ST.history[0] && ST.history[0].k.ts===k.ts) ST.history[0].k = clone(k); save(); renderKingdom(); return; }
   if(d.delphoto){ const tg = d.delphoto; photoDel(tg).then(()=>{ if(tg.startsWith('box:')) embSheet(tg.slice(4)); else cardSheet(SHEET.tag || tg, SHEET.i); render(); }); return; }
   if(d.embedit){ embSheet(d.embedit); return; }
+  if(d.result){ RES = null; resultSheet(d.result); return; }
+  if(d.rp){ readPts(); const i = RES.p.indexOf(d.rp); if(i>=0){ RES.p.splice(i,1); RES.w = RES.w.filter(x=>x!==d.rp); } else RES.p.push(d.rp); resultSheet(RES.id); return; }
+  if(d.rw){ readPts(); const i = RES.w.indexOf(d.rw); if(i>=0) RES.w.splice(i,1); else RES.w.push(d.rw); uiSound('tin'); resultSheet(RES.id); return; }
   if(d.editcustom){ customSheet(d.editcustom); return; }
   if(d.ctype){ const on = el.getAttribute('aria-pressed') !== 'true'; el.setAttribute('aria-pressed', on); el.classList.toggle('on', on); return; }
   switch(d.act){
@@ -2428,6 +2505,15 @@ document.addEventListener('click', e => {
     case 'delall': if(!delArmed){ delArmed = true; renderSettings(); setTimeout(()=>{ delArmed=false; if(TAB==='settings') renderSettings(); }, 4000); }
       else { delArmed = false; Object.keys(PH.urls).reduce((p,tg)=>p.then(()=>photoDel(tg)), Promise.resolve()).then(()=>renderSettings()); } break;
     case 'skip': SKIP = true; break;
+    case 'result': { if(!ST.current) break; RES = null; resultSheet(historyFor(ST.current).id); break; }
+    case 'addperson': { readPts(); const inp = document.getElementById('newname'); const n = inp.value.trim().slice(0,24); if(!n) break;
+      if(!ST.people.includes(n)) ST.people.push(n); if(!RES.p.includes(n)) RES.p.push(n); save(); resultSheet(RES.id); break; }
+    case 'saveresult': { readPts(); const e = ST.history.find(x => x.id === RES.id); if(!e) break;
+      if(RES.p.length < 2){ toast(t('needPlayers')); break; } if(!RES.w.length){ toast(t('needWinner')); break; }
+      e.res = {p:[...RES.p], w:RES.w.filter(x=>RES.p.includes(x)), pts:RES.pts}; RES.p.forEach(n => { if(!ST.people.includes(n)) ST.people.push(n); });
+      ST.lastPlayers = [...RES.p]; save(); closeSheet(); render(); fanfare(); toast(`${t('resSaved')} – ${e.res.w.join(' & ')} ${e.res.w.length>1?'('+t('wonTie')+')':t('won')} 👑`); break; }
+    case 'delresult': { const e = ST.history.find(x => x.id === RES.id); if(e) delete e.res; save(); closeSheet(); render(); break; }
+    case 'podium': podiumSheet(); break;
     case 'newcustom': customSheet(null); break;
     case 'savecustom': { const n = document.getElementById('cc-n').value.trim(); if(!n){ toast(t('needName')); break; }
       const types = [...document.querySelectorAll('[data-ctype][aria-pressed="true"]')].map(b => b.dataset.ctype);
@@ -2495,7 +2581,7 @@ document.addEventListener('change', e => {
 document.addEventListener('input', e => { if(e.target.dataset && e.target.dataset.vol) setVolume(+e.target.value/100); });
 document.addEventListener('pointerdown', e => { if(POPOPEN && !e.target.closest('#musicpop,#musicbtn')) musicPop(false); });
 document.getElementById('scrim').addEventListener('click', ()=>{ if(CAP){ CAP=null; render(); } closeSheet(); });
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeSheet(); if(document.getElementById('sheet').classList.contains('open') && SHEETLIST){ if(e.key==='ArrowRight') navSheet(1); if(e.key==='ArrowLeft') navSheet(-1); } });
+document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id==='newname'){ e.preventDefault(); document.querySelector('[data-act=addperson]').click(); return; } if(e.key==='Escape') closeSheet(); if(document.getElementById('sheet').classList.contains('open') && SHEETLIST){ if(e.key==='ArrowRight') navSheet(1); if(e.key==='ArrowLeft') navSheet(-1); } });
 { let sx = 0, sy = 0; const sh = document.getElementById('sheet');
   sh.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
   sh.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; if(Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy)*1.5) navSheet(dx < 0 ? 1 : -1); }, {passive:true}); }

@@ -164,6 +164,14 @@ textarea.nameinput{resize:vertical;font:inherit}
 .scanframe{position:absolute;inset:16%;border:3px solid #D6A032;border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
 .snavbar{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface);border-bottom:1px dashed var(--line);font-weight:800;color:var(--muted)}
 .snav{width:48px;height:40px;border:0;border-radius:8px;font:800 1.8rem/1 Grenze,serif;color:#2B1E14;background:repeating-linear-gradient(100deg,rgba(90,55,20,.1) 0 2px,transparent 2px 6px),linear-gradient(#E6BD86,#BE8A55);box-shadow:0 2px 3px rgba(0,0,0,.4)}
+.impstats{display:flex;flex-wrap:wrap;gap:8px 16px;margin:6px 0 12px;font-size:1rem}.impstats b{font:800 1.3rem Grenze,serif}
+.covers{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:8px 0 14px}.covers figure{margin:0}.covers img{max-width:min(78vw,300px);max-height:40vh;border-radius:8px;box-shadow:var(--shadow)}.covers figcaption{font-size:.85rem;color:var(--muted);margin-top:4px}
+.subh{font:700 1.1rem Grenze,serif;margin:18px 0 4px}
+.rulelist .row .btn{margin-left:0}
+.sheet.tall{max-height:96%}.ruleview h3 small{font:600 .9rem "Alegreya Sans",sans-serif;color:var(--muted)}
+.pdfframe{width:100%;height:70vh;border:0;border-radius:8px;background:#fff;box-shadow:0 0 0 2px var(--line)}
+.linkbtn{border:0;background:none;padding:0;color:var(--royal);font-weight:700;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .badlist{max-height:40vh;overflow:auto;background:var(--sunk);border-radius:8px;padding:8px 8px 8px 28px;font-size:.9rem}
 .embtn{border:0;padding:0;background:none;border-radius:50%;display:grid}
 .modeplaque{border:0;cursor:pointer;font:700 1rem Grenze,serif;color:#F6D98E;background:#A8322D;padding:4px 12px;border-radius:4px;box-shadow:0 0 0 2px #D6A032,0 3px 5px rgba(0,0,0,.3);transform:rotate(-2deg)}
@@ -421,6 +429,7 @@ label.btn input{display:none}
 .btn.small::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--rose) 0 9px,#F1E6C8 9px 18px)}
 .musicpop{position:fixed;z-index:25;top:calc(env(safe-area-inset-top,0px) + 62px);right:calc(var(--side,16px) + 14px);width:250px;background:var(--surface);border-radius:12px;padding:10px 14px;box-shadow:0 0 0 2px var(--wood),0 10px 24px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:8px}
 .musicpop[hidden]{display:none}
+@media(max-width:400px){.bar{gap:6px}.musicbtn{width:34px;height:34px}.musicbtn svg{width:19px;height:19px}.bar .seg button{padding:5px 8px}.brand{gap:6px}.brand svg{width:28px;height:28px}nav.tabs button{font-size:.66rem;padding:7px 1px 8px}nav.tabs button svg{width:21px;height:21px}}
 @media(max-width:420px){.musicpop{left:12px;right:12px;width:auto}}
 .mp-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700}
 .mp-row input[type=range]{flex:1;accent-color:var(--rose)}
@@ -522,6 +531,7 @@ input.nameinput{width:100%;padding:11px 14px;border-radius:10px;border:0;backgro
         <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5" fill="#A8322D" stroke="#D6A032" stroke-width="3"/><path d="M11 26l2-11 4.5 5 2.5-8 2.5 8 4.5-5 2 11z" fill="#D6A032"/></svg>
         <h1 id="title"></h1>
       </div>
+      <button class="musicbtn" id="rulesbtn" data-act="rules" aria-label="Regeln" title="Regeln"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C6.5 4 9.5 4 12 5.5v14C9.5 18 6.5 18 4 19.5z"/><path d="M20 5.5C17.5 4 14.5 4 12 5.5v14c2.5-1.5 5.5-1.5 8 0z"/></svg></button>
       <button class="musicbtn" id="musicbtn" data-act="music" aria-pressed="false" aria-label="Musik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="16" rx="5.5" ry="4.8" fill="currentColor" fill-opacity=".18"/><circle cx="9" cy="16" r="1.5"/><path d="M13 12.2L20 4.5"/><path d="M18.2 3.3l3 2.6"/><path d="M5.8 15.2l6.2 1.6"/></svg></button>
       <div class="seg" role="group" aria-label="Sprache / Language"><button data-lang="de">DE</button><button data-lang="en">EN</button></div>
     </div>
@@ -573,7 +583,8 @@ const EMB = {
 };
 function emblem(id, cls='em'){
   const e = EMB[id]; if(!e) return '';
-  let img = null; try{ img = PH.urls['box:'+id]; }catch(err){}
+  let img = null, icon = null; try{ img = PH.urls['box:'+id]; icon = img ? null : assetFor('icon', id); }catch(err){}
+  if(icon) return `<svg class="${cls}" viewBox="0 0 40 40" role="img" aria-label="${esc(boxName(id))}"><title>${esc(boxName(id))}</title><circle cx="20" cy="20" r="18.5" fill="#FBF6E9" stroke="#D6A032" stroke-width="2"/><image href="${icon}" x="7" y="7" width="26" height="26" preserveAspectRatio="xMidYMid meet"/></svg>`;
   if(img) return `<svg class="${cls}" viewBox="0 0 40 40" role="img" aria-label="${esc(boxName(id))}"><title>${esc(boxName(id))}</title><clipPath id="ce-${id}"><circle cx="20" cy="20" r="18"/></clipPath><circle cx="20" cy="20" r="18" fill="${e[0]}"/><image href="${img}" x="2" y="2" width="36" height="36" preserveAspectRatio="xMidYMid slice" clip-path="url(#ce-${id})"/><circle cx="20" cy="20" r="18" fill="none" stroke="#D6A032" stroke-width="2.5"/></svg>`;
   return `<svg class="${cls}" viewBox="0 0 40 40" role="img" aria-label="${esc(boxName(id))}"><title>${esc(boxName(id))}</title><circle cx="20" cy="20" r="18" fill="${e[0]}"/><circle cx="20" cy="20" r="18" fill="none" stroke="#D6A032" stroke-width="2.5"/><circle cx="20" cy="20" r="14.6" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-dasharray="1.5 2"/><g transform="translate(8 8)">${e[1](e[0])}</g></svg>`;
 }
@@ -581,7 +592,7 @@ function emblem(id, cls='em'){
 /* ---------- i18n ---------- */
 const S = {
  title:["Carnivinion","Carnivinion"],
- tKingdom:["Play","Spielen"], tCards:["Cards","Karten"], tSaved:["Saved","Gespeichert"], tSettings:["Settings","Einstellungen"],
+ tKingdom:["Play","Spielen"], tCards:["Cards","Karten"], tSaved:["Saved","Gemerkt"], tSettings:["Settings","Optionen"],
  st1:["How many","Anzahl"], st2:["Boxes","Boxen"], st3:["Cards","Karten"],
  q1:["How many boxes do we play?","Wie viele Boxen spielen wir?"], q1l:["Spin the wheel of fortune.","Dreh am Glücksrad."],
  spin:["Spin!","Drehen!"], spinAgain:["Spin again","Nochmal"], toBoxes:["Draw boxes","Boxen ziehen"],
@@ -628,12 +639,20 @@ const S = {
  notEnough:["Not enough cards in these boxes. Draw more boxes or unblock cards.","Zu wenige Karten in diesen Boxen. Mehr Boxen ziehen oder Karten entsperren."],
  nonSupply:["Non-supply & extras","Zusatzkarten"],
  credit:["Card data: dominiontabs (MIT). Recommended kingdoms: extra-recommended-sets by Kieran Millar (MIT). Unofficial fan project, not affiliated with Rio Grande Games or ASS Altenburger. Box emblems are original designs.","Kartendaten: dominiontabs (MIT). Empfohlene Königreiche: extra-recommended-sets von Kieran Millar (MIT). Inoffizielles Fanprojekt, nicht verbunden mit Rio Grande Games oder ASS Altenburger. Die Box-Wappen sind eigene Entwürfe."],
- photos:["Card photos","Kartenfotos"], addPhoto:["Take photo","Foto aufnehmen"], fromGallery:["From gallery","Aus Galerie"],
+ photos:["Pictures & rules","Bilder & Regeln"], addPhoto:["Take photo","Foto aufnehmen"], fromGallery:["From gallery","Aus Galerie"],
  replacePhoto:["New photo","Neues Foto"], removePhoto:["Remove photo","Foto entfernen"], photoSaved:["Photo saved","Foto gespeichert"],
  capture:["Photograph","Fotografieren"], missing:["without photo","ohne Foto"], withPhoto:["with photo","mit Foto"],
  skip:["Skip","Überspringen"], done:["Done","Fertig"], allHavePhotos:["Every card here has a photo.","Alle Karten hier haben ein Foto."],
  capHint:["Photograph the card straight on, filling the frame.","Karte gerade von oben fotografieren, möglichst formatfüllend."],
- importPhotos:["Import photos","Fotos importieren"], importHint:["Images or a .zip. File names must be the card name, e.g. “Dorf.jpg” or “Village.jpg”.","Bilder oder eine .zip-Datei. Dateiname = Kartenname, z. B. „Dorf.jpg“ oder „Village.jpg“."],
+ importPhotos:["Import pictures & rules","Bilder & Regeln importieren"], importHint:["Card pictures, box icons, box covers, setup pieces and rulebook PDFs – single files or a .zip (e.g. the Dominion asset bundle). Card pictures are named after the card, e.g. “Village.jpg” or “Dorf.jpg”; icon_…, cover_…, setup_… and rule_….pdf are recognised automatically.","Kartenbilder, Box-Symbole, Box-Cover, Spielmaterial und Regelheft-PDFs – einzeln oder als .zip (z. B. das Dominion-Asset-Paket). Kartenbilder heißen wie die Karte, z. B. „Village.jpg“ oder „Dorf.jpg“; icon_…, cover_…, setup_… und rule_….pdf werden automatisch erkannt."],
+ rules:["Rules","Regeln"], rulebooks:["Rulebooks","Regelhefte"], rulebook:["Rulebook","Regelheft"], openRule:["Open in new tab","In neuem Tab öffnen"], downloadRule:["Download","Herunterladen"],
+ noRules:["No rulebooks yet. Import the PDFs (rule_….pdf, also inside a .zip) under Settings → Pictures & rules.","Noch keine Regelhefte. Importiere die PDFs (rule_….pdf, auch in einer .zip) unter Einstellungen → Bilder & Regeln."],
+ ruleViewerHint:["If the PDF doesn't show here (common on phones), open it in a new tab.","Falls das PDF hier nicht angezeigt wird (auf Handys häufig), öffne es in einem neuen Tab."],
+ edLabel1:["1st edition","1. Edition"], edLabel2:["2nd edition","2. Edition"], edLabelU:["Update pack","Update-Pack"], covers:["Box covers","Box-Cover"],
+ impDone:["Import finished","Import abgeschlossen"], impNew:["imported","neu importiert"], impUpd:["updated","aktualisiert"], impSkip:["skipped","übersprungen"], impFail:["failed","fehlgeschlagen"],
+ rUnsafe:["unsafe path in ZIP","unsicherer Pfad in der ZIP"], rType:["unsupported file type","Dateityp nicht unterstützt"], rCard:["no card with this English name","keine Karte mit diesem englischen Namen"],
+ rExp:["unknown expansion","unbekannte Erweiterung"], rSetup:["unknown setup component","unbekanntes Spielmaterial"], rCorrupt:["file could not be read","Datei konnte nicht gelesen werden"], rSystem:["system file","Systemdatei"], rStorage:["not enough storage","nicht genug Speicher"],
+ boxInfo:["Box","Box"], impList:["These files were not taken over (everything else was imported):","Diese Dateien wurden nicht übernommen (alles andere wurde importiert):"],
  exportPhotos:["Save backup (.zip)","Sicherung speichern (.zip)"], exportHint:["Photos live only in this browser. Use the backup to move them to another phone or give them to friends.","Fotos liegen nur in diesem Browser. Mit der Sicherung bringst du sie auf ein anderes Handy oder an deine Freunde."],
  deleteAll:["Delete all photos","Alle Fotos löschen"], confirmDelete:["Tap again to delete all photos","Nochmal tippen, um alle Fotos zu löschen"],
  imported:["photos assigned","Fotos zugeordnet"], unmatched:["not recognized","nicht erkannt"], working:["Working…","Einen Moment…"],
@@ -697,7 +716,7 @@ const NOTES = {
  debt:["Debt tokens.","Schuldenmarker."], vp:["Victory point tokens.","Siegpunktmarker."],
  tavern:["Tavern mats.","Wirtshaustableaus."], exile:["Exile mats.","Exil-Tableaus."], favors:["Favor tokens.","Gefallen-Marker."],
  sun:["Sun tokens on the Prophecy.","Sonnenmarker auf die Prophezeiung."], trade:["Trade Route mat and tokens.","Handelsstraßen-Tableau und -Marker."],
- native:["Native Village mats.","Eingeborenendorf-Tableaus."], island:["Island mats.","Insel-Tableaus."],
+ native:["Native Village mats.","Eingeborenendorf-Tableaus."], pirateship:["Pirate Ship mats and coin tokens.","Piratenschiff-Tableaus und Geldmarker."], island:["Island mats.","Insel-Tableaus."],
  adv:["Adventures player tokens.","Abenteuer-Spielermarker."], heirloom:["Each Heirloom replaces one Copper in starting decks.","Jedes Erbstück ersetzt ein Kupfer im Startdeck."],
  blackmarket:["Build the Black Market deck from unused kingdom cards.","Schwarzmarkt-Stapel aus unbenutzten Königreichkarten bilden."],
 };
@@ -776,7 +795,7 @@ BOXES.forEach(b => Object.values(b.e).forEach(arr => arr.forEach(tg => { if(!CAR
 const MATS = {villagers:['Villagers','Dorfbewohner','tok','renaissance'], coffers:['Coffers','Taler','tok','renaissance'], debt:['Debt tokens','Schuldenmarker','tok','empires'], vp:['Victory tokens','Siegpunktmarker','tok','prosperity'],
   tavern:['Tavern mat','Wirtshaus-Tableau','mat','adventures'], exile:['Exile mat','Exil-Tableau','mat','menagerie'], favors:['Favor tokens','Gefallen-Marker','tok','allies'], sun:['Sun tokens','Sonnenmarker','tok','risingSun'],
   trade:['Trade Route mat','Handelsstraße','mat','prosperity'], native:['Native Village mat','Eingeborenendorf-Tableau','mat','seaside'], island:['Island mat','Insel-Tableau','mat','seaside'],
-  adv:['Adventures tokens','Abenteuer-Marker','tok','adventures'], blackmarket:['Black Market deck','Schwarzmarkt-Stapel','deck','promo']};
+  adv:['Adventures tokens','Abenteuer-Marker','tok','adventures'], pirateship:['Pirate Ship mat','Piratenschiff-Tableau','mat','seaside'], blackmarket:['Black Market deck','Schwarzmarkt-Stapel','deck','promo']};
 Object.entries(MATS).forEach(([key,[en,de,kind,box]]) => { const tag = '@mat:'+key; C[tag] = {n:[en,de], d:[NOTES[key][0], NOTES[key][1]], x:['',''], t:[kind==='mat'?'Mat':kind==='tok'?'Token':'Deck'], k:'X'}; CARDBOX[tag] = box; });
 
 /* ---------- random ---------- */
@@ -1223,11 +1242,13 @@ function tileHTML(tag, marks=[], opts={}){
 const PH = { db:null, urls:{}, ok:false };
 const LOCKSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor" fill-opacity=".15"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></svg>';
 const UNLOCKSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.8"/></svg>';
+const BOOKSVG = '<svg class="cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5.5C6.5 4 9.5 4 12 5.5v14C9.5 18 6.5 18 4 19.5z"/><path d="M20 5.5C17.5 4 14.5 4 12 5.5v14c2.5-1.5 5.5-1.5 8 0z"/></svg>';
 const CAMSVG = '<svg class="cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></svg>';
 function idb(mode, fn){
   return new Promise((res, rej) => { const tx = PH.db.transaction('p', mode); const st = tx.objectStore('p'); const r = fn(st); tx.oncomplete = () => res(r && r.result); tx.onerror = () => rej(tx.error); });
 }
 const FIXKEYS = [];
+const RULEKEYS = new Set();
 async function photoInit(){
   try{
     PH.db = await new Promise((res, rej) => { const r = indexedDB.open('kr-photos', 1); r.onupgradeneeded = () => r.result.createObjectStore('p'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
@@ -1235,7 +1256,8 @@ async function photoInit(){
       const tx = PH.db.transaction('p','readonly'); const cur = tx.objectStore('p').openCursor();
       cur.onsuccess = () => { const c = cur.result; if(!c) return; const k = String(c.key);
         if(k.includes('#') && k !== k.trim()) FIXKEYS.push([c.key, k.trim(), c.value]);
-        else if(C[c.key] || k.includes('#') || k.startsWith('box:') || k.startsWith('custom:')) PH.urls[c.key] = URL.createObjectURL(c.value);
+        else if(k.startsWith('rule:')) RULEKEYS.add(k);
+        else if(C[c.key] || k.includes('#') || /^(box|custom|icon|cover|setup):/.test(k)) PH.urls[c.key] = URL.createObjectURL(c.value);
         c.continue(); };
       tx.oncomplete = res; tx.onerror = () => rej(tx.error);
     });
@@ -1251,6 +1273,7 @@ async function photoPut(tag, blob){
   PH.urls[tag] = URL.createObjectURL(blob);
 }
 async function photoDel(tag){
+  if(tag.startsWith('rule:')){ await idb('readwrite', st => st.delete(tag)); RULEKEYS.delete(tag); return; }
   await idb('readwrite', st => st.delete(tag));
   if(PH.urls[tag]) URL.revokeObjectURL(PH.urls[tag]);
   delete PH.urls[tag];
@@ -1291,7 +1314,115 @@ function progress(done, total, label){
   document.getElementById('pblabel').innerHTML = `<span>${esc(label||t('working'))}</span>${total?`<span>${done} / ${total}</span>`:''}`;
   if(total) document.getElementById('pbfill').style.width = Math.round(done/total*100) + '%';
 }
+// ---- Dominion asset bundle: icon_*, cover_*, setup_*, rule_*.pdf and card pictures ----
+const EXP_ALIAS = { base_game:['dominion'], base:['dominion'], base_set:['dominion'], dominion:['dominion'], intrigue:['intrigue'], seaside:['seaside'], alchemy:['alchemy'],
+  prosperity:['prosperity'], cornucopia:['cornucopia'], hinterlands:['hinterlands'], dark_ages:['darkAges'], guilds:['guilds'], cornucopia_and_guilds:['cornucopia','guilds'],
+  adventures:['adventures'], empires:['empires'], nocturne:['nocturne'], renaissance:['renaissance'], menagerie:['menagerie'], allies:['allies'], plunder:['plunder'],
+  rising_sun:['risingSun'], promo:['promo'], promos:['promo'], promo_cards:['promo'] };
+// "seaside_2nd_edition_update_pack" → {boxes:['seaside'], ed:'u'}; unsuffixed means the original edition
+function parseExp(id){
+  id = id.toLowerCase().replace(/&/g,'and').replace(/[\s-]+/g,'_');
+  let ed = '1', m;
+  if((m = id.match(/^(.*)_2nd_edition_update_pack$/)) || (m = id.match(/^(.*)_update_pack$/))){ id = m[1]; ed = 'u'; }
+  else if((m = id.match(/^(.*)_2nd_edition$/))){ id = m[1]; ed = '2'; }
+  else if((m = id.match(/^(.*)_1st_edition$/))){ id = m[1]; ed = '1'; }
+  const boxes = EXP_ALIAS[id];
+  return boxes ? {boxes, ed} : null;
+}
+const EDORDER = ['2','u','1'];
+const edLabel = ed => t(ed==='2' ? 'edLabel2' : ed==='u' ? 'edLabelU' : 'edLabel1');
+// which editions of a box to prefer for icons and rulebooks: the ones you own, newest first
+function prefEds(id){ const o = ST.owned[id] || {}; const own = [o.e2 && '2', o.e1 && '1'].filter(Boolean); return [...own, ...EDORDER.filter(e => !own.includes(e))]; }
+function assetFor(kind, id){ for(const ed of prefEds(id)){ const u = PH.urls[`${kind}:${id}:${ed}`]; if(u) return u; } return null; }
+// setup_<component>: tolerant matching, the bundle spells the tavern mat "tavermat"
+const SETUP_ALIAS = { tavermat:['tavern'], tavernmat:['tavern'], nativevillagemat:['native'], islandmat:['island'], pirateshipmat:['pirateship'], traderoutemat:['trade'],
+  coffersmat:['coffers'], villagersmat:['villagers'], coffersvillagersmat:['coffers','villagers'], exilemat:['exile'], favorsmat:['favors'], favortokens:['favors'], favorstokens:['favors'],
+  trashmat:['trash'], debttokens:['debt'], suntokens:['sun'], journeytoken:['adv'], banemarker:['bane'], vptokens:['vp'], victorytokens:['vp'], blackmarketdeck:['blackmarket'] };
+function setupTargets(id){
+  id = id.toLowerCase().replace(/[^a-z0-9]/g,'');
+  if(SETUP_ALIAS[id]) return SETUP_ALIAS[id];
+  const k = [[/taver/,'tavern'],[/nativevillage/,'native'],[/island/,'island'],[/pirate/,'pirateship'],[/traderoute/,'trade'],[/exile/,'exile'],[/favor/,'favors'],[/debt/,'debt'],
+    [/sun/,'sun'],[/journey|pluscard|plusaction|plusbuy|pluscoin|minuscard|minuscoin|minuscost|estatetoken|trashingtoken|adventure/,'adv'],[/vp|victory|pointtoken/,'vp'],
+    [/bane/,'bane'],[/blackmarket/,'blackmarket'],[/trash/,'trash'],[/embargo/,'embargo'],[/obelisk/,'obelisk']];
+  const out = []; if(/coffer/.test(id)) out.push('coffers'); if(/villager/.test(id)) out.push('villagers');
+  for(const [re, tg] of k) if(re.test(id) && !out.includes(tg)) out.push(tg);
+  return out.length ? out : null;
+}
+function setupPhoto(matKey){ for(const k of Object.keys(PH.urls)) if(k.startsWith('setup:')){ const tg = setupTargets(k.slice(6)); if(tg && tg.includes(matKey)) return PH.urls[k]; } return null; }
+// English-first card lookup for the bundle ("Sauna-Avanto.jpg", "King's Court.jpg", "Dame Anna.jpg")
+let ENIDX = null;
+function enIndex(){
+  if(ENIDX) return ENIDX; ENIDX = {};
+  const add = (n, tag) => { const k = norm2(n); if(k && !ENIDX[k]) ENIDX[k] = tag; };
+  Object.keys(C).forEach(tag => { if(tag.startsWith('@') || tag.startsWith('custom:')) return; add(tag, tag); add(C[tag].n[0], tag); });
+  Object.entries(VIRT).forEach(([pile, names]) => names.forEach(n => add(n, pile + '#' + n)));
+  Object.entries(VMETA).forEach(([id, m]) => add(m.n[0], id));
+  Object.keys(C).forEach(tag => { if(tag.startsWith('@')) return; [tag, C[tag].n[0]].forEach(n => n.split(/\s*[\/]\s*|\s+-\s+/).forEach(part => add(part, tag))); });
+  return ENIDX;
+}
+function classify(path){
+  const base = path.split(/[\/\\]/).pop(), lower = base.toLowerCase();
+  const ext = (lower.match(/\.([a-z0-9]+)$/) || [])[1] || '';
+  const stem = base.replace(/\.[^.]+$/, '');
+  const isImg = ['jpg','jpeg','png','webp','gif'].includes(ext), isPdf = ext === 'pdf';
+  let m;
+  if((m = stem.match(/^rule_(.+)$/i))){ if(!isPdf) return {err:'rType'}; const e = parseExp(m[1]); return e ? {cat:'rule', keys:e.boxes.map(b => `rule:${b}:${e.ed}`)} : {err:'rExp'}; }
+  if(isPdf) return {err:'rType'};
+  if(!isImg) return {err:'rType'};
+  if((m = stem.match(/^(icon|cover)_(.+)$/i))){ const e = parseExp(m[2]); const cat = m[1].toLowerCase(); return e ? {cat, keys:e.boxes.map(b => `${cat}:${b}:${e.ed}`)} : {err:'rExp'}; }
+  if((m = stem.match(/^setup_(.+)$/i))){ const id = m[1].toLowerCase(); return setupTargets(id) ? {cat:'setup', keys:['setup:' + id.replace(/[^a-z0-9]/g,'')]} : {err:'rSetup'}; }
+  // our own backup format: the storage key with ":" written as "~"
+  if(stem.includes('~')){ const k = stem.replace(/~/g, ':'); return {cat:'card', keys:[k]}; }
+  const tag = enIndex()[norm2(stem)] || matchFile(base);
+  return tag ? {cat:'card', keys:[tag]} : {err:'rCard'};
+}
+const unsafePath = p => /^([a-zA-Z]:|[\/\\])/.test(p) || p.split(/[\/\\]/).includes('..');
+async function rulePut(key, blob){ await idb('readwrite', st => st.put(blob, key)); RULEKEYS.add(key); }
 async function importFiles(files){
+  const rep = {new:0, upd:0, skip:[], fail:[]};
+  progress(0, 0, t('reading'));
+  const jobs = [];
+  for(const f of files){
+    if(/\.zip$/i.test(f.name)){
+      if(!window.JSZip){ rep.fail.push([f.name, t('rCorrupt')]); continue; }
+      let zip; try{ zip = await JSZip.loadAsync(f); }catch(e){ rep.fail.push([f.name, t('rCorrupt')]); continue; }
+      const cj = Object.values(zip.files).find(e => e.name.endsWith('carnivinion-custom.json'));
+      if(cj){ try{ const arr = JSON.parse(await cj.async('string')); arr.forEach(cc => { const i = (ST.custom||[]).findIndex(x=>x.id===cc.id); if(i>=0) ST.custom[i]=cc; else (ST.custom = ST.custom||[]).push(cc); }); if(arr.length){ ST.owned.custom = ST.owned.custom || {e1:true}; registerCustom(); save(); } }catch(e){} }
+      Object.values(zip.files).forEach(e => {
+        if(e.dir) return;
+        const raw = e.unsafeOriginalName || e.name;
+        if(unsafePath(raw)){ rep.fail.push([raw, t('rUnsafe')]); return; }
+        const base = e.name.split('/').pop();
+        if(e.name.includes('__MACOSX') || base.startsWith('.') || /^(thumbs\.db|desktop\.ini)$/i.test(base) || base === 'carnivinion-custom.json'){ if(base !== 'carnivinion-custom.json') rep.skip.push([e.name, t('rSystem')]); return; }
+        jobs.push({name:e.name, get:() => e.async('blob')});
+      });
+    } else jobs.push({name:f.name, get:async () => f});
+  }
+  let done = 0; const total = jobs.length;
+  for(const j of jobs){
+    const c = classify(j.name);
+    if(c.err){ rep.skip.push([j.name, t(c.err)]); }
+    else {
+      try{
+        let blob = await j.get();
+        if(c.cat === 'rule'){
+          if(blob.type !== 'application/pdf') blob = new Blob([blob], {type:'application/pdf'});
+          for(const k of c.keys){ const had = RULEKEYS.has(k); await rulePut(k, blob); had ? rep.upd++ : rep.new++; }
+        } else {
+          const img = await shrink(blob, c.cat === 'cover' ? 1200 : 900);
+          for(const k of c.keys){ const had = !!PH.urls[k]; await photoPut(k, img); had ? rep.upd++ : rep.new++; }
+        }
+      }catch(err){ rep.fail.push([j.name, err && err.name === 'QuotaExceededError' ? t('rStorage') : t('rCorrupt')]); }
+    }
+    progress(++done, total, t('importing'));
+  }
+  progress(null); NAMEIDX = null; render();
+  const list = [...rep.fail, ...rep.skip];
+  openSheet(`<div class="inner"><h3>${t('impDone')}</h3>
+    <div class="impstats"><span><b>${rep.new}</b> ${t('impNew')}</span><span><b>${rep.upd}</b> ${t('impUpd')}</span><span><b>${rep.skip.length}</b> ${t('impSkip')}</span><span><b>${rep.fail.length}</b> ${t('impFail')}</span></div>
+    ${list.length ? `<p>${t('impList')}</p><ul class="badlist">${list.map(([n,r]) => `<li><b>${esc(n)}</b> – ${esc(r)}</li>`).join('')}</ul>` : ''}</div>`);
+}
+async function importFilesOld(files){
   const badNames = [];
   let ok = 0, bad = 0, done = 0, total = 0;
   progress(0, 0, t('reading'));
@@ -1341,7 +1472,7 @@ async function exportPhotos(){
   const zip = new JSZip();
   await new Promise((res, rej) => {
     const tx = PH.db.transaction('p','readonly'); const cur = tx.objectStore('p').openCursor();
-    cur.onsuccess = () => { const c = cur.result; if(!c) return; zip.file(`${c.key.replace(/[\/\\:*?"<>|]/g,'_')}.jpg`, c.value); c.continue(); };
+    cur.onsuccess = () => { const c = cur.result; if(!c) return; const k = String(c.key); zip.file(`${k.replace(/:/g,'~').replace(/[\/\\*?"<>|]/g,'-')}.${k.startsWith('rule:') ? 'pdf' : 'jpg'}`, c.value); c.continue(); };
     tx.oncomplete = res; tx.onerror = () => rej(tx.error);
   });
   zip.file('carnivinion-custom.json', JSON.stringify(ST.custom || []));
@@ -1379,7 +1510,7 @@ function pileMembers(tag){
 }
 const itemName = id => VMETA[id] ? VMETA[id].n[L()] : id.includes('#') ? id.split('#')[1] : nm(id);
 const itemText = id => VMETA[id] ? VMETA[id].d[L()] : C[id] ? C[id].d[L()] : '';
-function photoFor(tag){ if(PH.urls[tag]) return PH.urls[tag]; for(const m of pileMembers(tag)) if(PH.urls[m]) return PH.urls[m]; return null; }
+function photoFor(tag){ if(PH.urls[tag]) return PH.urls[tag]; if(tag.startsWith('@mat:')){ const sp = setupPhoto(tag.slice(5)); if(sp) return sp; } if(tag==='Trash'){ const sp = setupPhoto('trash'); if(sp) return sp; } for(const m of pileMembers(tag)) if(PH.urls[m]) return PH.urls[m]; return null; }
 function photoItems(tag){ const m = pileMembers(tag); return m.length ? (PH.urls[tag] ? [tag, ...m] : m) : [tag]; }
 const expandPhoto = tags => [...new Set(tags.flatMap(x => { const m = pileMembers(x); return m.length ? m : [x]; }))];
 const photoCount = tags => tags.filter(x => PH.urls[x]).length;
@@ -1699,6 +1830,7 @@ function setupNotes(k){
   if(/Trade Route/.test(text)) NT('trade');
   if(/Native Village mat/.test(text)) NT('native');
   if(/Island mat/.test(text)) NT('island');
+  if(/Pirate Ship mat/.test(text)) NT('pirateship');
   if(/(\+1 (Card|Action|Buy|Coin) token|-1 (Card|Coin) token|-2 Cost token|Trashing token|Journey token|Estate token)/i.test(text)) NT('adv');
   if(sup.includes('Black Market')) NT('blackmarket');
   return notes;
@@ -1930,7 +2062,7 @@ function renderSettings(){
     const allT = [...new Set(ownedBoxes().flatMap(boxTags))];
     h += `<h2 class="sec">${t('photos')}</h2><div class="panel">
       <div class="row"><span class="lbl">${Object.keys(PH.urls).length} ${t('photos')}</span></div>
-      <div class="row"><span class="lbl">${t('importPhotos')}<small>${t('importHint')}</small></span><label class="btn small">${t('importPhotos')}<input type="file" accept="image/*,.zip" multiple data-import="1"></label></div>
+      <div class="row"><span class="lbl">${t('importPhotos')}<small>${t('importHint')}</small></span><label class="btn small">${t('importPhotos')}<input type="file" accept="image/*,.zip,.pdf,application/pdf,application/zip" multiple data-import="1"></label></div>
       <div class="row"><span class="lbl">${t('exportPhotos')}<small>${t('exportHint')}</small></span>${(DL || !window.claude)?`<button class="btn small" data-act="export">${t('exportPhotos')}</button>`:''}</div>
       <div class="row"><span class="lbl"></span><button class="btn small danger" data-act="delall">${delArmed?t('confirmDelete'):t('deleteAll')}</button></div>
     </div>`;
@@ -1963,6 +2095,7 @@ function render(anim){
   document.documentElement.lang = lang;
   document.getElementById('title').textContent = t('title'); document.title = t('title');
   document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===lang));
+  const rb = document.getElementById('rulesbtn'); rb.setAttribute('aria-label', t('rules')); rb.title = t('rules');
   const mb = document.getElementById('musicbtn'); mb.setAttribute('aria-pressed', !!ST.music); mb.setAttribute('aria-label', t('music')); mb.title = t('music');
   if(ST.theme==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', ST.theme);
   if(TAB==='kingdom' && ST.setupDone && ST.flow.stage==='wheel' && !ST.flow.manual && !busy && ownedBoxes().length){
@@ -1977,7 +2110,7 @@ function render(anim){
 /* ---------- sheet ---------- */
 function openSheet(html){ const sh = document.getElementById('sheet'); sh.innerHTML = html; sh.scrollTop = 0;
   document.getElementById('scrim').classList.add('open'); requestAnimationFrame(()=>sh.classList.add('open')); }
-function closeSheet(){ stopScan(); document.getElementById('sheet').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); }
+function closeSheet(){ stopScan(); document.getElementById('sheet').classList.remove('tall'); document.getElementById('sheet').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); }
 let SHEET = {tag:null, i:0}, SHEETLIST = null;
 function navSheet(dir){ if(!SHEETLIST || !SHEETLIST.includes(SHEET.tag)) return; const n = SHEETLIST.length, i = SHEETLIST.indexOf(SHEET.tag); uiSound('card'); cardSheet(SHEETLIST[(i + dir + n) % n]); }
 function cardSheet(tag, idx){
@@ -2006,7 +2139,7 @@ function cardSheet(tag, idx){
     <div class="txt">${fmt(c.d[L()])}</div>
     ${c.x[L()]?`<details class="extra"><summary>${t('details')}</summary><div class="txt">${fmt(c.x[L()])}</div></details>`:''}
     ${g.length?`<p style="margin-top:14px"><b>${t('partOf')}:</b> ${g.map(m=>`<button class="chip" data-card="${esc(m)}">${esc(nm(m))}</button>`).join(' ')}</p>`:''}
-    <p><a class="wiki" href="${wiki}" target="_blank" rel="noopener">${t('wiki')}</a></p>
+    <p><a class="wiki" href="${wiki}" target="_blank" rel="noopener">${t('wiki')}</a>${(() => { const b = CARDBOX[tag]; const ed = b && prefEds(b).find(e => RULEKEYS.has(`rule:${b}:${e}`)); return ed ? ` · <button class="linkbtn" data-rule="rule:${b}:${ed}">${BOOKSVG}${t('rulebook')} ${esc(boxName(b))}</button>` : ''; })()}</p>
     ${photoBtns}
     <div class="sheetactions">
       ${inKingdom?`<button class="btn small" data-replace="${esc(tag)}">${t('replace')}</button><button class="btn small" data-replacewith="${esc(tag)}">${t('replaceWith')}</button>`:''}
@@ -2022,7 +2155,40 @@ function pickerSheet(tag){
     <input class="search" id="picksearch" type="search" placeholder="${t('searchCards')}"><div class="picklist" id="picklist">${draw('')}</div></div>`);
   document.getElementById('picksearch').addEventListener('input', e => { document.getElementById('picklist').innerHTML = draw(e.target.value.toLowerCase()); });
 }
-function embSheet(id){
+function boxSheet(id){
+  const has = !!PH.urls['box:'+id];
+  const covers = ['1','2','u'].map(ed => [ed, PH.urls[`cover:${id}:${ed}`]]).filter(x => x[1]);
+  const rules = ['1','2','u'].filter(ed => RULEKEYS.has(`rule:${id}:${ed}`));
+  openSheet(`<div class="inner" style="text-align:center"><h3>${esc(boxName(id))}</h3>
+    ${covers.length ? `<div class="covers">${covers.map(([ed,u]) => `<figure><img src="${u}" alt="${esc(boxName(id))} – ${edLabel(ed)}">${covers.length>1?`<figcaption>${edLabel(ed)}</figcaption>`:''}</figure>`).join('')}</div>` : `<div style="width:120px;margin:10px auto 14px">${emblem(id,'')}</div>`}
+    ${rules.length ? `<div class="sheetactions" style="justify-content:center">${rules.map(ed => `<button class="btn small" data-rule="rule:${id}:${ed}">${BOOKSVG}${t('rulebook')}${rules.length>1?' – '+edLabel(ed):''}</button>`).join('')}</div>` : ''}
+    <h4 class="subh">${t('emblemT')}</h4><div style="width:64px;margin:4px auto 10px">${emblem(id,'')}</div>
+    <div class="sheetactions" style="justify-content:center">
+      <label class="btn small">${CAMSVG}${t('emblemPick')}<input type="file" accept="image/*" data-photofor="box:${id}"></label>
+      ${has?`<button class="btn small danger" data-delphoto="box:${id}">${t('emblemReset')}</button>`:''}</div></div>`);
+}
+function rulesSheet(){
+  const keys = [...RULEKEYS];
+  const byBox = BOXES.map(b => [b.id, ['1','2','u'].filter(ed => keys.includes(`rule:${b.id}:${ed}`))]).filter(x => x[1].length);
+  const own = new Set(ownedBoxes()); byBox.sort((a,b) => (own.has(b[0]) - own.has(a[0])));
+  openSheet(`<div class="inner"><h3>${t('rulebooks')}</h3>${byBox.length ? `<div class="rulelist">${byBox.map(([id, eds]) => `<div class="row">${emblem(id)}<span class="lbl">${esc(boxName(id))}</span>${eds.map(ed => `<button class="btn small" data-rule="rule:${id}:${ed}">${eds.length>1 || ed!=='1' ? edLabel(ed) : t('rulebook')}</button>`).join('')}</div>`).join('')}</div>` : `<p>${t('noRules')}</p>`}</div>`);
+}
+let RULEURL = null;
+async function openRule(key){
+  try{
+    const blob = await idb('readonly', st => st.get(key));
+    if(!blob) return;
+    if(RULEURL) URL.revokeObjectURL(RULEURL);
+    RULEURL = URL.createObjectURL(blob.type === 'application/pdf' ? blob : new Blob([blob], {type:'application/pdf'}));
+    const [, id, ed] = key.split(':');
+    openSheet(`<div class="inner ruleview"><h3>${esc(boxName(id))} <small>${edLabel(ed)}</small></h3>
+      <div class="sheetactions"><a class="btn small" href="${RULEURL}" target="_blank" rel="noopener">${t('openRule')}</a><a class="btn small" href="${RULEURL}" download="${esc(key.replace(/:/g,'_'))}.pdf">${t('downloadRule')}</a></div>
+      <p class="hint">${t('ruleViewerHint')}</p><iframe class="pdfframe" src="${RULEURL}" title="${t('rulebook')}"></iframe></div>`);
+    document.getElementById('sheet').classList.add('tall');
+  }catch(e){ toast(t('rCorrupt')); }
+}
+function embSheet(id){ return boxSheet(id); }
+function embSheetOld(id){
   const has = !!PH.urls['box:'+id];
   openSheet(`<div class="inner" style="text-align:center"><h3>${t('emblemT')}</h3><div class="sub" style="justify-content:center">${esc(boxName(id))}</div>
     <div style="width:140px;margin:10px auto 16px">${emblem(id,'')}</div>
@@ -2168,7 +2334,8 @@ document.addEventListener('click', e => {
     save(); renderSettings(); return; }
   if(d.mode){ ST.s.mode = d.mode; save(); renderSettings(); return; }
   if(d.selall!==undefined){ if(d.selall==='1') BOXES.forEach(b => { if(b.id!=='promo') ST.owned[b.id] = Object.fromEntries(Object.keys(b.e).map(e=>['e'+e,true])); }); else BOXES.forEach(b => { if(b.id!=='promo') ST.owned[b.id] = {}; }); save(); renderSettings(); return; }
-  if(d.boxinfo){ toast(boxName(d.boxinfo)); return; }
+  if(d.boxinfo){ boxSheet(d.boxinfo); return; }
+  if(d.rule){ openRule(d.rule); return; }
   if(d.modeinfo){ const m = MODES[d.modeinfo], k = ST.current; openSheet(`<div class="inner"><h3>${esc(m.n[L()])}</h3>${k && k.rec ? `<p><b>${esc(k.rec)}</b></p>` : ''}<p class="txt">${esc(m.d[L()])}</p></div>`); return; }
   if(d.playoff!==undefined){ const o = OFFICIAL[+d.playoff]; playKingdom(kingdomFromOfficial(o)); TAB='kingdom'; goStage('kingdom', true); return; }
   if(d.view){ ST.view = d.view; save(); renderKingdom(); return; }
@@ -2205,6 +2372,7 @@ document.addEventListener('click', e => {
     case 'manRandom': if(dealCards(ST.flow.boxes)){ goStage('kingdom', true); fanfare(); } break;
     case 'fillRest': finishManual(true); break;
     case 'finishPick': finishManual(false); break;
+    case 'rules': rulesSheet(); break;
     case 'music': if(!ST.music) setMusic(true); musicPop(!POPOPEN); break;
     case 'musicon': setMusic(true); break;
     case 'musicoff': setMusic(false); break;

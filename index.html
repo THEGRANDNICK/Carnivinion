@@ -191,6 +191,72 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .p2 .pblock{height:84px}.p3 .pblock{height:60px}
 .row.statrow{min-height:44px;gap:4px;flex-wrap:nowrap;font-size:.92rem;padding:8px 10px}.row.statrow>span{min-width:42px;text-align:center}.statrow>span:first-child{min-width:22px}.row.statrow .lbl{flex:1 1 0;min-width:0;text-align:left;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row.statrow.head{font-size:.75rem;color:var(--muted);font-weight:800;min-height:34px}
+
+.tour{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:16px;background:rgba(15,12,30,.55);backdrop-filter:blur(3px)}
+.tour[hidden]{display:none}
+.tourcard{position:relative;width:min(440px,100%);max-height:94vh;overflow:auto;background:var(--surface);border-radius:18px;padding:18px 20px 16px;text-align:center;
+  box-shadow:0 0 0 3px #6B4630,0 0 0 5px #D6A032,0 20px 40px rgba(0,0,0,.45);animation:tourin .35s cubic-bezier(.2,1.3,.4,1)}
+@keyframes tourin{from{opacity:0;transform:translateY(20px) scale(.95)}}
+.tourcard h3{margin:10px 0 6px;font:800 1.6rem/1.1 "Grenze Gotisch",serif;color:var(--rose)}
+.tourcard p{margin:0 auto;max-width:36ch;font-size:1.02rem;line-height:1.45}
+.tourskip{position:absolute;top:10px;right:12px;border:0;background:none;color:var(--muted);font-weight:800;text-decoration:underline;cursor:pointer;z-index:2}
+.tourart{height:190px;display:grid;place-items:center;border-radius:12px;margin-top:18px;overflow:hidden;
+  background:repeating-linear-gradient(180deg,transparent 0 46px,rgba(58,34,14,.35) 46px 48px),linear-gradient(90deg,#C3905C,#B07A45 40%,#C49062 70%,#AD7642);box-shadow:inset 0 0 0 3px rgba(60,35,15,.5),inset 0 8px 16px rgba(0,0,0,.25)}
+.tourdots{display:flex;justify-content:center;gap:6px;margin:14px 0 12px}.tourdots span{width:8px;height:8px;border-radius:50%;background:var(--line)}.tourdots span.on{background:var(--rose);width:22px;border-radius:4px}
+.tournav{display:flex;justify-content:space-between;align-items:center}
+.tournav .btn.primary{padding:11px 22px}
+.ta{position:relative;width:100%;height:100%;display:grid;place-items:center}
+/* welcome */
+.ta-welcome>svg{width:96px;height:96px;animation:bob 1.6s ease-in-out infinite;filter:drop-shadow(0 6px 6px rgba(0,0,0,.35))}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-4deg)}}
+.ta-bunt{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:space-around}
+.ta-bunt i{width:22px;height:26px;clip-path:polygon(0 0,100% 0,50% 100%);background:var(--c);transform-origin:50% 0;animation:sway 1.4s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.2s)}
+.ta-bunt i:nth-child(4n+1){--c:#A8322D}.ta-bunt i:nth-child(4n+2){--c:#D6A032}.ta-bunt i:nth-child(4n+3){--c:#2F4F8F}.ta-bunt i:nth-child(4n){--c:#3F6B3A}
+.ta-conf{position:absolute;left:calc(var(--i)*7%);top:-10px;width:7px;height:11px;border-radius:2px;background:hsl(calc(var(--i)*47),70%,55%);animation:fall 2.6s linear infinite;animation-delay:calc(var(--i)*-.19s)}
+@keyframes fall{to{transform:translateY(220px) rotate(540deg)}}
+/* wheel */
+.ta-wheel svg{width:150px;height:150px;filter:drop-shadow(0 6px 6px rgba(0,0,0,.35))}
+.ta-spin{animation:tspin 2.8s cubic-bezier(.2,.7,.2,1) infinite}
+@keyframes tspin{from{transform:rotate(0)}to{transform:rotate(1080deg)}}
+/* cans */
+.ta-cans .pyr{transform:scale(.9)}.ta-cans .bx.can{width:46px;height:56px}
+.ta-hit{animation:hit 2.4s ease-in-out infinite}
+@keyframes hit{0%,40%{transform:none;filter:none}55%,90%{transform:translateY(-8px) scale(1.12);filter:drop-shadow(0 0 8px rgba(242,182,50,.95))}}
+/* table */
+.ta-table{display:flex;gap:10px;justify-content:center;align-items:center}
+.ta-card{width:84px;animation:deal2 3s cubic-bezier(.2,1.2,.4,1) infinite;animation-delay:calc(var(--i)*.18s)}
+.ta-card .pile{width:100%}
+@keyframes deal2{0%{opacity:0;transform:translateY(-60px) rotate(-12deg)}20%,85%{opacity:1;transform:none}100%{opacity:0}}
+.ta-lock{position:absolute;right:calc(50% - 150px);top:22px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#A8322D;color:#fff;box-shadow:0 2px 4px rgba(0,0,0,.4);animation:pop2 3s infinite}
+.ta-lock svg{width:16px;height:16px}
+@keyframes pop2{0%,45%{transform:scale(0)}55%,90%{transform:scale(1)}100%{transform:scale(0)}}
+/* modes */
+.ta-chip{transform:rotate(-2deg) scale(1.2)}
+.ta-roll{display:inline-grid;height:1.4em;overflow:hidden}.ta-roll b{grid-area:1/1;animation:roll4 6s infinite;opacity:0}
+.ta-roll b:nth-child(2){animation-delay:1.5s}.ta-roll b:nth-child(3){animation-delay:3s}.ta-roll b:nth-child(4){animation-delay:4.5s}
+@keyframes roll4{0%{opacity:0;transform:translateY(100%)}5%,22%{opacity:1;transform:none}27%,100%{opacity:0;transform:translateY(-100%)}}
+/* share */
+.ta-phone{position:relative;width:104px;height:160px;border-radius:16px;background:#2B2533;padding:14px 10px;box-shadow:0 8px 14px rgba(0,0,0,.4)}
+.ta-qr{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#fff;padding:6px;border-radius:4px;margin-top:18px}
+.ta-qr i{aspect-ratio:1;background:#fff}.ta-qr i.on{background:#2B1E14}
+.ta-scanline{position:absolute;left:8px;right:8px;top:34px;height:3px;background:#D6A032;box-shadow:0 0 10px #D6A032;animation:scan 1.8s ease-in-out infinite alternate}
+@keyframes scan{to{top:112px}}
+/* podium */
+.ta-pod .podium{min-height:0;width:260px;margin:0}
+.ta-pod .pblock{animation:rise 3s ease-out infinite;transform-origin:50% 100%}
+.ta-pod .p1 .pblock{height:90px}.ta-pod .p2 .pblock{height:62px}.ta-pod .p3 .pblock{height:44px}
+@keyframes rise{0%{transform:scaleY(0)}30%,90%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+.ta-crown{display:block;animation:crowndrop 3s infinite}.ta-crown .crown{width:30px;height:30px;color:#D6A032}
+@keyframes crowndrop{0%,30%{transform:translateY(-60px);opacity:0}45%,95%{transform:none;opacity:1}}
+.ta-pod .pname2{color:#FFF1D6;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+/* rules */
+.ta-rules{display:flex;align-items:center;justify-content:center;gap:18px}
+.ta-book{width:80px;height:80px;filter:drop-shadow(0 4px 4px rgba(0,0,0,.35))}
+.ta-pl{transform-origin:12px 12px;animation:page 2.4s ease-in-out infinite}
+@keyframes page{50%{transform:scaleX(.2)}}
+.ta-photos{display:flex;gap:6px}.ta-photos span{width:56px;animation:bob 2s ease-in-out infinite;animation-delay:calc(var(--i)*.3s)}.ta-photos .pile{width:100%}
+@media (prefers-reduced-motion: reduce){.tour *{animation:none!important}}
+
 .badlist{max-height:40vh;overflow:auto;background:var(--sunk);border-radius:8px;padding:8px 8px 8px 28px;font-size:.9rem}
 .embtn{border:0;padding:0;background:none;border-radius:50%;display:grid}
 .modechiprow{text-align:center;margin:4px 0 2px}
@@ -586,6 +652,7 @@ input.nameinput{width:100%;padding:11px 14px;border-radius:10px;border:0;backgro
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
 <div class="toast" id="toast" role="status"></div>
+<div class="tour" id="tour" hidden></div>
 <div class="pbar" id="pbar" hidden role="progressbar" aria-live="polite"><div class="pb-label" id="pblabel"></div><div class="pb-track"><span id="pbfill"></span></div></div>
 
 <script>
@@ -751,6 +818,7 @@ const S = {
  podium:["Podium","Podium"], podiumEmpty:["No results yet. Open a game and tap “Result”.","Noch keine Ergebnisse. Öffne ein Spiel und tippe auf „Ergebnis“."],
  wins:["wins","Siege"], win1:["win","Sieg"], ptsShort:["pts","Pkt."], games:["games","Spiele"], rate:["win rate","Siegquote"], best:["best score","Bestwert"], needWinner:["Mark at least one winner.","Markiere mindestens einen Gewinner."],
  needPlayers:["Pick at least two players.","Wähle mindestens zwei Spieler."], resSaved:["Result saved","Ergebnis gespeichert"], with:["with","mit"],
+ tutSkip:["Skip","Überspringen"], tutNext:["Next","Weiter"], tutBack:["Back","Zurück"], tutGo:["Let's play!","Los geht's!"], tutAgain:["Show the tour again","Rundgang nochmal ansehen"], tutTitle:["Tour","Rundgang"],
  sharedKingdom:["Shared kingdom","Geteiltes Königreich"],
 };
 const NOTES = {
@@ -783,7 +851,7 @@ const esc = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'
 
 /* ---------- state ---------- */
 const DEF = {
-  lang:'de', theme:'auto', sound:true, music:false, vol:.65, custom:[], people:[], lastPlayers:[], view:'table', fast:false, setupDone:false,
+  lang:'de', theme:'auto', sound:true, tutSeen:false, music:false, vol:.65, custom:[], people:[], lastPlayers:[], view:'table', fast:false, setupDone:false,
   owned:{dominion:{e2:true}}, promos:{},
   s:{players:3,req:{},theme:[],mode:'normal',min:1,max:3,perBox:true,landMax:2,landDeck:true,colony:'rule',shelters:'rule',noAttacks:false,reactPair:false,noRepeat:true,sort:'cost'},
   blocked:[], seen:[], history:[], favorites:[], current:null,
@@ -2125,7 +2193,7 @@ function renderSettings(){
   const tog = (key, on, label, hint='', attr='data-set') => `<label class="row"><span class="lbl">${label}${hint?`<small>${hint}</small>`:''}</span><input type="checkbox" class="toggle" ${attr}="${key}" ${on?'checked':''}></label>`;
   const step = (key, val, label) => `<div class="row"><span class="lbl">${label}</span><span class="stepper"><button data-step="${key}" data-d="-1" aria-label="−">−</button><output>${val}</output><button data-step="${key}" data-d="1" aria-label="+">+</button></span></div>`;
   const segRow = (key, val, opts, label) => `<div class="row"><span class="lbl">${label}</span><span class="seg">${opts.map(([o,l])=>`<button data-seg="${key}" data-v="${o}" aria-pressed="${val===o}">${l}</button>`).join('')}</span></div>`;
-  let h = `<h2 class="sec">${t('collection')}</h2><div class="panel"><div class="row" style="justify-content:flex-end"><button class="chip" data-selall="1">${t('selectAll')}</button><button class="chip" data-selall="0">${t('selectNone')}</button></div>`;
+  let h = `<div style="text-align:center;margin:6px 0 4px"><button class="modechip" data-act="tour"><b>${t('tutAgain')}</b></button></div><h2 class="sec">${t('collection')}</h2><div class="panel"><div class="row" style="justify-content:flex-end"><button class="chip" data-selall="1">${t('selectAll')}</button><button class="chip" data-selall="0">${t('selectNone')}</button></div>`;
   BOXES.filter(b=>b.id!=='promo').forEach(b => {
     const eds = Object.keys(b.e); const o = ST.owned[b.id]||{}; const on = !!(o.e1||o.e2);
     const cur = o.e1 && o.e2 ? 'b' : o.e1 ? '1' : '2';
@@ -2514,6 +2582,7 @@ document.addEventListener('click', e => {
       ST.lastPlayers = [...RES.p]; save(); closeSheet(); render(); fanfare(); toast(`${t('resSaved')} – ${e.res.w.join(' & ')} ${e.res.w.length>1?'('+t('wonTie')+')':t('won')} 👑`); break; }
     case 'delresult': { const e = ST.history.find(x => x.id === RES.id); if(e) delete e.res; save(); closeSheet(); render(); break; }
     case 'podium': podiumSheet(); break;
+    case 'tour': openTour(); break;
     case 'newcustom': customSheet(null); break;
     case 'savecustom': { const n = document.getElementById('cc-n').value.trim(); if(!n){ toast(t('needName')); break; }
       const types = [...document.querySelectorAll('[data-ctype][aria-pressed="true"]')].map(b => b.dataset.ctype);
@@ -2660,6 +2729,52 @@ function buildScene(){
   document.getElementById('scene').innerHTML = `<svg viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMax slice">${g}</svg>`;
 }
 
+
+/* ---------- animated first-visit tour ---------- */
+const TUT = [
+  {k:'welcome', t:['Welcome to the fair!','Willkommen auf dem Jahrmarkt!'], d:['Carnivinion deals you a Dominion kingdom – with a wheel of fortune, a can toss and a real table. Here is a quick tour.','Carnivinion stellt euch ein Dominion-Königreich zusammen – mit Glücksrad, Dosenwerfen und echtem Spieltisch. Hier eine kurze Tour.']},
+  {k:'wheel', t:['1 · Spin the wheel','1 · Am Glücksrad drehen'], d:['The wheel decides how many boxes you play. Tap “Skip” if you are in a hurry – or switch on quick mode in the options.','Das Rad entscheidet, wie viele Boxen ihr spielt. Keine Zeit? Tippe „Überspringen“ – oder schalte in den Optionen den Schnellmodus ein.']},
+  {k:'cans', t:['2 · Box toss','2 · Boxenwerfen'], d:['Your boxes stand like tin cans. The lucky ones light up and are played. With “Choose myself” you pick boxes and cards by hand.','Eure Boxen stehen wie Blechdosen im Regal. Die gezogenen leuchten auf. Mit „Selbst wählen“ sucht ihr Boxen und Karten von Hand aus.']},
+  {k:'table', t:['3 · The table','3 · Der Spieltisch'], d:['Kingdom, supply, starting deck and all extras lie ready. Tap a card for its text, flip through with the arrows, lock cards you want to keep.','Königreich, Vorrat, Startdeck und alle Extras liegen bereit. Tippe eine Karte für den Text, blättere mit den Pfeilen, sperre Karten, die bleiben sollen.']},
+  {k:'modes', t:['Game modes','Spielmodi'], d:['Tap the red sign above the wheel to switch: Battlefield, Cursed, Recommended kingdoms from the rulebooks and more.','Tippe auf das rote Schild über dem Rad: Schlachtfeld, Verflucht, empfohlene Königreiche aus den Anleitungen und mehr.']},
+  {k:'share', t:['Share with a QR code','Teilen per QR-Code'], d:['“Share” shows a QR code. Friends scan it (bottom bar → Scan) and get exactly the same kingdom.','„Teilen“ zeigt einen QR-Code. Freunde scannen ihn (unten → Scannen) und haben genau dasselbe Königreich.']},
+  {k:'podium', t:['Who won?','Wer hat gewonnen?'], d:['After the game tap “Result”, pick the players and crown the winner. The podium under “Saved” shows who wins most.','Nach dem Spiel auf „Ergebnis“ tippen, Mitspieler wählen, Gewinner krönen. Das Podium unter „Gemerkt“ zeigt, wer am häufigsten gewinnt.']},
+  {k:'rules', t:['Pictures & rules','Bilder & Regeln'], d:['Photograph your cards or import a whole picture bundle in the options. The book at the top opens the rulebooks – only when you need them.','Fotografiere eure Karten oder importiere ein ganzes Bilder-Paket in den Optionen. Das Buch oben öffnet die Regelhefte – nur wenn ihr sie braucht.']},
+];
+function tutArt(k){
+  if(k==='welcome') return `<div class="ta ta-welcome">${emblem('dominion','')}<div class="ta-bunt">${Array.from({length:9},(_,i)=>`<i style="--i:${i}"></i>`).join('')}</div>${Array.from({length:14},(_,i)=>`<b class="ta-conf" style="--i:${i}"></b>`).join('')}</div>`;
+  if(k==='wheel') return `<div class="ta ta-wheel"><svg viewBox="-60 -60 120 120"><g class="ta-spin">${['#A8322D','#F1E6C8','#2F4F8F','#D6A032','#3F6B3A','#F1E6C8','#6E3B63','#D6A032'].map((c,i)=>{ const a0=i*45*Math.PI/180, a1=(i+1)*45*Math.PI/180; return `<path d="M0 0L${(50*Math.sin(a0)).toFixed(1)} ${(-50*Math.cos(a0)).toFixed(1)}A50 50 0 0 1 ${(50*Math.sin(a1)).toFixed(1)} ${(-50*Math.cos(a1)).toFixed(1)}Z" fill="${c}" stroke="#4E3321"/>`; }).join('')}<circle r="50" fill="none" stroke="#7A5236" stroke-width="7"/></g><circle r="13" fill="#7A5236" stroke="#D6A032" stroke-width="3"/><path d="M0 -62l-7 -8h14z" fill="#A8322D" transform="rotate(180 0 -64)"/></svg></div>`;
+  if(k==='cans'){ const ids = ['dominion','seaside','intrigue','alchemy','prosperity','nocturne']; return `<div class="ta ta-cans"><div class="pyr">${[[ids[5]],[ids[3],ids[4]],[ids[0],ids[1],ids[2]]].map(r=>`<div class="tier">${r.map(id=>`<span class="bx can ${id==='seaside'||id==='alchemy'?'ta-hit':''}"><span class="cb">${emblem(id,'')}</span></span>`).join('')}</div>`).join('')}<div class="shelf"></div></div></div>`; }
+  if(k==='table') return `<div class="ta ta-table">${['Village','Smithy','Market'].map((x,i)=>`<div class="ta-card" style="--i:${i}">${pileHTML({tag:x,count:10})}</div>`).join('')}<span class="ta-lock">${LOCKSVG}</span></div>`;
+  if(k==='modes') return `<div class="ta ta-modes"><div class="modechip ta-chip"><small>${t('modeNowL')}</small><span class="ta-roll">${['normal','attack','cursed','official'].map(m=>`<b>${esc(MODES[m].n[L()])}</b>`).join('')}</span></div></div>`;
+  if(k==='share') return `<div class="ta ta-share"><div class="ta-phone"><div class="ta-qr">${Array.from({length:49},(_,i)=>`<i class="${[0,1,2,7,9,14,15,16,4,5,6,11,13,18,19,20,28,29,30,35,37,42,43,44,24,22,26,32,38,40,46,10,17,31,3,45].includes(i)?'on':''}"></i>`).join('')}</div><span class="ta-scanline"></span></div></div>`;
+  if(k==='podium') return `<div class="ta ta-pod"><div class="podium"><div class="pstand p2"><div class="pname2"><b>Nico</b></div><div class="pblock"><span>2</span></div></div><div class="pstand p1"><div class="pname2"><span class="ta-crown">${CROWNSVG}</span><b>Anna</b></div><div class="pblock"><span>1</span></div></div><div class="pstand p3"><div class="pname2"><b>Tom</b></div><div class="pblock"><span>3</span></div></div></div></div>`;
+  return `<div class="ta ta-rules"><svg class="ta-book" viewBox="0 0 24 24" fill="none" stroke="#4E3321" stroke-width="1.4" stroke-linejoin="round"><path class="ta-pl" d="M4 5.5C6.5 4 9.5 4 12 5.5v14C9.5 18 6.5 18 4 19.5z" fill="#F1E6C8"/><path d="M20 5.5C17.5 4 14.5 4 12 5.5v14c2.5-1.5 5.5-1.5 8 0z" fill="#EFE3C4"/></svg><div class="ta-photos">${['Village','Gold','Province'].map((x,i)=>`<span style="--i:${i}">${pileHTML({tag:x})}</span>`).join('')}</div></div>`;
+}
+let TUTI = 0;
+function openTour(){ TUTI = 0; document.getElementById('tour').hidden = false; renderTour(); }
+function closeTour(){ document.getElementById('tour').hidden = true; ST.tutSeen = true; save(); render(); }
+function renderTour(){
+  const st = TUT[TUTI], last = TUTI === TUT.length - 1;
+  document.getElementById('tour').innerHTML = `<div class="tourcard" role="dialog" aria-modal="true" aria-label="${t('tutTitle')}">
+    <button class="tourskip" data-tour="skip">${t('tutSkip')}</button>
+    <div class="tourart" key="${st.k}">${tutArt(st.k)}</div>
+    <h3>${esc(st.t[L()])}</h3><p>${esc(st.d[L()])}</p>
+    <div class="tourdots">${TUT.map((_,i)=>`<span class="${i===TUTI?'on':''}"></span>`).join('')}</div>
+    <div class="tournav">${TUTI ? `<button class="btn small" data-tour="back">${t('tutBack')}</button>` : '<span></span>'}<button class="btn primary tourgo" data-tour="${last?'done':'next'}">${last ? t('tutGo') : t('tutNext')}</button></div></div>`;
+  const g = document.querySelector('.tourgo'); if(g) g.focus({preventScroll:true});
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-tour]'); if(!b) return;
+  e.stopPropagation(); const a = b.dataset.tour;
+  if(a==='skip' || a==='done'){ if(a==='done') fanfare(); closeTour(); return; }
+  TUTI = Math.max(0, Math.min(TUT.length-1, TUTI + (a==='next'?1:-1))); uiSound('card'); renderTour();
+}, true);
+{ let tx = 0; const tr = () => document.getElementById('tour');
+  document.addEventListener('touchstart', e => { if(tr() && !tr().hidden) tx = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', e => { if(!tr() || tr().hidden) return; const dx = e.changedTouches[0].clientX - tx; if(Math.abs(dx) > 60){ TUTI = Math.max(0, Math.min(TUT.length-1, TUTI + (dx<0?1:-1))); renderTour(); } }, {passive:true});
+  document.addEventListener('keydown', e => { if(!tr() || tr().hidden) return; if(e.key==='ArrowRight'){ TUTI = Math.min(TUT.length-1, TUTI+1); renderTour(); } if(e.key==='ArrowLeft'){ TUTI = Math.max(0, TUTI-1); renderTour(); } if(e.key==='Escape') closeTour(); }); }
+
 /* ---------- boot ---------- */
 buildScene();
 photoInit();
@@ -2672,6 +2787,7 @@ if(mq){ const k = decodeQ(decodeURIComponent(mq[1])); if(k){ loadShared(k); hist
 const m = location.hash.match(/k=([^&]+)/);
 if(m){ const k = decodeK(m[1]); if(k){ resolve(k, null, false); ST.current = k; ST.flow = {stage:'kingdom', n:k.b.length, boxes:k.b}; save(); history.replaceState(null,'',location.href.split('#')[0]); } }
 render();
+if(!ST.tutSeen) setTimeout(openTour, 350);
 </script>
 </body>
 </html>

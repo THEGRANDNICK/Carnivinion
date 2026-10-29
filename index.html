@@ -268,8 +268,16 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .ta-photos{display:flex;gap:6px}.ta-photos span{width:56px;animation:bob 2s ease-in-out infinite;animation-delay:calc(var(--i)*.3s)}.ta-photos .pile{width:100%}
 @media (prefers-reduced-motion: reduce){.tour *{animation:none!important}}
 
+.tslist{display:flex;flex-direction:column;gap:6px}
+.tsitem{display:flex;align-items:center;gap:10px;background:var(--sunk);border-radius:10px;padding:6px 10px}
+.tsitem .em{width:30px;height:30px;flex:none}.tsitem .lbl{flex:1;font-weight:700}.tsitem .lbl small{display:block;font-weight:600;color:var(--debt);font-size:.78rem}
+.tsitem.unsure{box-shadow:inset 0 0 0 2px var(--gold)}
+.tsdel{border:0;background:none;font-size:1.1rem;color:var(--muted);width:34px;height:34px;cursor:pointer}
 .badlist{max-height:40vh;overflow:auto;background:var(--sunk);border-radius:8px;padding:8px 8px 8px 28px;font-size:.9rem}
 .embtn{border:0;padding:0;background:none;border-radius:50%;display:grid}
+.pickn{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 8px;margin:10px 0 4px}
+.pickn span{font-weight:800;font-size:.9rem;color:var(--ink);text-shadow:0 0 6px var(--halo),0 0 12px var(--halo);width:100%;text-align:center}
+.pickn .chip{min-width:34px;font:800 1.1rem Grenze,serif;padding:5px 8px}
 .modechiprow{text-align:center;margin:4px 0 2px}
 .modechip{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;padding:6px 14px;border-radius:6px;color:#F6D98E;background:#A8322D;box-shadow:0 0 0 2px #D6A032,0 3px 6px rgba(0,0,0,.3);transform:rotate(-1.5deg)}
 .modechip small{font:700 .75rem "Alegreya Sans",sans-serif;opacity:.85}.modechip b{font:700 1.15rem Grenze,serif;color:#fff}.modechip span{font-size:.8rem}
@@ -839,6 +847,19 @@ const S = {
  codeOf:["Code","Code"], scoresMerged:["games added","Spiele übernommen"], scoresKnown:["already there","schon vorhanden"], noScores:["No results to share yet.","Noch keine Ergebnisse zum Teilen."],
  scanInApp:["Tip: scan with Carnivinion → Scan (bottom bar), so it opens right in the app.","Tipp: Mit Carnivinion → Scannen (unten) scannen, dann öffnet es direkt in der App."],
  delGame:["Delete game","Spiel löschen"], sure:["Sure?","Sicher?"],
+ pickN:["Or pick the number:","Oder Anzahl direkt wählen:"],
+ delNoRes:["Delete games without result","Spiele ohne Ergebnis löschen"], delNoResDone:["games deleted","Spiele gelöscht"], clearAll:["Delete entire history","Ganzen Verlauf löschen"],
+ askResT:["Who won the last game?","Wer hat das letzte Spiel gewonnen?"], askResD:["You haven't entered a result for this kingdom yet.","Für dieses Königreich ist noch kein Ergebnis eingetragen."],
+ askResYes:["Enter result","Ergebnis eintragen"], askResNo:["New round without result","Neue Runde ohne Ergebnis"], askResNever:["Don't ask again","Nicht mehr fragen"],
+ wake:["Keep screen on during a game","Bildschirm während des Spiels anlassen"], wakeHint:["The phone doesn't go dark while the kingdom is on the table.","Das Handy wird nicht dunkel, solange das Königreich auf dem Tisch liegt."],
+ tsTitle:["Scan the table","Tisch scannen"], tsTake:["Photograph the table","Tisch fotografieren"], tsBtn:["Recognise cards on the table","Karten auf dem Tisch erkennen"],
+ tsHint:["Photograph the piles from above, from the side where the names are upright. Good light helps. With 10 piles, take two photos (one row each).","Fotografiere die Stapel von oben, von der Seite, auf der die Namen richtig herum stehen. Gutes Licht hilft. Bei 10 Stapeln lieber zwei Fotos (je eine Reihe)."],
+ tsLoading:["Loading text recognition (once, about 5 MB)…","Texterkennung wird geladen (einmalig, ca. 5 MB)…"], tsReading:["Reading the cards…","Karten werden gelesen…"],
+ tsFound:["recognised","erkannt"], tsNone:["No card names found in this photo. Try closer, straighter or with more light.","Auf diesem Foto wurden keine Kartennamen gefunden. Versuch es näher, gerader oder mit mehr Licht."],
+ tsAdd:["Add a missing card","Fehlende Karte hinzufügen"], tsDone:["Use this kingdom","Königreich übernehmen"], tsUnsure:["unsure – please check","unsicher – bitte prüfen"],
+ tsTaken:["Kingdom taken over – after the game tap “Result”.","Königreich übernommen – nach dem Spiel auf „Ergebnis“ tippen."], tsNeedK:["Add at least one kingdom card.","Füge mindestens eine Königreichkarte hinzu."],
+ tsUnavailable:["Card recognition can't load here. Open the website version (thegrandnick.github.io/Carnivinion) – it works there.","Die Kartenerkennung kann hier nicht geladen werden. Öffne die Website-Version (thegrandnick.github.io/Carnivinion) – dort funktioniert sie."],
+ tsCount:["kingdom · {l} landscape","Königreich · {l} Querformat"],
  sharedKingdom:["Shared kingdom","Geteiltes Königreich"],
 };
 const NOTES = {
@@ -871,7 +892,7 @@ const esc = s => String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'
 
 /* ---------- state ---------- */
 const DEF = {
-  lang:(navigator.language||'').toLowerCase().startsWith('de') ? 'de' : 'en', theme:'auto', sound:true, tutSeen:false, music:false, vol:.65, custom:[], people:[], lastPlayers:[], view:'table', fast:false, setupDone:false,
+  askRes:true, wake:true, lang:(navigator.language||'').toLowerCase().startsWith('de') ? 'de' : 'en', theme:'auto', sound:true, tutSeen:false, music:false, vol:.65, custom:[], people:[], lastPlayers:[], view:'table', fast:false, setupDone:false,
   owned:{dominion:{e2:true}}, promos:{},
   s:{players:3,req:{},theme:[],mode:'normal',min:1,max:3,perBox:true,landMax:2,landDeck:true,colony:'rule',shelters:'rule',noAttacks:false,reactPair:false,noRepeat:true,sort:'cost'},
   blocked:[], seen:[], history:[], favorites:[], current:null,
@@ -1838,6 +1859,7 @@ function renderWheel(){
   }
   const r = wheelResult;
   v.innerHTML = `<h2 class="big">${t('q1')}</h2><p class="lead">${t('q1l')}</p>${modeChip()}
+    ${busy ? '' : `<div class="pickn"><span>${t('pickN')}</span>${Array.from({length:Math.min(8, ownedBoxes().length)}, (_,i) => `<button class="chip ${r===i+1?'on':''}" data-pickn="${i+1}">${i+1}</button>`).join('')}</div>`}
     <div class="resultrow"><span class="result" id="wheelres" aria-live="polite">${r!=null?`${r} ${r===1?t('oneBox'):t('nBoxes')}`:''}</span></div>
     <div class="booth"><span class="pflag l"></span><span class="pflag r"></span><div class="roof"></div><div class="valance"></div><span class="pole l"></span><span class="pole r"></span>
     <div class="boothin"><div class="wheelwrap" id="wheelwrap">
@@ -2197,7 +2219,7 @@ function renderSaved(){
         <div class="sheetactions" style="margin-top:10px"><button class="btn small" data-playoff="${i}">${t('playThis')}</button></div></div>`; }).join('')}</div>` : `<p class="empty">${t('noOfficial')}</p>`;
     v.innerHTML = h; return;
   }
-  if(SAVEDTAB==='history') h += `<div style="text-align:center;margin:-4px 0 14px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="modechip" data-act="podium">${CROWNSVG}<b>${t('podium')}</b></button>${ST.history.some(e=>e.res)?`<button class="btn small" data-act="sharescores">${t('shareScores')}</button>`:''}</div>`;
+  if(SAVEDTAB==='history') h += `<div style="text-align:center;margin:-4px 0 14px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="modechip" data-act="podium">${CROWNSVG}<b>${t('podium')}</b></button>${ST.history.some(e=>e.res)?`<button class="btn small" data-act="sharescores">${t('shareScores')}</button>`:''}<button class="btn small" data-act="tablescan">${CAMSVG}${t('tsTitle')}</button></div>`;
   if(!list.length) h += `<p class="empty">${SAVEDTAB==='history'?t('noHistory'):t('noFav')}</p>`;
   else h += `<div class="saved">${list.map(e=>`<div class="saveditem">
       <div class="t">${(e.k.b||[]).map(id=>emblem(id,'')).join('')} ${e.name?esc(e.name):''}</div>
@@ -2206,7 +2228,8 @@ function renderSaved(){
       ${e.res ? `<div class="resline">${CROWNSVG}<b>${esc(e.res.w.join(' & '))}</b> <span>${t('with')} ${esc(e.res.p.filter(n=>!e.res.w.includes(n)).map(n => n + (e.res.pts&&e.res.pts[n]!=null?` (${e.res.pts[n]})`:'')).join(', '))}</span></div>` : ''}
       <div class="sheetactions" style="margin-top:10px"><button class="btn small" data-open="${e.id}">${t('open')}</button>${SAVEDTAB==='history'?`<button class="btn small" data-result="${e.id}">${CROWNSVG}${t('result')}</button>`:''}<button class="btn small danger" data-del="${e.id}">${t('del')}</button></div>
     </div>`).join('')}</div>`;
-  if(SAVEDTAB==='history' && list.length) h += `<p style="margin-top:18px"><button class="btn small danger" data-act="clearhist">${t('clearHistory')}</button></p>`;
+  if(SAVEDTAB==='history' && list.length){ const nr = list.filter(e => !e.res).length;
+    h += `<div class="sheetactions" style="margin-top:18px">${nr ? `<button class="btn small danger" data-act="delnores">${t('delNoRes')} (${nr})</button>` : ''}<button class="btn small danger" data-act="clearhist">${t('clearAll')}</button></div>`; }
   v.innerHTML = h;
 }
 function renderSettings(){
@@ -2230,7 +2253,7 @@ function renderSettings(){
     h += `<h2 class="sec">${t('promoCards')}</h2><div class="panel"><label class="row">${emblem('promo')}<span class="lbl"><b>${t('allPromos')}</b></span><input type="checkbox" class="toggle" data-allpromo="1" ${allOn?'checked':''}></label>`; }
   h += `${BOX.promo.e['1'].filter(x=>C[x].k==='K'||C[x].k==='L').sort((a,b)=>nm(a).localeCompare(nm(b),lang)).map(x=>
     `<label class="row">${emblem('promo')}<span class="lbl">${esc(nm(x))}</span><input type="checkbox" class="toggle" data-promo="${esc(x)}" ${ST.promos[x]?'checked':''}></label>`).join('')}</div>`;
-  h += `<h2 class="sec">${t('wheelS')}</h2><div class="panel">${step('min', s.min, t('minBoxes'))}${step('max', s.max, t('maxBoxes'))}${tog('perBox', s.perBox, t('perBox'))}${tog('sound', ST.sound, t('sound'), '', 'data-root')}<label class="row"><span class="lbl">${t('music')}<small>${t('musicHint')}</small></span><input type="checkbox" class="toggle" data-music="1" ${ST.music?'checked':''}></label><label class="row"><span class="lbl">${t('volume')}</span><input type="range" min="0" max="100" value="${Math.round(ST.vol*100)}" data-vol="1" style="flex:1;max-width:220px;accent-color:var(--rose)"></label>${tog('fast', ST.fast, t('fast'), t('fastHint'), 'data-root')}${step('players', s.players, t('players'))}</div>`;
+  h += `<h2 class="sec">${t('wheelS')}</h2><div class="panel">${step('min', s.min, t('minBoxes'))}${step('max', s.max, t('maxBoxes'))}${tog('perBox', s.perBox, t('perBox'))}${tog('sound', ST.sound, t('sound'), '', 'data-root')}<label class="row"><span class="lbl">${t('music')}<small>${t('musicHint')}</small></span><input type="checkbox" class="toggle" data-music="1" ${ST.music?'checked':''}></label><label class="row"><span class="lbl">${t('volume')}</span><input type="range" min="0" max="100" value="${Math.round(ST.vol*100)}" data-vol="1" style="flex:1;max-width:220px;accent-color:var(--rose)"></label>${tog('fast', ST.fast, t('fast'), t('fastHint'), 'data-root')}${navigator.wakeLock ? tog('wake', ST.wake, t('wake'), t('wakeHint'), 'data-root') : ''}${tog('askRes', ST.askRes, t('askResT'), t('askResD'), 'data-root')}${step('players', s.players, t('players'))}</div>`;
   const THEMES = ['Attack','Victory','Treasure','Reaction','Duration','Night','Reserve','Command','Fate','Doom','Liaison','Omen','Traveller','Looter'];
   const ownK = [...new Set(ownedBoxes().flatMap(boxTags))].filter(isK);
   const th = s.theme || [], md = s.mode || 'normal';
@@ -2282,7 +2305,17 @@ function renderActionbarInner(){
   else a.innerHTML = `<button class="btn" data-act="fav">${t('favorite')}</button><button class="btn primary" data-act="newRound">${t('newRound')}</button><button class="btn" data-act="share">${t('share')}</button>`;
 }
 function tentify(){ document.querySelectorAll('.actionbar .btn.primary').forEach(b => { if(!b.querySelector('.pennant')) b.insertAdjacentHTML('afterbegin','<i class="pennant" aria-hidden="true"></i>'); }); }
+let WAKE = null;
+async function updateWake(){
+  const want = ST.wake && TAB === 'kingdom' && ST.flow.stage === 'kingdom' && !document.hidden;
+  try{
+    if(want && !WAKE && navigator.wakeLock){ WAKE = await navigator.wakeLock.request('screen'); WAKE.addEventListener('release', () => { WAKE = null; }); }
+    else if(!want && WAKE){ await WAKE.release(); WAKE = null; }
+  }catch(e){ WAKE = null; }
+}
+document.addEventListener('visibilitychange', updateWake);
 function render(anim){
+  setTimeout(updateWake, 0);
   document.documentElement.lang = lang;
   document.getElementById('title').textContent = t('title'); document.title = t('title');
   document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===lang));
@@ -2540,6 +2573,189 @@ async function share(){
   SHAREURL = url;
   try{ new QRCode(document.getElementById('qrbox'), {text:url, width:260, height:260, colorDark:'#2B1E14', colorLight:'#FFFFFF', correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const qb = document.getElementById('qrbox'); if(qb) qb.remove(); }
 }
+
+/* ---------- recognise real cards on the table (on-device text recognition) ---------- */
+const TESS = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/';
+let OCRW = null, OCRLOAD = null, OCRPROG = null;
+function loadScript(src){ return new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = src; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); }); }
+async function ocrWorker(){
+  if(OCRW) return OCRW;
+  if(!OCRLOAD) OCRLOAD = (async () => {
+    if(!window.Tesseract) await loadScript(TESS + 'tesseract.min.js');
+    const w = await Tesseract.createWorker('eng', 1, {
+      workerPath: TESS + 'worker.min.js', corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1',
+      langPath: 'https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int',
+      logger: m => { if(OCRPROG) OCRPROG(m); } });
+    await w.setParameters({ tessedit_pageseg_mode: '7', preserve_interword_spaces: '1' });
+    return w; })();
+  try{ OCRW = await OCRLOAD; } catch(e){ OCRLOAD = null; throw e; }
+  return OCRW;
+}
+// every name a pile can show on top → the pile it belongs to
+let OCRIDX = null;
+function ocrIndex(){
+  if(OCRIDX) return OCRIDX;
+  const own = new Set(ownedBoxes()), map = new Map();
+  const add = (name, tag) => { const k = norm2(name); if(k.length < 3) return; const prev = map.get(k); if(!prev || (!own.has(CARDBOX[prev]) && own.has(CARDBOX[tag]))) map.set(k, tag); };
+  Object.keys(C).forEach(tag => { const c = C[tag]; if(tag.startsWith('@') || !['K','L','A','P'].includes(c.k)) return;
+    c.n.forEach(n => { add(n, tag); n.split(/\s*\/\s*|\s+-\s+/).forEach(part => add(part, tag)); });
+    if(tag.includes(' - ')) tag.split(' - ').forEach(part => add(part, tag));
+    pileMembers(tag).forEach(m => add(itemName(m), tag)); });
+  if(C['Harem']) add('Harem', 'Harem');
+  OCRIDX = [...map.entries()].map(([k, tag]) => ({k, tag}));
+  return OCRIDX;
+}
+function lev(a, b){ const m = a.length, n = b.length; if(!m) return n; if(!n) return m; let prev = Array.from({length:n+1}, (_,j) => j);
+  for(let i = 1; i <= m; i++){ const cur = [i]; for(let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1)); prev = cur; } return prev[n]; }
+function bestName(cand){
+  let best = null;
+  for(const e of ocrIndex()){
+    if(Math.abs(e.k.length - cand.length) > Math.max(2, e.k.length * .35)) continue;
+    const r = 1 - lev(cand, e.k) / Math.max(cand.length, e.k.length);
+    if(!best || r > best.r) best = {tag:e.tag, r};
+  }
+  const need = cand.length >= 9 ? .74 : cand.length >= 6 ? .8 : .88;
+  return best && best.r >= need ? best : null;
+}
+function ocrLines(data){
+  if(data.lines && data.lines.length) return data.lines;
+  const out = []; (data.blocks||[]).forEach(b => (b.paragraphs||[]).forEach(p => (p.lines||[]).forEach(l => out.push(l)))); return out;
+}
+function matchText(data){
+  const found = new Map();
+  for(const line of ocrLines(data)){
+    const words = (line.words || []).filter(w => w.confidence > 35 && /[a-zA-ZÀ-ÿ]/.test(w.text)).map(w => w.text);
+    const used = new Array(words.length).fill(false), cands = [];
+    for(let i = 0; i < words.length; i++) for(let len = 4; len >= 1; len--){
+      if(i + len > words.length) continue;
+      const k = norm2(words.slice(i, i+len).join(' ')); if(k.length < 4) continue;
+      const m = bestName(k); if(m) cands.push({i, len, ...m});
+    }
+    cands.sort((a,b) => b.r - a.r || b.len - a.len);
+    for(const c of cands){ if(used.slice(c.i, c.i+c.len).some(Boolean)) continue; for(let j = c.i; j < c.i+c.len; j++) used[j] = true;
+      const prev = found.get(c.tag); if(!prev || c.r > prev) found.set(c.tag, c.r); }
+  }
+  return found;
+}
+function prepCanvas(img, rot){
+  const max = 2000, k = Math.min(1, max / Math.max(img.width, img.height));
+  const w = Math.round(img.width * k), h = Math.round(img.height * k);
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const cx = cv.getContext('2d');
+  if(rot){ cx.translate(w, h); cx.rotate(Math.PI); }
+  cx.drawImage(img, 0, 0, w, h);
+  const id = cx.getImageData(0, 0, w, h), d = id.data; let lo = 255, hi = 0;
+  for(let i = 0; i < d.length; i += 16){ const g = d[i]*.3 + d[i+1]*.59 + d[i+2]*.11; if(g < lo) lo = g; if(g > hi) hi = g; }
+  const sc = 255 / Math.max(40, hi - lo);
+  for(let i = 0; i < d.length; i += 4){ const g = (d[i]*.3 + d[i+1]*.59 + d[i+2]*.11 - lo) * sc; d[i] = d[i+1] = d[i+2] = g < 0 ? 0 : g > 255 ? 255 : g; }
+  cx.putImageData(id, 0, 0); return cv;
+}
+let TS = null;
+function tableScan(){ TS = TS || {found:[], q:''}; tsSheet(); }
+function tsSheet(){
+  const f = TS.found, nK = f.filter(x => C[x.tag].k === 'K').length, nL = f.length - nK;
+  const q = norm2(TS.q || '');
+  const sugg = q.length >= 2 ? ocrIndex().filter(e => e.k.includes(q) && !f.some(x => x.tag === e.tag)).map(e => e.tag).filter((x,i,a) => a.indexOf(x) === i).slice(0, 8) : [];
+  openSheet(`<div class="inner"><h3>${t('tsTitle')}</h3><p class="hint" style="margin-top:0">${t('tsHint')}</p>
+    <div class="sheetactions"><label class="btn small">${CAMSVG}${t('tsTake')}<input type="file" accept="image/*" capture="environment" data-tscan="1"></label><label class="btn small">${t('scanGallery')}<input type="file" accept="image/*" multiple data-tscan="1"></label></div>
+    ${f.length ? `<p style="margin:12px 0 6px"><b>${nK} ${t('tsCount').replace('{l}', nL)}</b></p><div class="tslist">${f.map(x => `<div class="tsitem ${x.r < .86 ? 'unsure' : ''}">${CARDBOX[x.tag] ? emblem(CARDBOX[x.tag]) : ''}<span class="lbl">${esc(nm(x.tag))}${x.r < .86 ? `<small>${t('tsUnsure')}</small>` : ''}</span><button class="tsdel" data-tsdel="${esc(x.tag)}" aria-label="✕">✕</button></div>`).join('')}</div>` : ''}
+    <label class="flab">${t('tsAdd')}<input class="nameinput" id="tssearch" value="${esc(TS.q||'')}" placeholder="${t('searchCards')}" autocomplete="off"></label>
+    ${sugg.length ? `<div class="picklist">${sugg.map(x => `<button class="pickrow" data-tsadd="${esc(x)}"><span style="display:flex;gap:3px">${costHTML(x)}</span><span class="n">${esc(nm(x))}</span>${CARDBOX[x] ? emblem(CARDBOX[x],'') : ''}</button>`).join('')}</div>` : ''}
+    <div class="sheetactions" style="margin-top:14px"><button class="btn small" data-act="tsdone" ${nK ? '' : 'disabled'}>${t('tsDone')}</button></div></div>`);
+  const inp = document.getElementById('tssearch');
+  inp.addEventListener('input', e => { const pos = e.target.selectionStart; TS.q = e.target.value; tsSheet(); const n = document.getElementById('tssearch'); n.focus(); n.setSelectionRange(pos, pos); });
+}
+// Find text lines first (dark letter shapes sitting side by side), then read each line on its own.
+function findTextBoxes(cv){
+  const W = cv.width, H = cv.height, d = cv.getContext('2d').getImageData(0, 0, W, H).data;
+  const g = new Uint8Array(W*H); for(let i = 0; i < W*H; i++) g[i] = d[i*4];
+  const I = new Float64Array((W+1)*(H+1));
+  for(let y = 0; y < H; y++){ let row = 0; for(let x = 0; x < W; x++){ row += g[y*W+x]; I[(y+1)*(W+1)+x+1] = I[y*(W+1)+x+1] + row; } }
+  const R = Math.max(8, Math.round(Math.min(W, H) / 45)), dark = new Uint8Array(W*H);
+  for(let y = 0; y < H; y++){ const y0 = Math.max(0, y-R), y1 = Math.min(H-1, y+R);
+    for(let x = 0; x < W; x++){ const x0 = Math.max(0, x-R), x1 = Math.min(W-1, x+R);
+      const m = (I[(y1+1)*(W+1)+x1+1] - I[y0*(W+1)+x1+1] - I[(y1+1)*(W+1)+x0] + I[y0*(W+1)+x0]) / ((x1-x0+1)*(y1-y0+1));
+      if(g[y*W+x] < m * .78 && m > 70) dark[y*W+x] = 1; } }
+  // connected components of dark pixels = letter candidates
+  const lab = new Int32Array(W*H), comps = [], stack = [];
+  for(let i = 0; i < W*H; i++){ if(!dark[i] || lab[i]) continue;
+    let x0 = W, y0 = H, x1 = 0, y1 = 0, n = 0; stack.push(i); lab[i] = comps.length + 1;
+    while(stack.length){ const j = stack.pop(), x = j % W, y = (j / W) | 0; n++;
+      if(x < x0) x0 = x; if(x > x1) x1 = x; if(y < y0) y0 = y; if(y > y1) y1 = y;
+      for(const k of [j-1, j+1, j-W, j+W]){ if(k < 0 || k >= W*H || !dark[k] || lab[k]) continue; if((k === j-1 && x === 0) || (k === j+1 && x === W-1)) continue; lab[k] = comps.length + 1; stack.push(k); } }
+    const w = x1-x0+1, h = y1-y0+1;
+    if(h >= 9 && h <= H/6 && w <= h*4 && n >= 12 && n / (w*h) > .08 && n / (w*h) < .95) comps.push({x0, y0, x1, y1, h, cx:(x0+x1)/2, cy:(y0+y1)/2});
+    else comps.push(null);
+  }
+  const cs = comps.filter(Boolean).sort((a,b) => a.x0 - b.x0);
+  // chain neighbouring letters of similar size into lines (tolerates slightly tilted cards)
+  const parent = cs.map((_,i) => i), find = i => parent[i] === i ? i : (parent[i] = find(parent[i]));
+  for(let i = 0; i < cs.length; i++){ const a = cs[i];
+    for(let j = i+1; j < cs.length; j++){ const b = cs[j]; if(b.x0 - a.x1 > a.h * 1.4) break;
+      const hr = Math.max(a.h, b.h) / Math.min(a.h, b.h); if(hr > 1.8) continue;
+      if(Math.abs(a.cy - b.cy) > Math.max(a.h, b.h) * .45) continue;
+      parent[find(j)] = find(i); } }
+  const groups = new Map(); cs.forEach((c, i) => { const r = find(i); if(!groups.has(r)) groups.set(r, []); groups.get(r).push(c); });
+  const boxes = [];
+  groups.forEach(gr => { if(gr.length < 3) return;
+    const x0 = Math.min(...gr.map(c=>c.x0)), x1 = Math.max(...gr.map(c=>c.x1)), y0 = Math.min(...gr.map(c=>c.y0)), y1 = Math.max(...gr.map(c=>c.y1));
+    const hm = gr.map(c=>c.h).sort((a,b)=>a-b)[gr.length>>1];
+    if(x1 - x0 < hm * 2) return;
+    // slope of the letter centres = how tilted the card lies
+    const mx = gr.reduce((a,c)=>a+c.cx,0)/gr.length, my = gr.reduce((a,c)=>a+c.cy,0)/gr.length;
+    const sxx = gr.reduce((a,c)=>a+(c.cx-mx)**2,0), sxy = gr.reduce((a,c)=>a+(c.cx-mx)*(c.cy-my),0);
+    const ang = sxx ? Math.atan(sxy / sxx) : 0;
+    const p = Math.round(hm * .45); boxes.push({x:Math.max(0,x0-p), y:Math.max(0,y0-p), w:Math.min(W, x1+p) - Math.max(0,x0-p), h:Math.min(H, y1+p) - Math.max(0,y0-p), hm, ang}); });
+  return boxes.sort((a,b) => b.hm - a.hm).slice(0, 60);
+}
+async function ocrImage(w, img, rot, onTile){
+  const cv = prepCanvas(img, rot), boxes = findTextBoxes(cv), found = new Map();
+  const hs = boxes.map(b => b.hm).sort((a,b) => b-a), maxH = hs.length ? hs[Math.min(hs.length-1, Math.floor(hs.length*.15))] : 0;
+  let n = 0;
+  for(const b of boxes){
+    const sc = Math.min(3, Math.max(1, 46 / b.hm)), tcv = document.createElement('canvas');
+    tcv.width = Math.round(b.w * sc); tcv.height = Math.round(b.h * sc);
+    const tx = tcv.getContext('2d'); tx.fillStyle = '#fff'; tx.fillRect(0, 0, tcv.width, tcv.height);
+    // straighten the line before reading it
+    tx.translate(tcv.width/2, tcv.height/2); tx.rotate(-(b.ang||0)); tx.scale(sc, sc);
+    tx.drawImage(cv, b.x, b.y, b.w, b.h, -b.w/2, -b.h/2, b.w, b.h);
+    const d = (await w.recognize(tcv, {}, {text:true, blocks:true})).data;
+    // big letters are the name banners; small ones are rules text that only mentions a card
+    const pen = b.hm < maxH * .7 ? .12 : 0;
+    matchText(d).forEach((r, tag) => { r -= pen; if(r > .6 && (!found.has(tag) || found.get(tag) < r)) found.set(tag, r); });
+    if(onTile) onTile(++n, boxes.length);
+  }
+  return found;
+}
+async function tsPhotos(files){
+  try{
+    progress(0, 0, t('tsLoading'));
+    const w = await ocrWorker();
+    let added = 0, fi = 0;
+    for(const file of files){
+      const img = await createImageBitmap(file, {imageOrientation:'from-image'}).catch(async () => { const i = new Image(); i.src = URL.createObjectURL(file); await i.decode(); return i; });
+      const label = t('tsReading') + (files.length > 1 ? ` (${fi+1}/${files.length})` : '');
+      progress(0, 1, label);
+      let found = await ocrImage(w, img, false, (a, b) => progress(a, b, label));
+      if(found.size < 2){ const f2 = await ocrImage(w, img, true, (a, b) => progress(a, b, label + ' ↻')); f2.forEach((r, tag) => { if(!found.has(tag) || found.get(tag) < r) found.set(tag, r); }); }
+      found.forEach((r, tag) => { const ex = TS.found.find(x => x.tag === tag); if(ex){ ex.r = Math.max(ex.r, r); } else { TS.found.push({tag, r}); added++; } });
+      fi++;
+    }
+    progress(null);
+    TS.found.sort((a,b) => (C[a.tag].k === 'K' ? 0 : 1) - (C[b.tag].k === 'K' ? 0 : 1) || costKey(a.tag) - costKey(b.tag));
+    tsSheet(); toast(added ? `${added} ${t('tsFound')}` : t('tsNone'));
+  }catch(e){ progress(null); tsSheet(); toast(t('tsUnavailable')); }
+}
+function tsFinish(){
+  const tags = TS.found.map(x => x.tag);
+  let s0 = tags.filter(x => C[x].k === 'K'); if(!s0.length){ toast(t('tsNeedK')); return; }
+  let bane = null;
+  if(s0.includes('Young Witch') && s0.length > 10){ const c = s0.filter(x => x !== 'Young Witch' && plainCost(x, ['2','3'])); bane = c[c.length-1] || null; if(bane) s0 = s0.filter(x => x !== bane); }
+  const k = {v:2, s:s0, land:tags.filter(x => C[x].k === 'L'), ally:tags.find(x => C[x].k === 'A') || null, proph:tags.find(x => C[x].k === 'P') || null, bane, col:false, shel:false, ts:Date.now(), locked:[], scanned:true};
+  k.b = [...new Set([...k.s, ...k.land].map(x => CARDBOX[x]).filter(Boolean))];
+  resolve(k, poolFor(k.b), false);
+  playKingdom(k); TS = null; closeSheet(); TAB = 'kingdom'; render(true); window.scrollTo(0,0); toast(t('tsTaken'));
+}
+
 let SCAN = null;
 function stopScan(){ if(SCAN){ SCAN.stop = true; if(SCAN.stream) SCAN.stream.getTracks().forEach(tr => tr.stop()); SCAN = null; } }
 function handleScanned(text){
@@ -2555,6 +2771,7 @@ async function openScanner(){
   openSheet(`<div class="inner" style="text-align:center"><h3>${t('scanTitle')}</h3>
     <div class="scanbox"><video id="scanvid" playsinline webkit-playsinline muted autoplay></video><span class="scanframe"></span></div>
     <p class="hint" id="scanmsg">${t('scanHint')}</p>
+    <p><button class="btn small" data-act="tablescan">${CAMSVG}${t('tsBtn')}</button></p>
     <div class="sheetactions" style="justify-content:center"><label class="btn small">${CAMSVG}${t('scanTake')}<input type="file" accept="image/*" capture="environment" data-qrfile="1"></label><label class="btn small">${t('scanGallery')}<input type="file" accept="image/*" data-qrfile="1"></label></div></div>`);
   try{
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nomedia');
@@ -2638,6 +2855,7 @@ document.addEventListener('click', e => {
   if(d.rule){ openRule(d.rule); return; }
   if(d.modeinfo){ const m = MODES[d.modeinfo], k = ST.current; openSheet(`<div class="inner"><h3>${esc(m.n[L()])}</h3>${k && k.rec ? `<p><b>${esc(k.rec)}</b></p>` : ''}<p class="txt">${esc(m.d[L()])}</p></div>`); return; }
   if(d.playoff!==undefined){ const o = OFFICIAL[+d.playoff]; playKingdom(kingdomFromOfficial(o)); TAB='kingdom'; goStage('kingdom', true); return; }
+  if(d.pickn){ if(busy) return; const n = +d.pickn; wheelResult = n; ST.flow = {stage:'boxes', n, boxes:null}; goStage('boxes'); drawBoxes(); return; }
   if(d.view){ ST.view = d.view; save(); renderKingdom(); return; }
   if(d.ownq){ const b = BOX[d.ownq], o = ST.owned[d.ownq] = ST.owned[d.ownq]||{};
     if(Object.values(o).some(Boolean)) ST.owned[d.ownq] = {}; else o['e'+Object.keys(b.e).slice(-1)[0]] = true;
@@ -2649,6 +2867,8 @@ document.addEventListener('click', e => {
   if(d.result){ RES = null; resultSheet(d.result); return; }
   if(d.rp){ readPts(); const i = RES.p.indexOf(d.rp); if(i>=0){ RES.p.splice(i,1); RES.w = RES.w.filter(x=>x!==d.rp); } else RES.p.push(d.rp); resultSheet(RES.id); return; }
   if(d.scorenav){ SCOREI = (SCOREI + +d.scorenav + SCORECH.length) % SCORECH.length; scoreSheet(); return; }
+  if(d.tsdel){ TS.found = TS.found.filter(x => x.tag !== d.tsdel); tsSheet(); return; }
+  if(d.tsadd){ if(!TS.found.some(x => x.tag === d.tsadd)) TS.found.push({tag:d.tsadd, r:1}); TS.q = ''; tsSheet(); return; }
   if(d.pm){ const inp = document.querySelector(`[data-pts="${CSS.escape(d.pm)}"]`); if(inp){ const v = inp.value.trim(); inp.value = v.startsWith('-') ? v.slice(1) : '-' + v; readPts(); autoCrown(); inp.focus(); } return; }
   if(d.delgame){ if(el.dataset.armed !== '1'){ el.dataset.armed = '1'; el.textContent = t('sure'); setTimeout(() => { el.dataset.armed = ''; el.textContent = t('delGame'); }, 3000); return; }
     ST.history = ST.history.filter(x => x.id !== d.delgame); save(); RES = null; closeSheet(); render(); return; }
@@ -2664,6 +2884,7 @@ document.addEventListener('click', e => {
     case 'delall': if(!delArmed){ delArmed = true; renderSettings(); setTimeout(()=>{ delArmed=false; if(TAB==='settings') renderSettings(); }, 4000); }
       else { delArmed = false; Object.keys(PH.urls).reduce((p,tg)=>p.then(()=>photoDel(tg)), Promise.resolve()).then(()=>renderSettings()); } break;
     case 'skip': SKIP = true; break;
+    case 'askresnever': ST.askRes = false; save(); closeSheet(); toast('✓'); break;
     case 'result': { if(!ST.current) break; RES = null; resultSheet(historyFor(ST.current).id); break; }
     case 'addperson': { readPts(); const inp = document.getElementById('newname'); const n = inp.value.replace(/[~|!]/g,'').trim().slice(0,24); if(!n) break;
       if(!ST.people.includes(n)) ST.people.push(n); if(!RES.p.includes(n)) RES.p.push(n); save(); resultSheet(RES.id); break; }
@@ -2672,9 +2893,11 @@ document.addEventListener('click', e => {
       if(!RES.manual) autoCrown();
       if(!RES.w.length){ toast(t('needWinner')); break; }
       e.res = {p:[...RES.p], w:RES.w.filter(x=>RES.p.includes(x)), pts:RES.pts, manual: !!RES.manual}; RES.p.forEach(n => { if(!ST.people.includes(n)) ST.people.push(n); });
-      ST.lastPlayers = [...RES.p]; save(); closeSheet(); render(); fanfare(); toast(`${t('resSaved')} – ${e.res.w.join(' & ')} ${e.res.w.length>1?'('+t('wonTie')+')':t('won')} 👑`); break; }
+      ST.lastPlayers = [...RES.p]; ST.s.players = Math.max(2, Math.min(6, RES.p.length)); save(); closeSheet(); render(); fanfare(); toast(`${t('resSaved')} – ${e.res.w.join(' & ')} ${e.res.w.length>1?'('+t('wonTie')+')':t('won')} 👑`); break; }
     case 'delresult': { const e = ST.history.find(x => x.id === RES.id); if(e) delete e.res; save(); closeSheet(); render(); break; }
     case 'podium': podiumSheet(); break;
+    case 'tablescan': stopScan(); TS = null; tableScan(); break;
+    case 'tsdone': tsFinish(); break;
     case 'sharescores': SCOREI = 0; shareScores(); break;
     case 'tour': openTour(); break;
     case 'newcustom': customSheet(null); break;
@@ -2705,18 +2928,26 @@ document.addEventListener('click', e => {
     case 'toCards': if(dealCards(ST.flow.boxes)){ goStage('kingdom', true); fanfare(); } break;
     case 'recards': { const k = ST.current, lk = k.locked||[]; if(dealCards(k.b, {s:k.s.filter(x=>lk.includes(x)), land:k.land.filter(x=>lk.includes(x))})){ save(); render(true); } break; }
     case 'newRound':
+      if(ST.askRes && ST.current && ST.flow.stage==='kingdom' && !(ST.history.find(x => x.k.ts === ST.current.ts) || {}).res && !d.force){
+        openSheet(`<div class="inner" style="text-align:center"><h3>${t('askResT')}</h3><p>${t('askResD')}</p>
+          <div class="sheetactions" style="justify-content:center"><button class="btn small" data-act="result">${CROWNSVG}${t('askResYes')}</button><button class="btn small" data-act="newRound" data-force="1">${t('askResNo')}</button></div>
+          <p><button class="linkbtn" data-act="askresnever">${t('askResNever')}</button></p></div>`); break; }
+      closeSheet();
       if(ST.fast){ const vals = wheelRange(), n = pick(vals), bx = shuffle(ownedBoxes()).slice(0,n);
         wheelResult = n; if(dealCards(bx)){ ST.flow = {stage:'kingdom', n, boxes:bx}; goStage('kingdom', true); } break; }
       wheelResult = null; ST.flow = {stage:'wheel', n:null, boxes:null};
       if(wheelRange().length===1){ spin(); break; }
-      goStage('wheel'); spin(); break;
+      goStage('wheel'); break;
     case 'fav': favSheet(); break;
     case 'savefav': { const n = document.getElementById('favname').value.trim(); ST.favorites.unshift({id:'f'+Date.now(), name:n, k:clone(ST.current)}); save(); closeSheet(); toast(t('saved')); break; }
     case 'share': share(); break;
     case 'sharelink': try{ navigator.share({title:t('title'), text:kingdomSummary(ST.current), url:SHAREURL}); }catch(e){} break;
     case 'copylink': if(navigator.clipboard) navigator.clipboard.writeText(SHAREURL).then(()=>toast(t('copied'))).catch(()=>{}); break;
     case 'resetseen': ST.seen=[]; save(); renderSettings(); break;
-    case 'clearhist': ST.history=[]; save(); renderSaved(); break;
+    case 'clearhist': if(el.dataset.armed !== '1'){ el.dataset.armed = '1'; el.textContent = t('sure'); setTimeout(() => { if(el.isConnected){ el.dataset.armed = ''; el.textContent = t('clearAll'); } }, 3000); break; }
+      ST.history=[]; save(); renderSaved(); break;
+    case 'delnores': { if(el.dataset.armed !== '1'){ el.dataset.armed = '1'; el.textContent = t('sure'); setTimeout(() => { if(el.isConnected) renderSaved(); }, 3000); break; }
+      const n0 = ST.history.length; ST.history = ST.history.filter(e => e.res); save(); renderSaved(); toast(`${n0 - ST.history.length} ${t('delNoResDone')}`); break; }
   }
 });
 document.addEventListener('change', e => {
@@ -2740,6 +2971,7 @@ document.addEventListener('change', e => {
   }
   if(d.import && e.target.files && e.target.files.length) importFiles([...e.target.files]);
   if(d.qrfile && e.target.files && e.target.files[0]) scanFile(e.target.files[0]);
+  if(d.tscan && e.target.files && e.target.files.length) tsPhotos([...e.target.files]);
 });
 document.addEventListener('input', e => { if(e.target.dataset && e.target.dataset.vol) setVolume(+e.target.value/100); if(e.target.dataset && e.target.dataset.pts !== undefined && RES){ readPts(); autoCrown(); } });
 document.addEventListener('pointerdown', e => { if(POPOPEN && !e.target.closest('#musicpop,#musicbtn')) musicPop(false); });

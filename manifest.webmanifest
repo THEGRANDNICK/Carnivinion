@@ -1,15 +1,46 @@
 {
   "name": "Carnivinion",
   "short_name": "Carnivinion",
-  "description": "Mittelalterlicher Jahrmarkt-Randomizer für Dominion-Königreiche (inoffizielles Fanprojekt)",
+  "description": "Carnivinion – a medieval fairground randomizer for Dominion kingdoms. Unofficial fan project. © 2026 Nicolas Vogt",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#E9DDBE",
   "theme_color": "#A8322D",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "./",
+  "lang": "de",
+  "dir": "ltr",
+  "orientation": "any",
+  "categories": [
+    "games",
+    "entertainment",
+    "utilities"
+  ],
+  "launch_handler": {
+    "client_mode": [
+      "navigate-existing",
+      "auto"
+    ]
+  },
+  "handle_links": "preferred"
 }

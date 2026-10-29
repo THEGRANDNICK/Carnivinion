@@ -180,7 +180,8 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .crownbtn{border:0;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#BBA98E;background:var(--sunk);box-shadow:inset 0 2px 3px rgba(0,0,0,.2)}
 .crownbtn .crown{width:24px;height:24px}
 .crownbtn[aria-pressed="true"]{color:#F6D98E;background:#A8322D;box-shadow:0 0 0 2px #D6A032,0 3px 6px rgba(0,0,0,.3)}
-.ptsin{width:92px!important;margin:0!important;text-align:center}
+.ptsin{width:84px!important;margin:0!important;text-align:center}
+.pmbtn{border:0;width:36px;height:36px;border-radius:8px;font:800 1.1rem/1 Grenze,serif;color:#2B1E14;background:repeating-linear-gradient(100deg,rgba(90,55,20,.1) 0 2px,transparent 2px 6px),linear-gradient(#E6BD86,#BE8A55);box-shadow:0 2px 3px rgba(0,0,0,.35);flex:none}
 .resline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:.92rem}.resline .crown{color:#D6A032}.resline span{color:var(--muted)}
 .modechip .crown{width:20px;height:20px;color:#F6D98E}
 .podium{position:relative;display:grid;grid-template-columns:repeat(3,1fr);align-items:end;gap:6px;max-width:420px;margin:18px auto 0;min-height:230px}
@@ -832,6 +833,12 @@ const S = {
  needPlayers:["Pick at least two players.","Wähle mindestens zwei Spieler."], resSaved:["Result saved","Ergebnis gespeichert"], with:["with","mit"],
  tutSkip:["Skip","Überspringen"], tutNext:["Next","Weiter"], tutBack:["Back","Zurück"], tutGo:["Let's play!","Los geht's!"], tutAgain:["Show the tour again","Rundgang nochmal ansehen"], tutTitle:["Tour","Rundgang"],
  rightsReserved:["All rights reserved for the app's design, code, graphics and music.","Alle Rechte an Gestaltung, Code, Grafiken und Musik der App vorbehalten."],
+ autoCrownHint:["The crown follows the highest points until you set it yourself.","Die Krone folgt den meisten Punkten, bis du sie selbst setzt."],
+ podiumRule:["Ranking: most wins first, then best win rate, then most games. In a tie, every tied winner gets the win.","Rangfolge: zuerst die meisten Siege, dann die beste Siegquote, dann die meisten Spiele. Bei Gleichstand in einem Spiel bekommt jeder Gewinner den Sieg."],
+ shareScores:["Share scoreboard","Punktestand teilen"], shareScoresHint:["Let a friend scan this with Carnivinion → Scan. Games are merged – nothing is counted twice.","Lass einen Freund das mit Carnivinion → Scannen scannen. Die Spiele werden zusammengeführt – nichts wird doppelt gezählt."],
+ codeOf:["Code","Code"], scoresMerged:["games added","Spiele übernommen"], scoresKnown:["already there","schon vorhanden"], noScores:["No results to share yet.","Noch keine Ergebnisse zum Teilen."],
+ scanInApp:["Tip: scan with Carnivinion → Scan (bottom bar), so it opens right in the app.","Tipp: Mit Carnivinion → Scannen (unten) scannen, dann öffnet es direkt in der App."],
+ delGame:["Delete game","Spiel löschen"], sure:["Sure?","Sicher?"],
  sharedKingdom:["Shared kingdom","Geteiltes Königreich"],
 };
 const NOTES = {
@@ -1238,7 +1245,7 @@ document.addEventListener('click', e => {
   if(w){ woodClick(w.matches('.toggle') ? w.checked : w.getAttribute('aria-pressed') !== 'true'); return; }
   if(e.target.closest('.bx.can')){ if(ST.flow.manual) uiSound('tin'); return; }
   if(e.target.closest('.tile,.pile,.pimg,.pickrow')){ uiSound('card'); return; }
-  if(e.target.closest('.modecard,.emchip,.embtn,.snav,.modechip')){ woodClick(true); return; }
+  if(e.target.closest('.modecard,.emchip,.embtn,.snav,.modechip,.pmbtn')){ woodClick(true); return; }
   if(e.target.closest('button,label.btn')) uiSound('tap');
 }, true);
 function beep(freq=1400, dur=.03, vol=.08, type='square'){
@@ -2190,7 +2197,7 @@ function renderSaved(){
         <div class="sheetactions" style="margin-top:10px"><button class="btn small" data-playoff="${i}">${t('playThis')}</button></div></div>`; }).join('')}</div>` : `<p class="empty">${t('noOfficial')}</p>`;
     v.innerHTML = h; return;
   }
-  if(SAVEDTAB==='history') h += `<div style="text-align:center;margin:-4px 0 14px"><button class="modechip" data-act="podium">${CROWNSVG}<b>${t('podium')}</b></button></div>`;
+  if(SAVEDTAB==='history') h += `<div style="text-align:center;margin:-4px 0 14px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="modechip" data-act="podium">${CROWNSVG}<b>${t('podium')}</b></button>${ST.history.some(e=>e.res)?`<button class="btn small" data-act="sharescores">${t('shareScores')}</button>`:''}</div>`;
   if(!list.length) h += `<p class="empty">${SAVEDTAB==='history'?t('noHistory'):t('noFav')}</p>`;
   else h += `<div class="saved">${list.map(e=>`<div class="saveditem">
       <div class="t">${(e.k.b||[]).map(id=>emblem(id,'')).join('')} ${e.name?esc(e.name):''}</div>
@@ -2386,10 +2393,18 @@ function historyFor(k){
   if(!e){ e = {id:'h'+Date.now(), k:clone(k)}; ST.history.unshift(e); save(); }
   return e;
 }
-function readPts(){ document.querySelectorAll('[data-pts]').forEach(inp => { const v = inp.value.trim(); if(v === '') delete RES.pts[inp.dataset.pts]; else RES.pts[inp.dataset.pts] = +v; }); }
+function readPts(){ document.querySelectorAll('[data-pts]').forEach(inp => { const v = inp.value.trim().replace(',', '.').replace(/^−/, '-'); const n = Number(v); if(v === '' || v === '-' || !isFinite(n)) delete RES.pts[inp.dataset.pts]; else RES.pts[inp.dataset.pts] = n; }); }
+function autoCrown(){
+  if(RES.manual) return;
+  const vals = RES.p.filter(n => RES.pts[n] != null);
+  if(!vals.length) return;
+  const max = Math.max(...vals.map(n => RES.pts[n]));
+  RES.w = vals.filter(n => RES.pts[n] === max);
+  document.querySelectorAll('[data-rw]').forEach(b => b.setAttribute('aria-pressed', RES.w.includes(b.dataset.rw)));
+}
 function resultSheet(id){
   const e = ST.history.find(x => x.id === id); if(!e) return;
-  if(!RES || RES.id !== id){ const r = e.res || {p:[...ST.lastPlayers], w:[], pts:{}}; RES = {id, p:[...r.p], w:[...r.w], pts:{...(r.pts||{})}}; }
+  if(!RES || RES.id !== id){ const r = e.res || {p:[...ST.lastPlayers], w:[], pts:{}}; RES = {id, p:[...r.p], w:[...r.w], pts:{...(r.pts||{})}, manual: !!(e.res && e.res.manual)}; }
   const names = [...new Set([...ST.people, ...RES.p])];
   openSheet(`<div class="inner"><h3>${t('resultT')}</h3><p class="hint" style="margin-top:0">${t('resHint')}</p>
     <div class="round" style="margin:8px 0">${names.map(n => `<button class="chip ${RES.p.includes(n)?'on':''}" data-rp="${esc(n)}" aria-pressed="${RES.p.includes(n)}">${esc(n)}</button>`).join('')}</div>
@@ -2397,8 +2412,9 @@ function resultSheet(id){
     ${RES.p.length ? `<div class="panel" style="margin-top:14px">${RES.p.map(n => `<div class="row resrow">
       <button class="crownbtn" data-rw="${esc(n)}" aria-pressed="${RES.w.includes(n)}" aria-label="${esc(n)} ${t('won')}">${CROWNSVG}</button>
       <span class="lbl">${esc(n)}</span>
-      <input class="nameinput ptsin" type="number" inputmode="numeric" data-pts="${esc(n)}" value="${RES.pts[n] ?? ''}" placeholder="${t('ptsShort')}"></div>`).join('')}</div>` : ''}
-    <div class="sheetactions"><button class="btn small" data-act="saveresult">${t('saveResult')}</button>${e.res ? `<button class="btn small danger" data-act="delresult">${t('delResult')}</button>` : ''}</div></div>`);
+      <button class="pmbtn" data-pm="${esc(n)}" aria-label="±">±</button><input class="nameinput ptsin" type="text" inputmode="decimal" autocomplete="off" data-pts="${esc(n)}" value="${RES.pts[n] ?? ''}" placeholder="${t('ptsShort')}"></div>`).join('')}</div>
+      <p class="hint">${t('autoCrownHint')}</p>` : ''}
+    <div class="sheetactions"><button class="btn small" data-act="saveresult">${t('saveResult')}</button>${e.res ? `<button class="btn small danger" data-act="delresult">${t('delResult')}</button>` : ''}<button class="btn small danger" data-delgame="${e.id}">${t('delGame')}</button></div></div>`);
 }
 function podiumStats(){
   const st = {};
@@ -2414,7 +2430,9 @@ function podiumSheet(){
   openSheet(`<div class="inner" style="text-align:center"><h3>${t('podium')}</h3>
     <div class="podium" id="podium">${top.map((x,i) => x ? `<div class="pstand p${[2,1,3][i]}"><div class="pname2">${[2,1,3][i]===1?CROWNSVG:''}<b>${esc(x.n)}</b><small>${x.w} ${x.w===1?t('win1'):t('wins')}</small></div><div class="pblock"><span>${[2,1,3][i]}</span></div></div>` : '<div class="pstand empty"></div>').join('')}</div>
     <div class="panel" style="margin-top:16px;text-align:left"><div class="row statrow head"><span>#</span><span class="lbl"></span><span>${t('wins')}</span><span>${t('games')}</span><span>${t('rate')}</span><span>${t('best')}</span></div>
-      ${s2.map((x,i) => `<div class="row statrow"><span>${i+1}</span><span class="lbl">${esc(x.n)}</span><span><b>${x.w}</b></span><span>${x.g}</span><span>${Math.round(x.w/x.g*100)}%</span><span>${x.best ?? '–'}</span></div>`).join('')}</div></div>`);
+      ${s2.map((x,i) => `<div class="row statrow"><span>${i+1}</span><span class="lbl">${esc(x.n)}</span><span><b>${x.w}</b></span><span>${x.g}</span><span>${Math.round(x.w/x.g*100)}%</span><span>${x.best ?? '–'}</span></div>`).join('')}</div>
+    <p class="hint">${t('podiumRule')}</p>
+    <div class="sheetactions" style="justify-content:center"><button class="btn small" data-act="sharescores">${t('shareScores')}</button></div></div>`);
   confetti(document.getElementById('podium')); fanfare();
 }
 function favSheet(){
@@ -2461,12 +2479,63 @@ function decodeQ(q){
 }
 function loadShared(k){ resolve(k, null, false); ST.current = k; ST.flow = {stage:'kingdom', n:k.b.length, boxes:k.b}; save(); }
 let SHAREURL = '';
+// scoreboard code: names once, then per game id ! kingdom ! players ! winners ! points
+function scoreChunks(){
+  const games = ST.history.filter(e => e.res), chunks = []; let cur = [];
+  const enc = list => {
+    const names = [...new Set(list.flatMap(e => e.res.p))];
+    const ix = n => names.indexOf(n).toString(36);
+    const body = list.map(e => [parseInt(e.id.replace(/^h/,''),10).toString(36), encodeQ(e.k), e.res.p.map(ix).join(','), e.res.w.map(ix).join(','), e.res.p.map(n => (e.res.pts||{})[n] ?? '').join(',')].join('!')).join('|');
+    const raw = 'S1~' + names.join('~') + '~~' + body;
+    return btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  };
+  for(const g of games){ cur.push(g); if(enc(cur).length > 1100 && cur.length > 1){ cur.pop(); chunks.push(enc(cur)); cur = [g]; } }
+  if(cur.length) chunks.push(enc(cur));
+  return chunks;
+}
+function mergeScores(code){
+  try{
+    const raw = decodeURIComponent(escape(atob(code.replace(/-/g,'+').replace(/_/g,'/'))));
+    if(!raw.startsWith('S1~')) return null;
+    const [head, body] = raw.slice(3).split('~~'); const names = head ? head.split('~') : [];
+    let added = 0, known = 0;
+    (body||'').split('|').filter(Boolean).forEach(g => {
+      const [id36, kq, pp, ww, pts] = g.split('!'); const id = 'h' + parseInt(id36, 36);
+      const P = pp.split(',').filter(x=>x!=='').map(i => names[parseInt(i,36)]), W = (ww||'').split(',').filter(x=>x!=='').map(i => names[parseInt(i,36)]);
+      const ptv = (pts||'').split(','), res = {p:P, w:W, pts:{}};
+      P.forEach((n,i) => { if(ptv[i] !== undefined && ptv[i] !== '') res.pts[n] = Number(ptv[i]); });
+      const ex = ST.history.find(x => x.id === id);
+      if(ex){ if(!ex.res){ ex.res = res; added++; } else known++; return; }
+      const k = decodeQ(kq) || {v:2, b:[], s:[], land:[]}; k.ts = parseInt(id36, 36); delete k.shared;
+      ST.history.push({id, k, res}); added++;
+    });
+    names.forEach(n => { if(n && !ST.people.includes(n)) ST.people.push(n); });
+    ST.history.sort((a,b) => (b.k.ts||0) - (a.k.ts||0)); save();
+    return {added, known};
+  }catch(e){ return null; }
+}
+let SCOREI = 0, SCORECH = [];
+function shareScores(){
+  SCORECH = scoreChunks(); if(!SCORECH.length){ toast(t('noScores')); return; }
+  SCOREI = Math.min(SCOREI, SCORECH.length - 1); scoreSheet();
+}
+function scoreSheet(){
+  const url = location.href.split('#')[0] + '#s=' + SCORECH[SCOREI]; SHAREURL = url;
+  const n = SCORECH.length;
+  openSheet(`<div class="inner" style="text-align:center"><h3>${t('shareScores')}</h3><p>${t('shareScoresHint')}</p>
+    ${n > 1 ? `<div class="snavbar" style="position:static;border:0"><button class="snav" data-scorenav="-1">‹</button><span>${t('codeOf')} ${SCOREI+1} / ${n}</span><button class="snav" data-scorenav="1">›</button></div>` : ''}
+    <div id="qrbox" class="qrbox"></div>
+    <div class="sheetactions" style="justify-content:center">${navigator.share?`<button class="btn small" data-act="sharelink">${t('shareLink')}</button>`:''}<button class="btn small" data-act="copylink">${t('copyLink')}</button></div>
+    <p class="hint">${t('scanInApp')}</p></div>`);
+  try{ new QRCode(document.getElementById('qrbox'), {text:url, width:280, height:280, colorDark:'#2B1E14', colorLight:'#FFFFFF', correctLevel:QRCode.CorrectLevel.L}); }catch(e){ const qb = document.getElementById('qrbox'); if(qb) qb.remove(); }
+}
 async function share(){
   const k = ST.current, url = location.href.split('#')[0] + '#q=' + encodeQ(k), text = kingdomSummary(k);
   const hasCustom = supply(k).concat(k.land).some(x => x.startsWith('custom:'));
   openSheet(`<div class="inner" style="text-align:center"><h3>${t('share')}</h3><p>${t('shareQR')}</p>
     <div id="qrbox" class="qrbox"></div>${hasCustom?`<p class="hint">${t('customNotShared')}</p>`:''}
     <div class="sheetactions" style="justify-content:center">${navigator.share?`<button class="btn small" data-act="sharelink">${t('shareLink')}</button>`:''}<button class="btn small" data-act="copylink">${t('copyLink')}</button></div>
+    <p class="hint">${t('scanInApp')}</p>
     <input class="nameinput" readonly value="${esc(url)}" onclick="this.select()" style="font-size:.8rem"><p class="hint">${esc(text)}</p></div>`);
   SHAREURL = url;
   try{ new QRCode(document.getElementById('qrbox'), {text:url, width:260, height:260, colorDark:'#2B1E14', colorLight:'#FFFFFF', correctLevel:QRCode.CorrectLevel.M}); }catch(e){ const qb = document.getElementById('qrbox'); if(qb) qb.remove(); }
@@ -2474,6 +2543,9 @@ async function share(){
 let SCAN = null;
 function stopScan(){ if(SCAN){ SCAN.stop = true; if(SCAN.stream) SCAN.stream.getTracks().forEach(tr => tr.stop()); SCAN = null; } }
 function handleScanned(text){
+  const ms = String(text).match(/#s=([^&\s]+)/);
+  if(ms){ const r = mergeScores(decodeURIComponent(ms[1])); if(!r){ toast(t('scanFail')); return false; }
+    stopScan(); closeSheet(); TAB = 'saved'; SAVEDTAB = 'history'; render(); fanfare(); toast(`${r.added} ${t('scoresMerged')}${r.known ? ` · ${r.known} ${t('scoresKnown')}` : ''}`); return true; }
   const m = String(text).match(/#(q|k)=([^&\s]+)/);
   const k = m ? (m[1]==='q' ? decodeQ(decodeURIComponent(m[2])) : decodeK(m[2])) : null;
   if(!k){ toast(t('scanFail')); return false; }
@@ -2576,6 +2648,11 @@ document.addEventListener('click', e => {
   if(d.embedit){ embSheet(d.embedit); return; }
   if(d.result){ RES = null; resultSheet(d.result); return; }
   if(d.rp){ readPts(); const i = RES.p.indexOf(d.rp); if(i>=0){ RES.p.splice(i,1); RES.w = RES.w.filter(x=>x!==d.rp); } else RES.p.push(d.rp); resultSheet(RES.id); return; }
+  if(d.scorenav){ SCOREI = (SCOREI + +d.scorenav + SCORECH.length) % SCORECH.length; scoreSheet(); return; }
+  if(d.pm){ const inp = document.querySelector(`[data-pts="${CSS.escape(d.pm)}"]`); if(inp){ const v = inp.value.trim(); inp.value = v.startsWith('-') ? v.slice(1) : '-' + v; readPts(); autoCrown(); inp.focus(); } return; }
+  if(d.delgame){ if(el.dataset.armed !== '1'){ el.dataset.armed = '1'; el.textContent = t('sure'); setTimeout(() => { el.dataset.armed = ''; el.textContent = t('delGame'); }, 3000); return; }
+    ST.history = ST.history.filter(x => x.id !== d.delgame); save(); RES = null; closeSheet(); render(); return; }
+  if(d.rw && !RES.manual){ readPts(); RES.manual = true; RES.w = RES.w.includes(d.rw) ? RES.w.filter(x => x !== d.rw) : [d.rw]; uiSound('tin'); resultSheet(RES.id); return; }
   if(d.rw){ readPts(); const i = RES.w.indexOf(d.rw); if(i>=0) RES.w.splice(i,1); else RES.w.push(d.rw); uiSound('tin'); resultSheet(RES.id); return; }
   if(d.editcustom){ customSheet(d.editcustom); return; }
   if(d.ctype){ const on = el.getAttribute('aria-pressed') !== 'true'; el.setAttribute('aria-pressed', on); el.classList.toggle('on', on); return; }
@@ -2588,14 +2665,17 @@ document.addEventListener('click', e => {
       else { delArmed = false; Object.keys(PH.urls).reduce((p,tg)=>p.then(()=>photoDel(tg)), Promise.resolve()).then(()=>renderSettings()); } break;
     case 'skip': SKIP = true; break;
     case 'result': { if(!ST.current) break; RES = null; resultSheet(historyFor(ST.current).id); break; }
-    case 'addperson': { readPts(); const inp = document.getElementById('newname'); const n = inp.value.trim().slice(0,24); if(!n) break;
+    case 'addperson': { readPts(); const inp = document.getElementById('newname'); const n = inp.value.replace(/[~|!]/g,'').trim().slice(0,24); if(!n) break;
       if(!ST.people.includes(n)) ST.people.push(n); if(!RES.p.includes(n)) RES.p.push(n); save(); resultSheet(RES.id); break; }
     case 'saveresult': { readPts(); const e = ST.history.find(x => x.id === RES.id); if(!e) break;
       if(RES.p.length < 2){ toast(t('needPlayers')); break; } if(!RES.w.length){ toast(t('needWinner')); break; }
-      e.res = {p:[...RES.p], w:RES.w.filter(x=>RES.p.includes(x)), pts:RES.pts}; RES.p.forEach(n => { if(!ST.people.includes(n)) ST.people.push(n); });
+      if(!RES.manual) autoCrown();
+      if(!RES.w.length){ toast(t('needWinner')); break; }
+      e.res = {p:[...RES.p], w:RES.w.filter(x=>RES.p.includes(x)), pts:RES.pts, manual: !!RES.manual}; RES.p.forEach(n => { if(!ST.people.includes(n)) ST.people.push(n); });
       ST.lastPlayers = [...RES.p]; save(); closeSheet(); render(); fanfare(); toast(`${t('resSaved')} – ${e.res.w.join(' & ')} ${e.res.w.length>1?'('+t('wonTie')+')':t('won')} 👑`); break; }
     case 'delresult': { const e = ST.history.find(x => x.id === RES.id); if(e) delete e.res; save(); closeSheet(); render(); break; }
     case 'podium': podiumSheet(); break;
+    case 'sharescores': SCOREI = 0; shareScores(); break;
     case 'tour': openTour(); break;
     case 'newcustom': customSheet(null); break;
     case 'savecustom': { const n = document.getElementById('cc-n').value.trim(); if(!n){ toast(t('needName')); break; }
@@ -2661,7 +2741,7 @@ document.addEventListener('change', e => {
   if(d.import && e.target.files && e.target.files.length) importFiles([...e.target.files]);
   if(d.qrfile && e.target.files && e.target.files[0]) scanFile(e.target.files[0]);
 });
-document.addEventListener('input', e => { if(e.target.dataset && e.target.dataset.vol) setVolume(+e.target.value/100); });
+document.addEventListener('input', e => { if(e.target.dataset && e.target.dataset.vol) setVolume(+e.target.value/100); if(e.target.dataset && e.target.dataset.pts !== undefined && RES){ readPts(); autoCrown(); } });
 document.addEventListener('pointerdown', e => { if(POPOPEN && !e.target.closest('#musicpop,#musicbtn')) musicPop(false); });
 document.getElementById('scrim').addEventListener('click', ()=>{ if(CAP){ CAP=null; render(); } closeSheet(); });
 document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id==='newname'){ e.preventDefault(); document.querySelector('[data-act=addperson]').click(); return; } if(e.key==='Escape') closeSheet(); if(document.getElementById('sheet').classList.contains('open') && SHEETLIST){ if(e.key==='ArrowRight') navSheet(1); if(e.key==='ArrowLeft') navSheet(-1); } });
@@ -2812,7 +2892,9 @@ if('serviceWorker' in navigator && location.protocol === 'https:') navigator.ser
 load();
 if(ST.flow.stage==='wheel') wheelResult = ST.flow.n;
 if(ST.flow.stage==='boxes' && !ST.flow.boxes) ST.flow.stage = 'wheel', wheelResult = ST.flow.n;
-const mq = location.hash.match(/q=([^&]+)/);
+const ms0 = location.hash.match(/[#&]s=([^&]+)/);
+if(ms0){ const r = mergeScores(decodeURIComponent(ms0[1])); history.replaceState(null,'',location.href.split('#')[0]); if(r){ TAB = 'saved'; SAVEDTAB = 'history'; setTimeout(() => toast(`${r.added} ${t('scoresMerged')}${r.known ? ` · ${r.known} ${t('scoresKnown')}` : ''}`), 600); } }
+const mq = location.hash.match(/[#&]q=([^&]+)/);
 if(mq){ const k = decodeQ(decodeURIComponent(mq[1])); if(k){ loadShared(k); history.replaceState(null,'',location.href.split('#')[0]); } }
 const m = location.hash.match(/k=([^&]+)/);
 if(m){ const k = decodeK(m[1]); if(k){ resolve(k, null, false); ST.current = k; ST.flow = {stage:'kingdom', n:k.b.length, boxes:k.b}; save(); history.replaceState(null,'',location.href.split('#')[0]); } }

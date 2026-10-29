@@ -1,6 +1,6 @@
 // Carnivinion service worker: works offline after the first visit.
-const CACHE = 'carnivinion-v15';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
+const CACHE = 'carnivinion-v17';
+const CORE = ['./', './index.html', './privacy.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

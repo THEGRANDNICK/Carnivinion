@@ -3405,10 +3405,18 @@ async function assetList(){
   if(!r.ok) throw new Error('HTTP ' + r.status);
   return (await r.json()).filter(f => f.type === 'file' && /\.(zip|pdf|jpe?g|png|webp)$/i.test(f.name));
 }
+// assets/seaside.zip, assets/seaside-2.zip … are only loaded if you own that expansion; everything else (common.zip, packs) always
+function assetWanted(name){
+  const base = name.replace(/\.[^.]+$/,'').replace(/-\d+$/,'');
+  if(base === 'cornucopia_guilds') return ownedBoxes().some(b => b === 'cornucopia' || b === 'guilds');
+  if(base === 'promo') return ownedBoxes().includes('promo') || Object.values(ST.promos || {}).some(Boolean);
+  if(BOX[base]) return ownedBoxes().includes(base);
+  return true;
+}
 async function assetCheck(){
   if(!ST.sync || !ST.sync.repo) return null;
   try{ const all = await assetList(), done = ST.sync.assets || {};
-    ASSETS = {all, todo: all.filter(f => done[f.path] !== f.sha)}; return ASSETS; }catch(e){ ASSETS = null; return null; }
+    ASSETS = {all, todo: all.filter(f => done[f.path] !== f.sha && assetWanted(f.name))}; return ASSETS; }catch(e){ ASSETS = null; return null; }
 }
 const mb = n => Math.max(1, Math.round(n / 1048576));
 async function assetDownload(){

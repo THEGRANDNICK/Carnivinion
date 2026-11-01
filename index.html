@@ -351,6 +351,37 @@ button.row.statrow:hover{background:var(--sunk)}
 .cam{width:20px;height:20px}
 nav.tabs button svg{width:26px;height:26px}
 .plock svg,.lockbtn svg{width:70%;height:70%}
+.props .p-tank{position:absolute;left:10px;bottom:10px;width:104px;transform:rotate(-6deg)}
+.props .p-puddle{position:absolute;left:84px;bottom:-4px;width:190px;opacity:.95}
+.props .p-coins{position:absolute;right:120px;bottom:12px;width:52px}
+.props .p-raven{position:absolute;right:66px;bottom:14px;width:46px}
+.props .p-candle{position:absolute;right:14px;bottom:6px;width:46px}
+.props .p-candle .glow{position:absolute;left:-36px;top:-34px;width:118px;height:118px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,90,.38),transparent 65%);animation:flicker 1.6s ease-in-out infinite alternate}
+.props svg{display:block;width:100%;height:auto;overflow:visible}
+@media(min-width:900px){.props{height:120px}.props .p-tank{width:150px;left:18px}.props .p-puddle{width:270px;left:120px}.props .p-coins{width:72px;right:190px}.props .p-raven{width:66px;right:110px}.props .p-candle{width:64px;right:28px}}
+.flame2{transform-origin:30px 27px;animation:flame2 1.3s ease-in-out infinite alternate}
+@keyframes flame2{0%{transform:scale(1,1) rotate(-2deg)}50%{transform:scale(.92,1.08) rotate(2deg)}100%{transform:scale(1.04,.95) rotate(-1deg)}}
+.raven .rvb{transform-origin:22px 36px;animation:rvidle 7s ease-in-out infinite}
+.raven .rvh{transform-origin:33px 14px;animation:rvhead 5s ease-in-out infinite}
+@keyframes rvidle{0%,70%,100%{transform:none}74%{transform:translateY(-5px)}78%{transform:none}82%{transform:translateY(-3px)}86%{transform:none}}
+@keyframes rvhead{0%,40%,100%{transform:none}45%,60%{transform:rotate(-12deg)}65%{transform:rotate(6deg)}}
+.sraven{animation:none}
+.navraven{position:absolute;top:-12px;left:calc(50% + 10px);width:30px;pointer-events:none;animation:hopin .45s cubic-bezier(.2,1.6,.4,1)}
+.navraven svg{width:100%;height:auto;display:block}
+@keyframes hopin{0%{transform:translate(18px,-14px) scale(.4);opacity:0}100%{transform:none;opacity:1}}
+nav.tabs button{position:relative}
+.btn{border-radius:4px 4px 10px 10px}
+.setnav button{position:relative;overflow:hidden;border-radius:4px 4px 10px 10px!important;padding:12px 14px 7px!important;background:var(--surface)!important;color:var(--ink)!important;box-shadow:0 0 0 1.5px var(--wood),0 2px 3px rgba(0,0,0,.25)!important}
+.setnav button::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--rose) 0 9px,#F1E6C8 9px 18px)}
+.setnav button[aria-current="true"]{background:#A8322D!important;color:#fff!important}
+.setnav button[aria-current="true"]::before{background:repeating-linear-gradient(90deg,#D6A032 0 9px,#F1E6C8 9px 18px)}
+.musicbtn{border-radius:4px 4px 10px 10px!important;position:relative;overflow:hidden;background:var(--surface)!important;box-shadow:0 0 0 1.5px var(--wood);color:var(--ink)!important;padding-top:4px}
+.musicbtn::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:repeating-linear-gradient(90deg,var(--rose) 0 8px,#F1E6C8 8px 16px)}
+.musicbtn svg{width:24px!important;height:24px!important}
+.stepper button{border-radius:4px 4px 9px 9px!important}
+.sheetx{border-radius:4px 4px 10px 10px!important;background:var(--surface)!important;box-shadow:0 0 0 1.5px var(--wood),0 2px 4px rgba(0,0,0,.2)!important}
+.copyline{background:rgba(251,243,226,.92);border-radius:10px;padding:10px 12px;box-shadow:0 0 0 1.5px var(--wood)}
+@media (prefers-reduced-motion: reduce){.raven .rvb,.raven .rvh,.flame2,.navraven{animation:none!important}}
 .tslist{display:flex;flex-direction:column;gap:6px}
 .tsitem{display:flex;align-items:center;gap:10px;background:var(--sunk);border-radius:10px;padding:6px 10px}
 .tsitem .em{width:30px;height:30px;flex:none}.tsitem .lbl{flex:1;font-weight:700}.tsitem .lbl small{display:block;font-weight:600;color:var(--debt);font-size:.78rem}
@@ -658,7 +689,8 @@ label.btn input{display:none}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:7;background:var(--surface);border-top:3px solid var(--wood);box-shadow:0 -1px 0 var(--line),0 -6px 18px rgba(35,33,74,.08);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
 nav.tabs button{flex:1;max-width:180px;border:0;background:none;padding:8px 4px 9px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.76rem;font-weight:700;color:var(--muted)}
 nav.tabs button svg{width:24px;height:24px}
-nav.tabs button[aria-current="page"]{color:var(--royal)}
+nav.tabs button[aria-current="page"]{color:var(--ink)}
+nav.tabs button[aria-current="page"]>span:last-child{font-weight:900}
 
 /* ---------- panels ---------- */
 .panel{background:var(--surface);border-radius:10px;box-shadow:0 0 0 3px #6B4630,0 0 0 5px #4E3321,0 10px 20px rgba(0,0,0,.25);margin:0 5px}
@@ -1653,6 +1685,7 @@ const LOCKSVG = '<svg viewBox="0 0 24 24"><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" 
 const UNLOCKSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.8"/></svg>';
 const BOOKSVG = '<svg class="cam" viewBox="0 0 24 24"><path d="M3 6.2c3-1.4 6-1.4 9 .3v13c-3-1.7-6-1.7-9-.3z" fill="#F6E7C8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 6.2c-3-1.4-6-1.4-9 .3v13c3-1.7 6-1.7 9-.3z" fill="#FFF8EA" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 5.6V11l1.4-1 1.4 1V5.4" fill="#B8423A" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10h4M5.5 12.5h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const BADGESVG = {"streak": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 21c-4 0-6.5-2.7-6.5-6.2 0-3.6 3-5.4 3.4-9 2.2 1.4 3.5 3.4 3.6 5.6 1-.9 1.5-2.1 1.5-3.5 2.6 2 4.5 4.5 4.5 7.2C18.5 18.4 16 21 12 21z\" fill=\"#B8423A\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 21c-1.8 0-3-1.2-3-2.9 0-1.8 1.6-2.6 2-4.3 1.9 1 3.9 2.4 3.9 4.4 0 1.6-1.2 2.8-2.9 2.8z\" fill=\"#E2B23E\" stroke=\"none\"/></svg>", "comeback": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 17.5h18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M6.5 17.5a5.5 5.5 0 0 1 11 0z\" fill=\"#E2B23E\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 5.5v2.2M5.3 8.3l1.5 1.5M18.7 8.3l-1.5 1.5M2.8 13h2M19.2 13h2\" stroke=\"#B8423A\" stroke-width=\"1.8\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M6 20.5h12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "curse": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3.5c-4.4 0-7.5 3-7.5 7 0 2.3 1 3.9 2.5 4.8V18h10v-2.7c1.5-.9 2.5-2.5 2.5-4.8 0-4-3.1-7-7.5-7z\" fill=\"#FFF8EA\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"9\" cy=\"11\" r=\"1.8\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"11\" r=\"1.8\" fill=\"currentColor\"/><path d=\"M12 13.5l-.8 1.6h1.6z\" fill=\"currentColor\"/><path d=\"M9.5 18v2.5M12 18v2.5M14.5 18v2.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "battle": "<svg viewBox=\"0 0 24 24\"><path d=\"M5 4l9.5 9.5M19 4L9.5 13.5\" stroke=\"currentColor\" stroke-width=\"3.6\" stroke-linecap=\"round\"/><path d=\"M5 4l9.5 9.5M19 4L9.5 13.5\" stroke=\"#FFF8EA\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><path d=\"M12.8 15.2l3-3M11.2 15.2l-3-3\" stroke=\"#E2B23E\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><path d=\"M16.5 16.5l3 3M7.5 16.5l-3 3\" stroke=\"#B8423A\" stroke-width=\"2.6\" stroke-linecap=\"round\"/></svg>", "collector": "<svg viewBox=\"0 0 24 24\"><path d=\"M3.5 9.5L12 5l8.5 4.5V18L12 21.5 3.5 18z\" fill=\"#F6E7C8\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3.5 9.5L12 14l8.5-4.5M12 14v7.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M7.8 7.2l8.5 4.6v3.5\" stroke=\"#B8423A\" stroke-width=\"1.8\" fill=\"none\" stroke-linecap=\"round\"/></svg>", "points": "<svg viewBox=\"0 0 24 24\"><path d=\"M4 18l-1-9.5 4.8 4L12 5l4.2 7.5L21 8.5 20 18z\" fill=\"#E2B23E\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M4 20.5h16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"12\" cy=\"13.6\" r=\"1.2\" fill=\"#B8423A\" stroke=\"none\"/></svg>", "diplomat": "<svg viewBox=\"0 0 24 24\"><path d=\"M2.5 11l3.5-3.5 3 1 3-1.5 3 1.5 3-1 3.5 3.5-4.5 4.5-3.5 3a1.5 1.5 0 0 1-2.1 0L7 14.5z\" fill=\"#E2B23E\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M9 8.5l3.5 3.5a1.2 1.2 0 0 0 1.7-1.7L12 8M8.5 13.5l2 2M10.5 12l2.2 2.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "regular": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 19.5L12 6l9 13.5z\" fill=\"#F6E7C8\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 6L8 19.5M12 6l4 13.5\" stroke=\"#B8423A\" stroke-width=\"2.2\" fill=\"none\"/><path d=\"M3 19.5h18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 6V2.8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 2.9l3.5 1.2L12 5.3z\" fill=\"#3D5FA0\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M10.6 19.5a1.4 2.6 0 0 1 2.8 0z\" fill=\"currentColor\"/></svg>"};
+const RAVENSVG = `<svg class="raven" viewBox="0 0 44 40" aria-hidden="true"><g class="rvb"><path d="M10 28l-5.5 5 7-1.2 5-2.3" fill="#2A2533" stroke="#120F16" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 27.5c0-8 6.2-13.5 13.5-13.5 2.2-4.3 6.6-6.7 10.4-5.3 2.8 1 4 3.6 3.6 6.3l3.6 1.4-3.8 1.4c-1 6.4-6.9 11.2-14.3 11.2h-12z" fill="#2A2533" stroke="#120F16" stroke-width="1.4" stroke-linejoin="round"/><path d="M13 24.5c3.2-5.2 9.6-6.6 13.6-3.8-2.2 4.6-7.6 7-13.6 6.6z" fill="#433A52"/><path d="M30.5 9.6c1.6-.4 3.2.1 4.2 1.1" stroke="#5B5068" stroke-width="1.2" fill="none" stroke-linecap="round"/><g class="rvh"><path d="M37.4 14.3l4.6 1.7-4.5 1.6z" fill="#6A6273" stroke="#120F16" stroke-width="1.1" stroke-linejoin="round"/><circle cx="33.3" cy="13" r="1.9" fill="#FFF8EA"/><circle cx="33.9" cy="13.1" r="1" fill="#120F16"/></g><path d="M19 29v6.5M24 29v6.5M17.2 35.5h3.8M22.2 35.5h3.8" stroke="#120F16" stroke-width="1.4" stroke-linecap="round"/></g></svg>`;
 const CROWNSVG = '<svg class="crown" viewBox="0 0 24 24"><path d="M4 18l-1-9.5 4.8 4L12 5l4.2 7.5L21 8.5 20 18z" fill="#E2B23E" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20.5h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13.6" r="1.2" fill="#B8423A" stroke="none"/></svg>';
 const CAMSVG = '<svg class="cam" viewBox="0 0 24 24"><path d="M3.5 8.5h3l1.5-2.3h8l1.5 2.3h3v10.5h-17z" fill="#F6E7C8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13.5" r="3.6" fill="#3D5FA0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13.5" r="1.3" fill="#FFF8EA" stroke="none"/><path d="M17.5 10.5h1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function idb(mode, fn){
@@ -1997,7 +2030,7 @@ const ICONS = {
 };
 function renderTabs(){
   const tb = [['kingdom','navKingdom'],['saved','navPodium'],['settings','tSettings']]
-    .map(([id,k])=>`<button data-tab="${id}" ${(TAB===id && !(id==='saved' && SAVEDTAB==='official')) || (id==='settings' && (TAB==='cards' || (TAB==='saved' && SAVEDTAB==='official')))?'aria-current="page"':''}>${ICONS[id]}<span>${t(k)}</span></button>`);
+    .map(([id,k])=>{ const on = (TAB===id && !(id==='saved' && SAVEDTAB==='official')) || (id==='settings' && (TAB==='cards' || (TAB==='saved' && SAVEDTAB==='official'))); return `<button data-tab="${id}" ${on?'aria-current="page"':''}>${on ? `<span class="navraven">${RAVENSVG}</span>` : ''}${ICONS[id]}<span>${t(k)}</span></button>`; });
   tb.splice(2, 0, `<button data-act="scan">${ICONS.scan}<span>${t('scan')}</span></button>`);
   document.getElementById('tabs').innerHTML = tb.join('');
 }
@@ -2449,10 +2482,12 @@ function tableHTML(k, anim, marks, locked){
     <div class="tsec"><h4>${t('startDeckT')} <small>(×${N})</small></h4><div class="frow">${start.map(pileHTML).join('')}</div></div>
     ${slip.length ? `<div class="tsec"><h4>${t('alsoT')}</h4><div class="slip"><ul>${slip.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>` : ''}
     <div class="props" aria-hidden="true">
-      <div class="puddle"></div><div class="mug"><div class="body"></div><div class="handle"></div><div class="foam"></div></div>
+      <div class="p-tank"><svg class="tankard" viewBox="0 0 120 60" aria-hidden="true"><path d="M14 20h52a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6z" fill="#A8743F" stroke="#3A2618" stroke-width="2"/><path d="M10 29h60M10 37h60M10 45h60" stroke="#7E5229" stroke-width="1.2" opacity=".7"/><rect x="17" y="20" width="6" height="32" fill="#C9A15A" stroke="#3A2618" stroke-width="1.6"/><rect x="56" y="20" width="6" height="32" fill="#C9A15A" stroke="#3A2618" stroke-width="1.6"/><path d="M27 20c0-11 23-11 23 0" fill="none" stroke="#3A2618" stroke-width="7" stroke-linecap="round"/><path d="M27 20c0-11 23-11 23 0" fill="none" stroke="#A8743F" stroke-width="3.6" stroke-linecap="round"/><path d="M71 21c6-4 13 0 12 6 6 1 7 9 2 12 3 5-2 11-8 8-2 4-7 5-9 2" fill="#FFF7E0" stroke="#3A2618" stroke-width="1.8" stroke-linejoin="round"/><circle cx="78" cy="30" r="1.6" fill="#F0DFAE"/><circle cx="81" cy="38" r="1.2" fill="#F0DFAE"/><ellipse cx="71" cy="36" rx="4" ry="14" fill="#5A3A1C" stroke="#3A2618" stroke-width="1.6"/></svg></div><div class="p-puddle"><svg class="puddlesvg" viewBox="0 0 200 40" aria-hidden="true"><path d="M8 22c10-14 40-16 66-12 20 3 38-6 62-3 30 4 58 6 58 16 0 11-30 14-62 12-26-2-40 6-70 5C26 39 0 34 8 22z" fill="#E1A63A" fill-opacity=".75" stroke="#B07A1F" stroke-width="1.5" stroke-opacity=".6"/><path d="M40 18c14-4 34-4 48-1" stroke="#FFE7A8" stroke-width="3" stroke-linecap="round" fill="none" opacity=".8"/><ellipse cx="150" cy="22" rx="10" ry="3" fill="#FFE7A8" opacity=".6"/></svg></div>
       <span class="stream" style="left:150px"></span><span class="drip" style="left:148px"></span><span class="drip" style="left:196px;animation-delay:-1.1s"></span>
       <div class="coinroll"><i></i></div>
-      <div class="candle"><div class="glow"></div><div class="flame"></div></div>
+      <div class="p-coins"><svg class="coinsvg" viewBox="0 0 54 40" aria-hidden="true"><g stroke="#3A2618" stroke-width="1.6"><ellipse cx="22" cy="31" rx="14" ry="5" fill="#B8862A"/><path d="M8 27v4c0 2.8 6.3 5 14 5s14-2.2 14-5v-4" fill="#C9973A"/><ellipse cx="22" cy="27" rx="14" ry="5" fill="#E6BD52"/><path d="M10 21v4c0 2.8 6 5 13 5s13-2.2 13-5v-4" fill="#C9973A"/><ellipse cx="23" cy="21" rx="13" ry="4.6" fill="#F0CC63"/><ellipse cx="44" cy="31" rx="7" ry="7" fill="#F0CC63"/></g><path d="M18 21h10M42 28v6" stroke="#A8791A" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div class="p-raven">${RAVENSVG}</div>
+      <div class="p-candle"><div class="glow"></div><svg class="candlesvg" viewBox="0 0 60 90" aria-hidden="true"><ellipse cx="30" cy="80" rx="24" ry="7" fill="#C9973A" stroke="#3A2618" stroke-width="2"/><ellipse cx="30" cy="77" rx="16" ry="4" fill="#E8C066" stroke="#3A2618" stroke-width="1.4"/><path d="M52 79c8 0 8 9 0 9" fill="none" stroke="#3A2618" stroke-width="5" stroke-linecap="round"/><path d="M52 79c8 0 8 9 0 9" fill="none" stroke="#C9973A" stroke-width="2.4" stroke-linecap="round"/><path d="M22 36h16v41H22z" fill="#FFF6E2" stroke="#3A2618" stroke-width="2" stroke-linejoin="round"/><path d="M22 37c0 6 3 6 3 11s3 4 3-3c0-5 2-5 2 0s3 7 3 2v-7c2 0 3 2 5 0" fill="#FFFDF4" stroke="#3A2618" stroke-width="1.3" stroke-linejoin="round"/><path d="M30 36v-5" stroke="#3A2618" stroke-width="1.6" stroke-linecap="round"/><g class="flame2"><path d="M30 6c6 8 9 14 5 21-2 3-8 3-10 0-4-7 1-13 5-21z" fill="#F08A24" stroke="#3A2618" stroke-width="1.4" stroke-linejoin="round"/><path d="M30 14c3 5 4 9 2 12-1 1.5-3 1.5-4 0-2-3 0-7 2-12z" fill="#FFE27A"/></g></svg></div>
     </div>
   </div></div>`;
 }
@@ -2485,7 +2520,7 @@ function renderKingdom(anim){
   let h = `<div class="roundrow">${(usedBoxes.length ? usedBoxes : (k.b||[])).map(id=>`<button class="embtn" data-boxinfo="${id}" aria-label="${esc(boxName(id))}">${emblem(id)}</button>`).join('')}${k.mode&&MODES[k.mode]?`<button class="modeplaque" data-modeinfo="${k.mode}">${esc(k.rec || MODES[k.mode].n[L()])}</button>`:''}<span class="spacer"></span>
     <span class="seg viewseg" ${ST.ui === 'simple' ? 'hidden' : ''} aria-label="${t('sortShort')}">${[['cost',t('sCost')],['name',t('sName')],['set',t('sSet')]].map(([o,l])=>`<button data-seg="sort" data-v="${o}" aria-pressed="${ST.s.sort===o}">${l}</button>`).join('')}</span>
 
-    ${hasResult(k) ? `<button class="btn small" data-act="result" style="display:inline-flex;align-items:center;gap:5px">${CROWNSVG}${t('result')}</button>` : `<button class="btn small" data-act="newRound">${t('newRound')}</button>`}
+    <button class="btn small resbtn" data-act="result" style="display:inline-flex;align-items:center;gap:5px">${CROWNSVG}${t('result')}</button>
     <button class="btn small" data-act="recards">${locked.length?t('rerollRest'):t('reshuffleCards')}</button></div>`;
   if(k.shared) h += `<p class="hint">${t('sharedKingdom')}</p>`;
   if(ST.view!=='list'){ h += tableHTML(k, anim, marks, locked); h += `<p class="hint copyline" style="margin-top:40px"><b>${COPY}</b><br>${t('credit')}</p>`; v.innerHTML = h; sizeProps(); return; }
@@ -2677,7 +2712,7 @@ function renderActionbarInner(){
   else if(st==='boxes') a.innerHTML = ST.flow.boxes && !busy
       ? `<button class="btn" data-act="drawBoxes">${t('drawAgain')}</button><button class="btn primary" data-act="toCards">${t('toCards')}</button>`
       : busy ? `<button class="btn primary" data-act="skip">${t('skipAnim')}</button>` : `<button class="btn" data-act="manual"><span class="lg">${t('manual')}</span><span class="sm">${t('manualS')}</span></button><button class="btn primary" data-act="drawBoxes">${t('draw')}</button>`;
-  else a.innerHTML = `<button class="btn" data-act="fav">${t('favorite')}</button>${hasResult(ST.current) ? `<button class="btn primary" data-act="newRound">${t('newRound')}</button>` : `<button class="btn primary" data-act="result">${CROWNSVG} ${t('result')}</button>`}<button class="btn" data-act="share">${t('share')}</button>`;
+  else a.innerHTML = `<button class="btn" data-act="fav">${t('favorite')}</button><button class="btn primary" data-act="newRound">${t('newRound')}</button><button class="btn" data-act="share">${t('share')}</button>`;
 }
 function tentify(){ document.querySelectorAll('.actionbar .btn.primary').forEach(b => { if(!b.querySelector('.pennant')) b.insertAdjacentHTML('afterbegin','<i class="pennant" aria-hidden="true"></i>'); }); }
 let WAKE = null;
@@ -3987,6 +4022,7 @@ function buildScene(){
   g += `<path d="M0 330Q720 312 1440 334V420H0Z" fill="var(--grass)"/>`;
   g += `<path d="M560 420Q640 360 700 340Q760 360 880 420Z" fill="#C9B083" opacity=".55"/>`;
   g += `</g>`;
+  [[640,190,0],[868,189,1]].forEach(([x,y,f]) => { g += `<g class="sraven" style="animation-delay:${-f*2.3}s" transform="translate(${x} ${y-33})${f?' scale(-1 1) translate(-40 0)':''}"><g class="raven">${RAVENSVG.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '')}</g></g>`; });
   document.getElementById('scene').innerHTML = `<svg viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMax slice">${g}</svg>`;
 }
 
